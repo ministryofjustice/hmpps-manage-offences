@@ -1,13 +1,19 @@
-import type { RequestHandler, Router } from 'express'
+import { Router } from 'express'
+import csrf from '../middleware/csrfMiddleware'
+import { Services } from '../services'
+import homeRoutes from './home'
+import auth from '../authentication/auth'
+import tokenVerifier from '../data/tokenVerification'
+import populateCurrentUser from '../middleware/populateCurrentUser'
 
-import asyncMiddleware from '../middleware/asyncMiddleware'
+export default function Index(services: Services): Router {
+  const router = Router({ mergeParams: true })
 
-export default function routes(router: Router): Router {
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  router.use(auth.authenticationMiddleware(tokenVerifier))
+  router.use(populateCurrentUser(services.userService))
+  router.use(csrf())
 
-  get('/', (req, res, next) => {
-    res.render('pages/index')
-  })
+  router.use(homeRoutes())
 
   return router
 }

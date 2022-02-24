@@ -1,12 +1,6 @@
 import createApp from './app'
-import HmppsAuthClient from './data/hmppsAuthClient'
-import { createRedisClient } from './data/redisClient'
-import TokenStore from './data/tokenStore'
-import UserService from './services/userService'
+import { services } from './services'
 
-const hmppsAuthClient = new HmppsAuthClient(new TokenStore(createRedisClient()))
-const userService = new UserService(hmppsAuthClient)
-
-const app = createApp(userService)
+const app = createApp(services)
 
 export default app

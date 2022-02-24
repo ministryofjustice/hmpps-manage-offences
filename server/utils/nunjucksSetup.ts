@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
-import nunjucks from 'nunjucks'
+import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
-import * as pathModule from 'path'
+import path from 'path'
 
 const production = process.env.NODE_ENV === 'production'
 
-export default function nunjucksSetup(app: express.Express, path: pathModule.PlatformPath): void {
+export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
@@ -23,9 +23,13 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     })
   }
 
+  registerNunjucks(app)
+}
+
+export function registerNunjucks(app?: express.Express): Environment {
   const njkEnv = nunjucks.configure(
     [
-      path.join(__dirname, '../../server/views'),
+      path.join(__dirname, '../views'),
       'node_modules/govuk-frontend/',
       'node_modules/govuk-frontend/components/',
       'node_modules/@ministryofjustice/frontend/',
@@ -45,4 +49,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     const array = fullName.split(' ')
     return `${array[0][0]}. ${array.reverse()[0]}`
   })
+
+  return njkEnv
 }
