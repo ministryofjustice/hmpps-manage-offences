@@ -1,37 +1,49 @@
-import type { Express } from 'express'
-import request from 'supertest'
-import appWithAllRoutes from './routes/testutils/appSetup'
+import type { Request, Response } from 'express'
 
-let app: Express
+import { HTTPError } from 'superagent'
+import createErrorHandler from './errorHandler'
 
-beforeEach(() => {
-  app = appWithAllRoutes({})
-})
+describe('Error Handler', () => {
+  let req: Request
+  let res: Response
+  let error: HTTPError
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+  beforeEach(() => {
+    req = {} as Request
 
-describe('GET 404', () => {
-  it('should render content with stack in dev mode', () => {
-    return request(app)
-      .get('/unknown')
-      .expect(404)
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('NotFoundError: Not found')
-        expect(res.text).not.toContain('Something went wrong. The error has been logged. Please try again')
-      })
+    res = {
+      redirect: jest.fn(),
+      render: jest.fn(),
+      status: jest.fn(),
+      locals: {
+        user: {
+          username: 'user',
+        },
+      },
+    } as unknown as Response
   })
 
-  it('should render content without stack in production mode', () => {
-    return request(appWithAllRoutes({ production: true }))
-      .get('/unknown')
-      .expect(404)
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('Something went wrong. The error has been logged. Please try again')
-        expect(res.text).not.toContain('NotFoundError: Not found')
-      })
+  it('should log user out if error is 401', () => {
+    const handler = createErrorHandler(false)
+
+    error = {
+      status: 401,
+    } as HTTPError
+
+    handler(error, req, res, jest.fn)
+
+    expect(res.redirect).toHaveBeenCalledWith('/sign-out')
+  })
+
+  it('should log user out if error is 403', () => {
+    const handler = createErrorHandler(false)
+
+    error = {
+      status: 403,
+    } as HTTPError
+
+    handler(error, req, res, jest.fn)
+
+    expect(res.redirect).toHaveBeenCalledWith('/sign-out')
   })
 })

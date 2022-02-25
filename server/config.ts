@@ -53,7 +53,7 @@ export default {
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000))),
-      apiClientId: get('API_CLIENT_ID', 'clientid', requiredInProduction),
+      apiClientId: get('API_CLIENT_ID', 'manage-offences-client', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get('SYSTEM_CLIENT_ID', 'clientid'),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret'),
@@ -66,6 +66,14 @@ export default {
       },
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
+    },
+    manageOffences: {
+      url: get('MANAGE_OFFENCES_API_URL', 'http://localhost:8089', requiredInProduction),
+      timeout: {
+        response: Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('MANAGE_OFFENCES_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
