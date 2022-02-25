@@ -1,30 +1,8 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
-{% if (prisoners) %}
-    {% if (prisoners.length > 0) %}
-    <table id="search-results-table" class="govuk-table" data-qa="search-results-table">
-        <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Name</th>
-            <th scope="col" class="govuk-table__header">Prison number</th>
-            <th scope="col" class="govuk-table__header">Date of birth</th>
-            <th scope="col" class="govuk-table__header"></th>
-        </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-        {% for prisoner in prisoners %}
-            <tr class="govuk-table__row" data-qa="{{'prisoner-' + prisoner.prisonerNumber}}">
-                <td class="govuk-table__cell"><a class="govuk-link"
-                            href="{{ '/calculation/' + prisoner.prisonerNumber + '/check-information' }}" data-qa="prisoner-link">{{ (prisoner.lastName + ', ' +prisoner.firstName ) | title }}</a>
-                </td>
-                <td class="govuk-table__cell">{{ prisoner.prisonerNumber }}</td>
-                <td class="govuk-table__cell">{{ prisoner.dateOfBirth | date('DD MMMM YYYY') }}</td>
-            </tr>
-
-        {% endfor %}
-        </tbody>
-    </table>
+{% if (offences) %}
+    {% if (offences.length > 0) %}
+        {#    TODO #}
     {% else %}
         <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
     {% endif %}

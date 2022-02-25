@@ -15,7 +15,7 @@ describe('GET /', () => {
     viewContext = {}
   })
 
-  it('should render index page', () => {
+  it('should render search page', () => {
     viewContext = { shouldShowCreateLicenceCard: false }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))

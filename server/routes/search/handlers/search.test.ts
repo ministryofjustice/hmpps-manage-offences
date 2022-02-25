@@ -5,7 +5,7 @@ import OffenceService from '../../../services/offenceService'
 
 const offenceService = new OffenceService() as jest.Mocked<OffenceService>
 
-describe('Route Handlers - Home', () => {
+describe('Route Handlers - Search', () => {
   const handler = new SearchRoutes(offenceService)
   let req: Request
   let res: Response
@@ -20,11 +20,19 @@ describe('Route Handlers - Home', () => {
   })
 
   describe('GET', () => {
-    it('For case admin', async () => {
+    it('Search screen without any search params', async () => {
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/search/search', { offences: undefined })
+    })
+
+    it('Search screen without any a search param', async () => {
+      req = {
+        query: { offenceCode: 'ABC' },
+      } as unknown as Request
       offenceService.getOffencesByCode = jest.fn()
       offenceService.getOffencesByCode.mockResolvedValue([{ id: 1 }])
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/search/search', [{ id: 1 }])
+      expect(res.render).toHaveBeenCalledWith('pages/search/search', { offences: [{ id: 1 }] })
     })
   })
 })

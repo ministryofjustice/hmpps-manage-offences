@@ -14,7 +14,7 @@ describe('Route Handlers - Home', () => {
   })
 
   describe('GET', () => {
-    it('For case admin', async () => {
+    it('Test landing page route', async () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index')
     })
