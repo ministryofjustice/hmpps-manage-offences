@@ -7,7 +7,6 @@ export default class SearchRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { offenceCode } = req.query as Record<string, string>
     const offences = offenceCode ? await this.offenceService.getOffencesByCode(offenceCode) : undefined
-    console.log(JSON.stringify(offences))
     res.render('pages/search/search', { offences })
   }
 }
