@@ -15,24 +15,8 @@ describe('Route Handlers - Home', () => {
 
   describe('GET', () => {
     it('For case admin', async () => {
-      req = getReqWithRoles(['ROLE_LICENCE_CA'])
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/index', {
-        shouldShowCreateLicenceCard: false,
-        shouldShowVaryLicenceCard: false,
-        shouldShowApproveLicenceCard: false,
-        shouldShowMyCaseloadCard: false,
-        shouldShowViewOrPrintCard: true,
-        shouldShowVaryApprovalCard: false,
-      })
+      expect(res.render).toHaveBeenCalledWith('pages/index')
     })
   })
 })
-
-const getReqWithRoles = (roles: string[]): Request => {
-  return {
-    user: {
-      userRoles: roles,
-    },
-  } as unknown as Request
-}

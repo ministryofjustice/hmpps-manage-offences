@@ -6,7 +6,7 @@ export default class ManageOffenceesApiClient {
   restClient: RestClient
 
   constructor(token: string) {
-    this.restClient = new RestClient('Calculate release dates API', config.apis.manageOffences as ApiConfig, token)
+    this.restClient = new RestClient('Manage offences API', config.apis.manageOffences as ApiConfig, token)
   }
 
   getOffencesByCode(offenceCode: string): Promise<[Offence]> {

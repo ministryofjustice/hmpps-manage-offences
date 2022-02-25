@@ -1,0 +1,16 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Search" %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-4" data-qa="offence-search-section">
+        <div class="govuk-grid-column-full">
+            <div id="offence-search-container">
+                <h1 class="govuk-heading-xl">Search for offences</h1>
+                {% include "pages/search/offenceSearch.njk" %}
+                {% include "pages/search/offenceSearchTable.njk" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

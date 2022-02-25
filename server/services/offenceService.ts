@@ -2,7 +2,13 @@ import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import { Offence } from '../@types/manageOffences/manageOffencesClientTypes'
 
 export default class OffenceService {
-  async getOffencesByCode(offenceCode: string, token: string): Promise<[Offence]> {
-    return new ManageOffencesApiClient(token).getOffencesByCode(offenceCode)
+  private manageOffencesApiClient: ManageOffencesApiClient
+
+  setManageOffencesApiClient(token: string) {
+    this.manageOffencesApiClient = new ManageOffencesApiClient(token)
+  }
+
+  async getOffencesByCode(offenceCode: string): Promise<[Offence]> {
+    return this.manageOffencesApiClient.getOffencesByCode(offenceCode)
   }
 }
