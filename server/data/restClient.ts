@@ -1,18 +1,17 @@
 import superagent from 'superagent'
 import Agent, { HttpsAgent } from 'agentkeepalive'
 import { Readable } from 'stream'
-
-import querystring, { ParsedUrlQueryInput } from 'querystring'
 import logger from '../../logger'
 import sanitiseError from '../sanitisedError'
 import { ApiConfig } from '../config'
 import type { UnsanitisedError } from '../sanitisedError'
 import TokenStore from './tokenStore'
+import { createRedisClient } from './redisClient'
 
 interface GetRequest {
   userToken?: string
   path?: string
-  query?: ParsedUrlQueryInput
+  query?: string
   headers?: Record<string, string>
   responseType?: string
   raw?: boolean
@@ -45,23 +44,23 @@ interface SignedWithMethod {
   username?: string
 }
 
-export default class HmppsRestClient {
+export default class RestClient {
   private agent: Agent
 
   private tokenStore: TokenStore
 
   constructor(private readonly name: string, private readonly apiConfig: ApiConfig) {
     this.agent = apiConfig.url.startsWith('https') ? new HttpsAgent(apiConfig.agent) : new Agent(apiConfig.agent)
-    this.tokenStore = new TokenStore()
+    this.tokenStore = new TokenStore(createRedisClient())
   }
 
   async get(
-    { path = null, query = {}, headers = {}, responseType = '', raw = false }: GetRequest,
+    { path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest,
     signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
-    logger.info(`Get using admin client credentials: calling ${this.name}: ${path}?${querystring.stringify(query)}`)
+    logger.info(`Get using user credentials: calling ${this.name}: ${path} ${query}`)
     return superagent
       .get(`${this.apiConfig.url}${path}`)
       .agent(this.agent)

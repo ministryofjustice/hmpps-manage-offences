@@ -1,5 +1,5 @@
 import config, { ApiConfig } from '../config'
-import RestClient from './hmppsRestClient'
+import RestClient from './restClient'
 import { Offence } from '../@types/manageOffences/manageOffencesClientTypes'
 
 export default class ManageOffencesApiClient extends RestClient {

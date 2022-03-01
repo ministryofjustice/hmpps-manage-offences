@@ -1,38 +1,27 @@
-import { createClient } from 'redis'
-import { promisify } from 'util'
-
 import querystring from 'querystring'
 import superagent from 'superagent'
+import type { RedisClient } from './redisClient'
+
 import logger from '../../logger'
-import config from '../config'
 import generateOauthClientToken from '../authentication/clientCredentials'
+import config from '../config'
 
 export default class TokenStore {
-  private readonly getRedisAsync: (key: string) => Promise<string>
+  private readonly prefix = 'systemToken:'
 
-  private readonly setRedisAsync: (key: string, value: string, mode: string, durationSeconds: number) => Promise<void>
-
-  constructor() {
-    console.log('TOKENSTOR: In constructor')
-    const redisClient = createClient({
-      url:
-        config.redis.tls_enabled === 'true'
-          ? `rediss://${config.redis.host}:${config.redis.port}`
-          : `redis://${config.redis.host}:${config.redis.port}`,
-      password: config.redis.password,
-      legacyMode: false,
-    })
-
-    redisClient.on('error', error => {
+  constructor(private readonly client: RedisClient) {
+    client.on('error', error => {
       logger.error(error, `Redis error`)
     })
+  }
 
-    this.getRedisAsync = promisify(redisClient.get).bind(redisClient)
-    this.setRedisAsync = promisify(redisClient.set).bind(redisClient)
+  private async ensureConnected() {
+    if (!this.client.isOpen) {
+      await this.client.connect()
+    }
   }
 
   public getSystemToken = async (username?: string): Promise<string> => {
-    console.log('TOKENSTOR: In getSystemToken')
     const key = username || '%ANONYMOUS%'
     const token = await this.getToken(key)
     if (token) {
@@ -64,13 +53,13 @@ export default class TokenStore {
     return response.body.access_token
   }
 
-  private async setToken(key: string, token: string, durationSeconds: number): Promise<void> {
-    console.log('TOKENSTOR: In set tojken')
-    await this.setRedisAsync(key, token, 'EX', durationSeconds)
+  public async setToken(key: string, token: string, durationSeconds: number): Promise<void> {
+    await this.ensureConnected()
+    await this.client.set(`${this.prefix}${key}`, token, { EX: durationSeconds })
   }
 
-  private async getToken(key: string): Promise<string> {
-    console.log(`TOKENSTOR: In get token${key}`)
-    return this.getRedisAsync(key)
+  public async getToken(key: string): Promise<string> {
+    await this.ensureConnected()
+    return this.client.get(`${this.prefix}${key}`)
   }
 }

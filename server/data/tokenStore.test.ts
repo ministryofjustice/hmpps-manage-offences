@@ -14,7 +14,7 @@ jest.mock('../authentication/clientCredentials', () => {
 
 beforeEach(() => {
   redisClient = redis.createClient()
-  tokenStore = new TokenStore()
+  tokenStore = new TokenStore(redisClient as any)
 })
 
 afterEach(done => {

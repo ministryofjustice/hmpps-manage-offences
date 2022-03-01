@@ -1,21 +1,17 @@
-import redis, { createClient } from 'redis'
+import { v4 as uuidv4 } from 'uuid'
 import session from 'express-session'
 import connectRedis, { Client } from 'connect-redis'
-import addRequestId from 'express-request-id'
 import express, { Router } from 'express'
-
-import config from '../config'
 import { createRedisClient } from '../data/redisClient'
+import config from '../config'
 
 const RedisStore = connectRedis(session)
 
-const cl =
-
 export default function setUpWebSession(): Router {
-  const client = createRedisClient()
-  const router = express.Router()
-  // client.connect()
+  const client = createRedisClient(true)
+  client.connect()
 
+  const router = express.Router()
   router.use(
     session({
       store: new RedisStore({ client: client as unknown as Client }),
@@ -34,7 +30,16 @@ export default function setUpWebSession(): Router {
     next()
   })
 
-  router.use(addRequestId())
+  router.use((req, res, next) => {
+    const headerName = 'X-Request-Id'
+    const oldValue = req.get(headerName)
+    const id = oldValue === undefined ? uuidv4() : oldValue
+
+    res.set(headerName, id)
+    req.id = id
+
+    next()
+  })
 
   return router
 }

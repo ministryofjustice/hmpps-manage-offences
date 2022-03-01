@@ -1,6 +1,6 @@
 import nock from 'nock'
-import HmppsRestClient from './hmppsRestClient'
 import HmppsAuthClient from './hmppsAuthClient'
+import RestClient from './restClient'
 
 type User = Express.User
 
@@ -13,7 +13,7 @@ jest.mock('./tokenStore', () => {
 const authClient = new HmppsAuthClient()
 
 describe('hmppsAuthClient', () => {
-  const get = jest.spyOn(HmppsRestClient.prototype, 'get')
+  const get = jest.spyOn(RestClient.prototype, 'get')
 
   beforeEach(() => {
     get.mockResolvedValue(true)
