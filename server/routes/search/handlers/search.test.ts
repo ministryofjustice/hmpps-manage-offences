@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import SearchRoutes from './search'
 import OffenceService from '../../../services/offenceService'
 
-const offenceService = new OffenceService() as jest.Mocked<OffenceService>
+const offenceService = new OffenceService(null) as jest.Mocked<OffenceService>
 
 describe('Route Handlers - Search', () => {
   const handler = new SearchRoutes(offenceService)
@@ -16,6 +16,11 @@ describe('Route Handlers - Search', () => {
     } as unknown as Request
     res = {
       render: jest.fn(),
+      locals: {
+        user: {
+          username: 'user',
+        },
+      },
     } as unknown as Response
   })
 

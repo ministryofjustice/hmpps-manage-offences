@@ -1,56 +1,66 @@
-import { RedisClient } from './redisClient'
+import nock from 'nock'
+import redis, { RedisClient } from 'redis-mock'
 import TokenStore from './tokenStore'
+import config from '../config'
 
-const redisClient = {
-  get: jest.fn(),
-  set: jest.fn(),
-  on: jest.fn(),
-  connect: jest.fn(),
-  isOpen: true,
-} as unknown as jest.Mocked<RedisClient>
+let tokenStore: TokenStore
+let redisClient: RedisClient
 
-describe('tokenStore', () => {
-  let tokenStore: TokenStore
+jest.mock('redis', () => redis)
 
-  beforeEach(() => {
-    tokenStore = new TokenStore(redisClient as unknown as RedisClient)
+jest.mock('../authentication/clientCredentials', () => {
+  return jest.fn().mockImplementation(() => 'Basic clientId:secret')
+})
+
+beforeEach(() => {
+  redisClient = redis.createClient()
+  tokenStore = new TokenStore()
+})
+
+afterEach(done => {
+  redisClient.flushall(done)
+  jest.clearAllMocks()
+  nock.cleanAll()
+})
+
+describe('Token Store', () => {
+  it('Token for user is returned from redis is exists', async () => {
+    redisClient.set('joebloggs', 'saved token')
+
+    const token = await tokenStore.getSystemToken('joebloggs')
+
+    expect(token).toEqual('saved token')
   })
 
-  afterEach(() => {
-    jest.resetAllMocks()
+  it('Auth is called to get and save a token for user if one is not saved', async () => {
+    nock(config.apis.hmppsAuth.url, {
+      reqheaders: { Authorization: 'Basic clientId:secret', 'content-type': 'application/x-www-form-urlencoded' },
+    })
+      .post('/oauth/token', { grant_type: 'client_credentials', username: 'joebloggs' })
+      .reply(200, {
+        access_token: 'generated user token',
+        expires_in: 2000,
+      })
+
+    const token = await tokenStore.getSystemToken('joebloggs')
+
+    expect(token).toEqual('generated user token')
+    expect(nock.isDone()).toBe(true)
   })
 
-  describe('get token', () => {
-    it('Can retrieve token', async () => {
-      redisClient.get.mockResolvedValue('token-1')
-
-      await expect(tokenStore.getToken('user-1')).resolves.toBe('token-1')
-
-      expect(redisClient.get).toHaveBeenCalledWith('systemToken:user-1')
+  it('Auth is called to get and save a token for system if one is not saved', async () => {
+    nock(config.apis.hmppsAuth.url, {
+      reqheaders: { Authorization: 'Basic clientId:secret', 'content-type': 'application/x-www-form-urlencoded' },
     })
+      .post('/oauth/token', { grant_type: 'client_credentials' })
+      .reply(200, {
+        access_token: 'generated system token',
+        expires_in: 2000,
+      })
 
-    it('Connects when no connection calling getToken', async () => {
-      ;(redisClient as unknown as Record<string, boolean>).isOpen = false
+    const token = await tokenStore.getSystemToken()
 
-      await tokenStore.getToken('user-1')
-
-      expect(redisClient.connect).toHaveBeenCalledWith()
-    })
-  })
-
-  describe('set token', () => {
-    it('Can set token', async () => {
-      await tokenStore.setToken('user-1', 'token-1', 10)
-
-      expect(redisClient.set).toHaveBeenCalledWith('systemToken:user-1', 'token-1', { EX: 10 })
-    })
-
-    it('Connects when no connection calling set token', async () => {
-      ;(redisClient as unknown as Record<string, boolean>).isOpen = false
-
-      await tokenStore.setToken('user-1', 'token-1', 10)
-
-      expect(redisClient.connect).toHaveBeenCalledWith()
-    })
+    expect(token).toEqual('generated system token')
+    expect(nock.isDone()).toBe(true)
   })
 })

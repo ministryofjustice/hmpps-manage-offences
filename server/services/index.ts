@@ -1,11 +1,12 @@
 import OffenceService from './offenceService'
 import UserService from './userService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
-import TokenStore from '../data/tokenStore'
-import { createRedisClient } from '../data/redisClient'
+import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 
-const hmppsAuthClient = new HmppsAuthClient(new TokenStore(createRedisClient()))
-const offenceService = new OffenceService()
+const hmppsAuthClient = new HmppsAuthClient()
+const manageOffencesApiClient = new ManageOffencesApiClient()
+
+const offenceService = new OffenceService(manageOffencesApiClient)
 const userService = new UserService(hmppsAuthClient)
 
 export const services = {

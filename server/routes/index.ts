@@ -11,7 +11,7 @@ export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
 
   router.use(auth.authenticationMiddleware(tokenVerifier))
-  router.use(populateCurrentUser(services.userService, services.offenceService))
+  router.use(populateCurrentUser(services.userService))
   router.use(csrf())
 
   router.use(homeRoutes())
