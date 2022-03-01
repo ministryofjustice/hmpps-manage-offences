@@ -2,14 +2,20 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Home" %}
+{% set pageId = "landing-page" %}
 
 {% block content %}
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-xl" data-qa="main-heading">
-                Manage offences
-            </h1>
+            <h1 class="govuk-heading-xl" data-qa="main-heading">Manage offences</h1>
+            <p class="govuk-body">Use this service to manage offences, including:</p>
+
+            <ul class="govuk-list govuk-list--bullet" id="service-uses-list">
+                <li>reviewing new and updated offences from HM Courts and Tribunals Service (HMCTS)</li>
+                <li>adding accurate schedule information (such as schedule 15)</li>
+                <li>loading offence data into both NOMIS and Delius</li>
+            </ul>
             {{ govukButton({
                 text: "Start now",
                 href: '/search/offence-code',
