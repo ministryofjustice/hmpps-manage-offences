@@ -1,4 +1,3 @@
-import querystring from 'querystring'
 import superagent from 'superagent'
 import type { RedisClient } from './redisClient'
 
@@ -33,9 +32,9 @@ export default class TokenStore {
       config.apis.hmppsAuth.systemClientSecret
     )
 
-    const authRequest = username
-      ? querystring.stringify({ grant_type: 'client_credentials', username })
-      : querystring.stringify({ grant_type: 'client_credentials' })
+    const authRequest = new URLSearchParams(
+      username ? { grant_type: 'client_credentials', username } : { grant_type: 'client_credentials' }
+    ).toString()
 
     logger.info(
       `HMPPS Auth request '${authRequest}' for client id '${config.apis.hmppsAuth.systemClientId}' and user '${username}'`
