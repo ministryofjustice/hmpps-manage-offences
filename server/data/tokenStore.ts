@@ -1,6 +1,9 @@
+import superagent from 'superagent'
 import type { RedisClient } from './redisClient'
 
 import logger from '../../logger'
+import generateOauthClientToken from '../authentication/clientCredentials'
+import config from '../config'
 
 export default class TokenStore {
   private readonly prefix = 'systemToken:'
@@ -15,6 +18,38 @@ export default class TokenStore {
     if (!this.client.isOpen) {
       await this.client.connect()
     }
+  }
+
+  public getSystemToken = async (username?: string): Promise<string> => {
+    const key = username || '%ANONYMOUS%'
+    const token = await this.getToken(key)
+    if (token) {
+      return token
+    }
+
+    const clientToken = generateOauthClientToken(
+      config.apis.hmppsAuth.systemClientId,
+      config.apis.hmppsAuth.systemClientSecret
+    )
+
+    const authRequest = new URLSearchParams(
+      username ? { grant_type: 'client_credentials', username } : { grant_type: 'client_credentials' }
+    ).toString()
+
+    logger.info(
+      `HMPPS Auth request '${authRequest}' for client id '${config.apis.hmppsAuth.systemClientId}' and user '${username}'`
+    )
+
+    const response = await superagent
+      .post(`${config.apis.hmppsAuth.url}/oauth/token`)
+      .set('Authorization', clientToken)
+      .set('content-type', 'application/x-www-form-urlencoded')
+      .send(authRequest)
+      .timeout(config.apis.hmppsAuth.timeout)
+
+    // Set the TTL slightly less than expiry of token
+    await this.setToken(key, response.body.access_token, response.body.expires_in - 60)
+    return response.body.access_token
   }
 
   public async setToken(key: string, token: string, durationSeconds: number): Promise<void> {

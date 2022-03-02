@@ -2,16 +2,19 @@ import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import { Offence } from '../@types/manageOffences/manageOffencesClientTypes'
 
-export default class ManageOffenceesApiClient {
-  restClient: RestClient
+type User = Express.User
 
-  constructor(token: string) {
-    this.restClient = new RestClient('Manage offences API', config.apis.manageOffences as ApiConfig, token)
+export default class ManageOffencesApiClient extends RestClient {
+  constructor() {
+    super('Manage offences API', config.apis.manageOffences as ApiConfig)
   }
 
-  getOffencesByCode(offenceCode: string): Promise<[Offence]> {
-    return this.restClient.get({
-      path: `/offences/code/${offenceCode}`,
-    }) as Promise<[Offence]>
+  getOffencesByCode(offenceCode: string, user: User): Promise<[Offence]> {
+    return this.get(
+      {
+        path: `/offences/code/${offenceCode}`,
+      },
+      { token: user.token }
+    ) as Promise<[Offence]>
   }
 }
