@@ -24,7 +24,6 @@ MANAGE_OFFENCES_API_URL="https://manage-offences-api-dev.hmpps.service.justice.g
 PRISON_API_URL="https://api-dev.prison.service.justice.gov.uk"
 API_CLIENT_SECRET=FILL THIS IN WITH SECRET FROM DEV!!
 SYSTEM_CLIENT_SECRET=FILL THIS IN WITH SECRET FROM DEV!!
-To start the main services (excluding the manage-offences): 
 ```   
 2. Start the redis container.
 ```   
