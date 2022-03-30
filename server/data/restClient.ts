@@ -7,7 +7,6 @@ import { ApiConfig } from '../config'
 import type { UnsanitisedError } from '../sanitisedError'
 import TokenStore from './tokenStore'
 import { createRedisClient } from './redisClient'
-import { restClientMetricsMiddleware } from './restClientMetricsMiddleware'
 
 interface GetRequest {
   userToken?: string
@@ -65,7 +64,6 @@ export default class RestClient {
     return superagent
       .get(`${this.apiConfig.url}${path}`)
       .agent(this.agent)
-      .use(restClientMetricsMiddleware)
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
@@ -96,7 +94,6 @@ export default class RestClient {
       .post(`${this.apiConfig.url}${path}`)
       .send(data)
       .agent(this.agent)
-      .use(restClientMetricsMiddleware)
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
@@ -126,7 +123,6 @@ export default class RestClient {
       .put(`${this.apiConfig.url}${path}`)
       .send(data)
       .agent(this.agent)
-      .use(restClientMetricsMiddleware)
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
@@ -153,7 +149,6 @@ export default class RestClient {
       .get(`${this.apiConfig.url}${path}`)
       .agent(this.agent)
       .auth(signedWith, { type: 'bearer' })
-      .use(restClientMetricsMiddleware)
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
