@@ -5,6 +5,23 @@ import path from 'path'
 
 const production = process.env.NODE_ENV === 'production'
 
+const toTwoDigits = (val: number) => `${`0${val}`.slice(-2)}`
+
+const months = {
+  0: { short: 'Jan', full: 'January' },
+  1: { short: 'Feb', full: 'February' },
+  2: { short: 'Mar', full: 'March' },
+  3: { short: 'Apr', full: 'April' },
+  4: { short: 'May', full: 'May' },
+  5: { short: 'Jun', full: 'June' },
+  6: { short: 'Jul', full: 'July' },
+  7: { short: 'Aug', full: 'August' },
+  8: { short: 'Sep', full: 'September' },
+  9: { short: 'Oct', full: 'October' },
+  10: { short: 'Nov', full: 'November' },
+  11: { short: 'Dec', full: 'December' },
+}
+
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
 
@@ -48,6 +65,22 @@ export function registerNunjucks(app?: express.Express): Environment {
     }
     const array = fullName.split(' ')
     return `${array[0][0]}. ${array.reverse()[0]}`
+  })
+
+  // monthLength can be 'short' (default) or 'full'
+  njkEnv.addFilter('dateFormat', (dateString: string, monthLength = 'short') => {
+    if (!dateString) return null
+    const date = new Date(dateString)
+    return `${toTwoDigits(date.getDate())} ${months[date.getMonth()][monthLength]} ${date.getFullYear()}`
+  })
+
+  njkEnv.addFilter('dateTimeFormat', (dateString: string, monthLength = 'short') => {
+    if (!dateString) return null
+    const date = new Date(dateString)
+    if (!date || Number.isNaN(date.getTime())) return null
+    return `${toTwoDigits(date.getDate())} ${months[date.getMonth()][monthLength]} ${date.getFullYear()} ${toTwoDigits(
+      date.getHours()
+    )}:${toTwoDigits(date.getMinutes())}`
   })
 
   return njkEnv

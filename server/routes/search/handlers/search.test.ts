@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import SearchRoutes from './search'
 import OffenceService from '../../../services/offenceService'
+import { Offence } from '../../../@types/manageOffences/manageOffencesClientTypes'
 
 const offenceService = new OffenceService(null) as jest.Mocked<OffenceService>
 
@@ -35,9 +36,9 @@ describe('Route Handlers - Search', () => {
         query: { offenceCode: 'ABC' },
       } as unknown as Request
       offenceService.getOffencesByCode = jest.fn()
-      offenceService.getOffencesByCode.mockResolvedValue([{ id: 1 }])
+      offenceService.getOffencesByCode.mockResolvedValue([{ id: 1 } as unknown as Offence])
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/search/search', { offences: [{ id: 1 }] })
+      expect(res.render).toHaveBeenCalledWith('pages/search/search', { offences: [{ id: 1 }], offenceCode: 'ABC' })
     })
   })
 })

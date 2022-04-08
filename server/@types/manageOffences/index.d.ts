@@ -4,31 +4,91 @@
  */
 
 export interface paths {
+  '/offences/load-all-offences': {
+    /** This endpoint will fetch all offences from SDRS and load into the manage offences DB. This will delete all existing data and reload */
+    post: operations['loadAllOffences']
+  }
+  '/offences/sdrs/code/{offenceCode}': {
+    /** This endpoint will return the the offence that matches the passed in offence code */
+    get: operations['getOffenceFromSDRS']
+  }
   '/offences/code/{offenceCode}': {
-    /** This endpoint will return the the offences that match an offence code */
+    /** This endpoint will return the the offences that start with the passed offence code */
     get: operations['getOffencesByOffenceCode']
   }
 }
 
 export interface components {
   schemas: {
-    /** @description Offence details */
-    Offence: {
-      /**
-       * Format: int64
-       * @description Unique ID of the offence
-       */
-      id: number
-      /** @description The offence code */
+    ControlTableRecord: {
+      DataSet: string
+      /** Format: date-time */
+      LastUpdate: string
+    }
+    GatewayOperationTypeResponse: {
+      GetOffenceResponse?: components['schemas']['GetOffenceResponse']
+      GetControlTableResponse?: components['schemas']['GetControlTableResponse']
+    }
+    GetControlTableResponse: {
+      ReferenceDataSet: components['schemas']['ControlTableRecord'][]
+    }
+    GetOffenceResponse: {
+      Offence: components['schemas']['Offence'][]
+    }
+    MessageBodyResponse: {
+      GatewayOperationType: components['schemas']['GatewayOperationTypeResponse']
+    }
+    MessageStatusResponse: {
+      status: string
       code?: string
-      /** @description The offence description */
-      description?: string
+      reason?: string
+    }
+    Offence: {
+      /** Format: int32 */
+      OffenceRevisionId: number
+      code: string
+      Description?: string
+      CjsTitle?: string
+      /** Format: date */
+      OffenceStartDate?: string
+      /** Format: date */
+      OffenceEndDate?: string
+      /** Format: date-time */
+      ChangedDate?: string
+    }
+    SDRSResponse: {
+      MessageBody: components['schemas']['MessageBodyResponse']
+      MessageStatus: components['schemas']['MessageStatusResponse']
     }
   }
 }
 
 export interface operations {
-  /** This endpoint will return the the offences that match an offence code */
+  /** This endpoint will fetch all offences from SDRS and load into the manage offences DB. This will delete all existing data and reload */
+  loadAllOffences: {
+    responses: {
+      /** OK */
+      200: unknown
+    }
+  }
+  /** This endpoint will return the the offence that matches the passed in offence code */
+  getOffenceFromSDRS: {
+    parameters: {
+      path: {
+        /** The offence code */
+        offenceCode: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['SDRSResponse']
+        }
+      }
+    }
+  }
+  /** This endpoint will return the the offences that start with the passed offence code */
   getOffencesByOffenceCode: {
     parameters: {
       path: {
