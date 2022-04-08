@@ -1,8 +1,42 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
 {% if (offences) %}
     {% if (offences.length > 0) %}
-        {#    TODO #}
+        <table id="offence-table" class="govuk-table alternate-shade" data-qa="offence-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Last change date</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body govuk-body-s">
+            {% for offence in offences %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
+                        {{ offence.code }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ offence.cjsTitle }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ offence.startDate | dateFormat }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ offence.endDate | dateFormat }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ offence.changedDate | dateTimeFormat }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        
     {% else %}
         <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
     {% endif %}

@@ -63,3 +63,9 @@ And then either, run tests in headless mode with:
 Or run tests with the cypress UI:
 
 `npm run int-test-ui`
+
+### Generating open-api types
+1. Run `cd scripts`
+2. Run `./generate-manage-offences-api-types.sh` and open the generated file `index.d.ts`
+3. Resolve any lint errors, and remove the last line `export interface external {}`
+

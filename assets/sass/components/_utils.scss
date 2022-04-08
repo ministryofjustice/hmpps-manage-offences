@@ -1,0 +1,8 @@
+table.alternate-shade {
+  tr:nth-child(odd) {
+    background-color: #f3f2f1;
+  }
+  tr:only-child {
+    background-color: #ffffff;
+  }
+}

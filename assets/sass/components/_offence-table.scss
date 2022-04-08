@@ -1,0 +1,26 @@
+#offence-table {
+  td, th {
+    min-width: 80px;
+    font-size: 16px;
+    max-width: 300px;
+
+    &:first-of-type {
+      min-width: 95px;
+    }
+
+    &:last-of-type {
+      text-align: right;
+      padding-right: 5px;
+      min-width: auto;
+    }
+
+    &.govuk-table__cell {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  }
+
+  th {
+    vertical-align: bottom;
+  }
+}
