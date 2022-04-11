@@ -1,6 +1,6 @@
 table.alternate-shade {
   tr:nth-child(odd) {
-    background-color: #f3f2f1;
+    background-color: govuk-colour("light-grey");
   }
   tr:only-child {
     background-color: #ffffff;

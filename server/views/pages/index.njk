@@ -1,11 +1,15 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/nav.njk" import navBar with context %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set pageId = "landing-page" %}
 
-{% block content %}
+{% block navBar %}
+    {{ navBar('home') }}
+{% endblock %}
 
+{% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-xl" data-qa="main-heading">Manage offences</h1>
@@ -18,7 +22,7 @@
             </ul>
             {{ govukButton({
                 text: "Start now",
-                href: '/search/offence-code',
+                href: '/load-results',
                 classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
                 isStartButton: true,
                 attributes: { 'data-qa': 'start-now-button' }

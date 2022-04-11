@@ -1,5 +1,5 @@
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
-import { Offence } from '../@types/manageOffences/manageOffencesClientTypes'
+import { MostRecentLoadResult, Offence } from '../@types/manageOffences/manageOffencesClientTypes'
 
 type User = Express.User
 
@@ -8,5 +8,9 @@ export default class OffenceService {
 
   async getOffencesByCode(offenceCode: string, user: User): Promise<[Offence]> {
     return this.manageOffencesApiClient.getOffencesByCode(offenceCode, user)
+  }
+
+  async getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
+    return this.manageOffencesApiClient.getMostRecentLoadResult(user)
   }
 }
