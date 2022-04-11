@@ -17,6 +17,8 @@ describe('GET /', () => {
     const $ = cheerio.load(compiledTemplate.render())
 
     expect($('h1').text().trim()).toBe('Manage offences')
-    expect($('#service-uses-list').text()).toContain('loading offence data into both NOMIS and Delius')
+    expect($('#service-uses-list').text()).toContain(
+      'Manage offences, including loading, publishing, searching and augmenting'
+    )
   })
 })
