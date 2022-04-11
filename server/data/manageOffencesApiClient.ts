@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import { Offence } from '../@types/manageOffences/manageOffencesClientTypes'
+import { MostRecentLoadResult, Offence } from '../@types/manageOffences/manageOffencesClientTypes'
 
 type User = Express.User
 
@@ -16,5 +16,14 @@ export default class ManageOffencesApiClient extends RestClient {
       },
       { token: user.token }
     ) as Promise<[Offence]>
+  }
+
+  getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
+    return this.get(
+      {
+        path: '/offences/load-results',
+      },
+      { token: user.token }
+    ) as Promise<[MostRecentLoadResult]>
   }
 }

@@ -1,0 +1,26 @@
+{%  macro navBar(selected) %}
+
+    <nav class="app-navigation govuk-clearfix">
+        <div class="govuk-width-container">
+            <ul class="app-navigation__list">
+
+                <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "home" }}">
+                    <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/"
+                       data-topnav="Get started">Home</a>
+                </li>
+
+
+                <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "load-results" }}">
+                    <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/load-results"
+                       data-topnav="Get started">Load monitor</a>
+                </li>
+
+                <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "search" }}">
+                    <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/search/offence-code"
+                       data-topnav="Get started">Search</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+{% endmacro %}

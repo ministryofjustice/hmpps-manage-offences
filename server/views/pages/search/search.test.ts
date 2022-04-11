@@ -7,18 +7,13 @@ const snippet = fs.readFileSync('server/views/pages/search/search.njk')
 
 describe('GET /', () => {
   let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
   const njkEnv = registerNunjucks()
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
   })
 
   it('should render search page', () => {
-    viewContext = { shouldShowCreateLicenceCard: false }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    const $ = cheerio.load(compiledTemplate.render())
 
     expect($('h1').text().trim()).toBe('Search for offences')
   })

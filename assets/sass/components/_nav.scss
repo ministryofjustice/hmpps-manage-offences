@@ -1,0 +1,69 @@
+.app-navigation {
+  font-family: "GDS Transport",arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.25;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #f8f8f8;
+}
+
+.app-navigation__list {
+  position: relative;
+  left: -10px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.app-navigation__list-item {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  height: 50px;
+  margin: 0 10px;
+  float: left;
+  line-height: 50px;
+
+  &.app-navigation__list-item--current{
+    border-bottom: 4px solid #1d70b8;
+
+    .app-navigation__link {
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.app-navigation__link {
+
+  text-decoration: none;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  &:hover {
+    color: #1d70b8;
+    text-decoration: underline;
+  }
+}
+
+// overrides to allow header/phasebanner/nav layout
+.govuk-phase-banner {
+  border-bottom: none;
+}
+
+.govuk-header {
+  border-bottom: none;
+}

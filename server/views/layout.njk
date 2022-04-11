@@ -23,12 +23,14 @@
 
 {% block header %}
   {% include "partials/header.njk" %}
+  {% block navBar %}{% endblock %}
 {% endblock %}
 
 {% block bodyStart %}
 {% endblock %}
 
 {% block beforeContent %}
+
   <aside role="complementary">
     {% include "partials/phaseBanner.njk" %}
     {% block aside %}{% endblock %}

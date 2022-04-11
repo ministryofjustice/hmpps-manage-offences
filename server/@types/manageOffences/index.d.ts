@@ -8,9 +8,9 @@ export interface paths {
     /** This endpoint will fetch all offences from SDRS and load into the manage offences DB. This will delete all existing data and reload */
     post: operations['loadAllOffences']
   }
-  '/offences/sdrs/code/{offenceCode}': {
-    /** This endpoint will return the the offence that matches the passed in offence code */
-    get: operations['getOffenceFromSDRS']
+  '/offences/load-results': {
+    /** Get the results of the most recent load */
+    get: operations['findLoadResults']
   }
   '/offences/code/{offenceCode}': {
     /** This endpoint will return the the offences that start with the passed offence code */
@@ -20,45 +20,69 @@ export interface paths {
 
 export interface components {
   schemas: {
-    ControlTableRecord: {
-      DataSet: string
-      /** Format: date-time */
-      LastUpdate: string
+    /** @description Details of the load by alpha char (A to Z) */
+    MostRecentLoadResult: {
+      /** @description Single alphabetic character between A and Z - indicates the part of the SDRS load this status relates to */
+      alphaChar: string
+      /**
+       * @description Load Status: SUCCESS or FAIL
+       * @enum {string}
+       */
+      status?: 'SUCCESS' | 'FAIL'
+      /**
+       * @description Load Type: FULL_LOAD or UPDATE
+       * @enum {string}
+       */
+      type?: 'FULL_LOAD' | 'UPDATED'
+      /**
+       * Format: date-time
+       * @description The date and time of the load
+       */
+      loadDate?: string
+      /**
+       * Format: date-time
+       * @description The date and time of the most recent successful load; if the load was successful this is the same as the loadDate
+       */
+      lastSuccessfulLoadDate?: string
     }
-    GatewayOperationTypeResponse: {
-      GetOffenceResponse?: components['schemas']['GetOffenceResponse']
-      GetControlTableResponse?: components['schemas']['GetControlTableResponse']
-    }
-    GetControlTableResponse: {
-      ReferenceDataSet: components['schemas']['ControlTableRecord'][]
-    }
-    GetOffenceResponse: {
-      Offence: components['schemas']['Offence'][]
-    }
-    MessageBodyResponse: {
-      GatewayOperationType: components['schemas']['GatewayOperationTypeResponse']
-    }
-    MessageStatusResponse: {
-      status: string
-      code?: string
-      reason?: string
-    }
+    /** @description Offence details */
     Offence: {
-      /** Format: int32 */
-      OffenceRevisionId: number
-      code: string
-      Description?: string
-      CjsTitle?: string
-      /** Format: date */
-      OffenceStartDate?: string
-      /** Format: date */
-      OffenceEndDate?: string
-      /** Format: date-time */
-      ChangedDate?: string
-    }
-    SDRSResponse: {
-      MessageBody: components['schemas']['MessageBodyResponse']
-      MessageStatus: components['schemas']['MessageStatusResponse']
+      /**
+       * Format: int64
+       * @description Unique ID of the offence
+       */
+      id: number
+      /** @description The offence code */
+      code?: string
+      /** @description The offence description */
+      description?: string
+      /** @description The CJS Title (usually the same as description) */
+      cjsTitle?: string
+      /**
+       * Format: int32
+       * @description The revision number of the offence
+       */
+      revisionId?: number
+      /**
+       * Format: date
+       * @description The offence start date
+       */
+      startDate?: string
+      /**
+       * Format: date
+       * @description The offence end date
+       */
+      endDate?: string
+      /**
+       * Format: date-time
+       * @description The date this offence was last changed in SDRS
+       */
+      changedDate?: string
+      /**
+       * Format: date-time
+       * @description The date this offence was loaded into manage-offences from SDRS
+       */
+      loadDate?: string
     }
   }
 }
@@ -71,19 +95,13 @@ export interface operations {
       200: unknown
     }
   }
-  /** This endpoint will return the the offence that matches the passed in offence code */
-  getOffenceFromSDRS: {
-    parameters: {
-      path: {
-        /** The offence code */
-        offenceCode: string
-      }
-    }
+  /** Get the results of the most recent load */
+  findLoadResults: {
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['SDRSResponse']
+          'application/json': components['schemas']['MostRecentLoadResult'][]
         }
       }
     }

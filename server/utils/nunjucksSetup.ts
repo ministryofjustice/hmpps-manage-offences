@@ -83,5 +83,21 @@ export function registerNunjucks(app?: express.Express): Environment {
     )}:${toTwoDigits(date.getMinutes())}`
   })
 
+  njkEnv.addFilter('statusColour', (status: string) => {
+    if (status === 'SUCCESS') {
+      return 'govuk-tag--green'
+    }
+
+    if (status === 'FAIL') {
+      return 'govuk-tag--red'
+    }
+    return 'govuk-tag--grey'
+  })
+
+  njkEnv.addFilter('loadType', (loadType: string) => {
+    if (!loadType) return null
+    return loadType === 'FULL_LOAD' ? 'Full load' : 'Update'
+  })
+
   return njkEnv
 }
