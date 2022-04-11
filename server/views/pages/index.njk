@@ -12,21 +12,53 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-xl" data-qa="main-heading">Manage offences</h1>
-            <p class="govuk-body">Use this service to manage offences, including:</p>
+            <header class="homepage-inverse-header">
+                <div class="govuk-width-container">
+                    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+                        Manage offences
+                    </h1>
+                    <span id="service-uses-list" class="govuk-caption-l govuk-!-margin-bottom-8">Manage offences, including loading, publishing, searching and augmenting</span>
+                </div>
+            </header>
 
-            <ul class="govuk-list govuk-list--bullet" id="service-uses-list">
-                <li>reviewing new and updated offences from HM Courts and Tribunals Service (HMCTS)</li>
-                <li>adding accurate schedule information (such as schedule 15)</li>
-                <li>loading offence data into both NOMIS and Delius</li>
-            </ul>
-            {{ govukButton({
-                text: "Start now",
-                href: '/load-results',
-                classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
-                isStartButton: true,
-                attributes: { 'data-qa': 'start-now-button' }
-            }) }}
+            <section class="homepage-section homepage-section--links-and-search">
+                <div class="govuk-width-container">
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            <h2 class="govuk-heading-m  govuk-!-margin-bottom-4">Offence Actions</h2>
+
+                            <ul class="offence-actions govuk-list govuk-list--spaced">
+                                <li>
+                                    <a class="govuk-link" href="/load-results" title="From the Standing Data Repository Service (SDRS) part of the HM Court &amp; Tribunal Service (HMTCS)">Recent Offences <strong>recieved from</strong> HMCTS.</a>
+                                </li>
+                                <li>
+                                    <a class="govuk-link"  href="#">Offences <strong>sent to</strong> NOMIS</a>
+                                </li>
+                                <li>
+                                    <a class="govuk-link" href="#">Offences <strong>sent to</strong> Delius</a>
+                                </li>
+                                <li>
+                                    <a class="govuk-link" href="/search/offence-code">Search offences in Manage Offences</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="govuk-grid-column-one-half govuk-!-margin-top-0">
+                            <form action="/search/offence-code" method="get" role="search">
+                                <div class="gem-c-search govuk-!-display-none-print  govuk-!-margin-bottom-0 gem-c-search--large-on-mobile gem-c-search--on-white gem-c-search--separate-label" data-module="gem-toggle-input-class-on-focus" data-gem-toggle-input-class-on-focus-module-started="true">
+                                    <h2 class="govuk-!-margin-0">
+                                        <label for="search-main-544a6151" class="govuk-label govuk-label--m govuk-!-margin-bottom-4">Search</label>
+                                    </h2>
+                                    <div class="gem-c-search__item-wrapper">
+                                        <input class="govuk-input govuk-!-width-two-thirds"  name="offenceCode" title="Search Offences" type="search" value="" placeholder="Search Offences">
+                                        <button class="govuk-button">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
