@@ -26,4 +26,22 @@ export default class ManageOffencesApiClient extends RestClient {
       { token: user.token }
     ) as Promise<[MostRecentLoadResult]>
   }
+
+  triggerSdrsLoad(user: User) {
+    this.post(
+      {
+        path: '/offences/load-all-offences',
+      },
+      { token: user.token }
+    )
+  }
+
+  triggerSdrsUpdate(user: User) {
+    this.post(
+      {
+        path: '/offences/load-offence-updates',
+      },
+      { token: user.token }
+    )
+  }
 }

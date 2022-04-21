@@ -13,4 +13,12 @@ export default class OffenceService {
   async getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
     return this.manageOffencesApiClient.getMostRecentLoadResult(user)
   }
+
+  async triggerSdrsLoad(user: User) {
+    this.manageOffencesApiClient.triggerSdrsLoad(user)
+  }
+
+  async triggerSdrsUpdate(user: User) {
+    this.manageOffencesApiClient.triggerSdrsUpdate(user)
+  }
 }
