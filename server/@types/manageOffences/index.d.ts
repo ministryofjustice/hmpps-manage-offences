@@ -4,6 +4,10 @@
  */
 
 export interface paths {
+  '/offences/load-offence-updates': {
+    /** This endpoint will determine which offences have been changed since the last SDRS load and update them */
+    post: operations['updateOffences']
+  }
   '/offences/load-all-offences': {
     /** This endpoint will fetch all offences from SDRS and load into the manage offences DB. This will delete all existing data and reload */
     post: operations['loadAllOffences']
@@ -33,7 +37,7 @@ export interface components {
        * @description Load Type: FULL_LOAD or UPDATE
        * @enum {string}
        */
-      type?: 'FULL_LOAD' | 'UPDATED'
+      type?: 'FULL_LOAD' | 'UPDATE'
       /**
        * Format: date-time
        * @description The date and time of the load
@@ -73,6 +77,8 @@ export interface components {
        * @description The offence end date
        */
       endDate?: string
+      /** @description The offence's home office stats code */
+      homeOfficeStatsCode?: string
       /**
        * Format: date-time
        * @description The date this offence was last changed in SDRS
@@ -88,6 +94,13 @@ export interface components {
 }
 
 export interface operations {
+  /** This endpoint will determine which offences have been changed since the last SDRS load and update them */
+  updateOffences: {
+    responses: {
+      /** OK */
+      200: unknown
+    }
+  }
   /** This endpoint will fetch all offences from SDRS and load into the manage offences DB. This will delete all existing data and reload */
   loadAllOffences: {
     responses: {

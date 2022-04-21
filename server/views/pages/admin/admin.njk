@@ -1,0 +1,38 @@
+{% extends "layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Latest load results" %}
+{% set pageId = "search-offences" %}
+
+{% block navBar %}
+    {{ navBar('load-results') }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters ">
+            <div>
+                <form method="get" action="/admin/trigger-sdrs-load">
+                    {{ govukButton({
+                        classes: "govuk-button--primary",
+                        text: "SDRS load",
+                        preventDoubleClick: true
+                    }) }}
+                </form>
+            </div>
+            <div>
+                <form method="get" action="/admin/trigger-sdrs-update">
+                    {{ govukButton({
+                        classes: "govuk-button--primary",
+                        text: "SDRS Update",
+                        preventDoubleClick: true
+                    }) }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
