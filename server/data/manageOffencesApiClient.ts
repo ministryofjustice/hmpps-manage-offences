@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import { MostRecentLoadResult, Offence } from '../@types/manageOffences/manageOffencesClientTypes'
+import { FeatureToggle, MostRecentLoadResult, Offence } from '../@types/manageOffences/manageOffencesClientTypes'
 
 type User = Express.User
 
@@ -27,19 +27,20 @@ export default class ManageOffencesApiClient extends RestClient {
     ) as Promise<[MostRecentLoadResult]>
   }
 
-  triggerSdrsLoad(user: User) {
-    this.post(
+  getFeatureToggles(user: User): Promise<[FeatureToggle]> {
+    return this.get(
       {
-        path: '/offences/load-all-offences',
+        path: '/admin/feature-toggles',
       },
       { token: user.token }
-    )
+    ) as Promise<[FeatureToggle]>
   }
 
-  triggerSdrsUpdate(user: User) {
-    this.post(
+  toggleFeature(featureToggle: FeatureToggle, user: User): Promise<unknown> {
+    return this.put(
       {
-        path: '/offences/load-offence-updates',
+        path: '/admin/toggle-feature',
+        data: featureToggle,
       },
       { token: user.token }
     )

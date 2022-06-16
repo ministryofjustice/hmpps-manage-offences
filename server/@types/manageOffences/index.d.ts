@@ -4,13 +4,8 @@
  */
 
 export interface paths {
-  '/offences/load-offence-updates': {
-    /** This endpoint will determine which offences have been changed since the last SDRS load and update them */
-    post: operations['updateOffences']
-  }
-  '/offences/load-all-offences': {
-    /** This endpoint will fetch all offences from SDRS and load into the manage offences DB. This will delete all existing data and reload */
-    post: operations['loadAllOffences']
+  '/admin/toggle-feature': {
+    put: operations['toggleFeature']
   }
   '/offences/load-results': {
     /** Get the results of the most recent load */
@@ -20,10 +15,23 @@ export interface paths {
     /** This endpoint will return the the offences that start with the passed offence code */
     get: operations['getOffencesByOffenceCode']
   }
+  '/admin/feature-toggles': {
+    get: operations['getAllToggles']
+  }
 }
 
 export interface components {
   schemas: {
+    /** @description Feature toggle details */
+    FeatureToggle: {
+      /**
+       * @description Feature to be toggled: FULL_SYNC_NOMIS, DELTA_SYNC_NOMIS or SYNC_SDRS
+       * @enum {string}
+       */
+      feature: 'FULL_SYNC_NOMIS' | 'DELTA_SYNC_NOMIS' | 'SYNC_SDRS'
+      /** @description true or false - depending on whether the feature should be enabled */
+      enabled: boolean
+    }
     /** @description Details of the load by alpha char (A to Z) */
     MostRecentLoadResult: {
       /** @description Single alphabetic character between A and Z - indicates the part of the SDRS load this status relates to */
@@ -94,18 +102,15 @@ export interface components {
 }
 
 export interface operations {
-  /** This endpoint will determine which offences have been changed since the last SDRS load and update them */
-  updateOffences: {
+  toggleFeature: {
     responses: {
       /** OK */
       200: unknown
     }
-  }
-  /** This endpoint will fetch all offences from SDRS and load into the manage offences DB. This will delete all existing data and reload */
-  loadAllOffences: {
-    responses: {
-      /** OK */
-      200: unknown
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['FeatureToggle']
+      }
     }
   }
   /** Get the results of the most recent load */
@@ -132,6 +137,16 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['Offence'][]
+        }
+      }
+    }
+  }
+  getAllToggles: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['FeatureToggle'][]
         }
       }
     }

@@ -1,0 +1,51 @@
+{% extends "layout.njk" %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Latest load results" %}
+{% set pageId = "search-offences" %}
+
+{% block navBar %}
+    {{ navBar("toggle-jobs") }}
+{% endblock %}
+
+{% block content %}
+    <h1 class='govuk-heading-l'>Toggle jobs</h1>
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        {% for featureToggle in featureToggles %}
+            {{ govukRadios({
+                classes: "govuk-radios--inline",
+                idPrefix: featureToggle.feature,
+                name: featureToggle.feature,
+                fieldset: {
+                    legend: {
+                        text: featureToggle.displayName,
+                        isPageHeading: true,
+                        classes: "govuk-fieldset__legend--s"
+                    }
+                },
+                items: [
+                    {
+                        value: true,
+                        text: "Enabled",
+                        checked: featureToggle.enabled === true
+                    },
+                    {
+                        value: false,
+                        text: "Disabled",
+                        checked: featureToggle.enabled === false
+                    }
+                ]
+            }) }}
+        {% endfor %}
+
+        {{ govukButton({
+            text: "Save",
+            type: "submit",
+            preventDoubleClick: true
+        }) }}
+    </form>
+{% endblock %}
