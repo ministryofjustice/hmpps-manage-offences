@@ -1,5 +1,8 @@
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import { MostRecentLoadResult, Offence } from '../@types/manageOffences/manageOffencesClientTypes'
+import FeatureToggleType from '../types/featureToggleType'
+import FeatureToggleEnum from '../enums/FeatureToggleEnum'
+import FeatureToggleDisplay from '../types/featureToggleDisplay'
 
 type User = Express.User
 
@@ -14,11 +17,16 @@ export default class OffenceService {
     return this.manageOffencesApiClient.getMostRecentLoadResult(user)
   }
 
-  async triggerSdrsLoad(user: User) {
-    this.manageOffencesApiClient.triggerSdrsLoad(user)
+  async getFeatureToggles(user: User): Promise<FeatureToggleDisplay[]> {
+    const toggles = await this.manageOffencesApiClient.getFeatureToggles(user)
+    return toggles
+      .sort((a, b) => a.feature.localeCompare(b.feature))
+      .map(t => {
+        return { ...t, displayName: FeatureToggleType[t.feature].displayName } as FeatureToggleDisplay
+      })
   }
 
-  async triggerSdrsUpdate(user: User) {
-    this.manageOffencesApiClient.triggerSdrsUpdate(user)
+  async toggleFeature(feature: FeatureToggleEnum, enabled: boolean, user: User): Promise<unknown> {
+    return this.manageOffencesApiClient.toggleFeature({ feature, enabled }, user)
   }
 }

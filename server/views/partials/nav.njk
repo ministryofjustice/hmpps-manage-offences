@@ -10,14 +10,21 @@
                 </li>
 
 
+                <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "search" }}">
+                    <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/search/offence-code"
+                       data-topnav="Get started">Search</a>
+                </li>
+
+
                 <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "load-results" }}">
                     <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/load-results"
                        data-topnav="Get started">Load monitor</a>
                 </li>
 
-                <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "search" }}">
-                    <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/search/offence-code"
-                       data-topnav="Get started">Search</a>
+
+                <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "toggle-jobs" }}">
+                    <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/toggle-jobs"
+                       data-topnav="Get started">Toggle jobs</a>
                 </li>
             </ul>
         </div>
