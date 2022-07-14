@@ -5,6 +5,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 
 {% set pageTitle = applicationName + " - Schedules" %}
 {% set pageId = "schedules" %}
@@ -13,21 +14,25 @@
     {{ navBar("schedules") }}
 {% endblock %}
 
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Schedules",
+                href: "/schedules"
+            }
+        ]
+    }) }}
+{% endblock %}
+
 {% block content %}
-    <h1 class='govuk-heading-l'>Schedules</h1>
+    <h1 class='govuk-heading-l'>Select a schedule</h1>
 
     <form method="get">
         {{ govukRadios({
             idPrefix: "schedule",
             name: "scheduleId",
-            fieldset: {
-                legend: {
-                    text: "Choose a schedule",
-                    isPageHeading: true,
-                    classes: "govuk-fieldset__legend--m"
-                }
-            },
-            items: schedules | asValueText('id', 'code') | checkRadioIfIncludes(scheduleId)
+            items: schedules | asValueText('id', 'fullName') | checkRadioIfIncludes(scheduleId)
         }) }}
 
         <div class="govuk-grid-row">
@@ -35,7 +40,7 @@
                 <div>
                     {{ govukButton({
                         classes: "govuk-button--primary",
-                        text: "Show offences",
+                        text: "Continue",
                         preventDoubleClick: true,
                         attributes: {  'data-qa': 'search-prisoners' }
                     }) }}
@@ -44,26 +49,4 @@
         </div>
 
     </form>
-
-    {% if (fullSchedule) %}
-        {% for part in fullSchedule.scheduleParts %}
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-three-quarters">
-                    <h1 class="govuk-heading-l">Part {{ part.partNumber }}</h1>
-                </div>
-                <div class="govuk-grid-column-one-quarter">
-                    {{ govukButton({
-                        classes: "govuk-button--tertiary",
-                        text: "Link offences",
-                        preventDoubleClick: true,
-                        href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
-                        attributes: {  'data-qa': 'link-offences' }
-                    }) }}
-                </div>
-            </div>
-            {% for offence in part.offences %}
-                {#                TODO list all offences that are linked#}
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
 {% endblock %}

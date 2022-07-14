@@ -1,7 +1,9 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/nav.njk" import navBar with context %}
-{% from "partials/offenceSearchTable.njk" import offenceSearchTable %}
+{% from "partials/offenceTable.njk" import offenceTable %}
+{% from "partials/offenceSearch.njk" import offenceSearch %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 
 {% set pageTitle = applicationName + " - Search" %}
 {% set pageId = "search-offences" %}
@@ -10,13 +12,32 @@
     {{ navBar('schedules') }}
 {% endblock %}
 
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Schedules",
+                href: "/schedules"
+            },
+            {
+                text: "Parts and offences",
+                href: "/schedules/parts-and-offences/" + fullSchedule.id
+            },
+            {
+                text: "Add offences",
+                href: "/schedules/parts-and-offences/" + fullSchedule.id + "/" + schedulePart.id
+            }
+        ]
+    }) }}
+{% endblock %}
+
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-4" data-qa="offence-search-section">
         <div class="govuk-grid-column-full">
             <div id="offence-search-container">
-                <h1 class="govuk-heading-l">Link offences to a schedule part</h1>
-                {% include "pages/search/offenceSearch.njk" %}
-                {{ offenceSearchTable(offences, scheduleId, schedulePartId, offenceCode, csrfToken) }}
+                <h1 class="govuk-heading-l">Add offences to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }} ({{ fullSchedule.act }})</h1>
+                {{ offenceSearch(offenceCode, '/schedules?scheduleId=' + fullSchedule.id) }}
+                {{ offenceTable(offences, fullSchedule.id, schedulePart.id, offenceCode, csrfToken, 'ADD') }}
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import ScheduleRoutes from './handlers/schedules'
 import LinkOffenceRoutes from './handlers/linkOffence'
 import OffenceService from '../../services/offenceService'
+import PartsAndOffencesRoutes from './handlers/partsAndOffences'
 
 export default function Index(offenceService: OffenceService): Router {
   const router = Router()
@@ -11,11 +12,14 @@ export default function Index(offenceService: OffenceService): Router {
   const post = (path: string, handler: RequestHandler) => router.post(routePrefix(path), asyncMiddleware(handler))
 
   const scheduleHandler = new ScheduleRoutes(offenceService)
-  const linkOffenceHandler = new LinkOffenceRoutes(offenceService)
+  const linkOffenceRoutes = new LinkOffenceRoutes(offenceService)
+  const partsAndOffencesHandler = new PartsAndOffencesRoutes(offenceService)
 
   get('/', scheduleHandler.GET)
-  get('/link-offences/:scheduleId/:schedulePartId', linkOffenceHandler.GET)
-  post('/link-offence', linkOffenceHandler.POST)
+  get('/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
+  get('/add-offences/:scheduleId/:schedulePartId', linkOffenceRoutes.GET)
+  post('/link-offence', linkOffenceRoutes.POST_LINK)
+  post('/unlink-offence', linkOffenceRoutes.POST_UNLINK)
 
   return router
 }

@@ -1,7 +1,8 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/nav.njk" import navBar with context %}
-{% from "partials/offenceSearchTable.njk" import offenceSearchTable %}
+{% from "partials/offenceTable.njk" import offenceTable %}
+{% from "partials/offenceSearch.njk" import offenceSearch %}
 
 {% set pageTitle = applicationName + " - Search" %}
 {% set pageId = "search-offences" %}
@@ -15,8 +16,8 @@
         <div class="govuk-grid-column-full">
             <div id="offence-search-container">
                 <h1 class="govuk-heading-l">Search for offences</h1>
-                {% include "pages/search/offenceSearch.njk" %}
-                {{ offenceSearchTable(offences) }}
+                {{ offenceSearch(offenceCode) }}
+                {{ offenceTable(offences) }}
             </div>
         </div>
     </div>

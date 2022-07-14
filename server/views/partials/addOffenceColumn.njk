@@ -1,0 +1,22 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro addOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offenceId, csrfToken) %}
+    <td class="govuk-table__cell text-align-right">
+        <form method="post" action="/schedules/link-offence">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+            <input type="hidden" name="scheduleId" value="{{ scheduleId }}"/>
+            <input type="hidden" name="schedulePartId" value="{{ schedulePartId }}"/>
+            <input type="hidden" name="offenceId" value="{{ offenceId }}"/>
+            <input type="hidden" name="offenceCodeSearch" value="{{ offenceCodeSearch }}"/>
+
+            {{ govukButton({
+                text: "Add",
+                value: 'add-button',
+                classes: 'govuk-button--secondary govuk-!-margin-bottom-0',
+                preventDoubleClick: true
+            }) }}
+        </form>
+    </td>
+{% endmacro %}

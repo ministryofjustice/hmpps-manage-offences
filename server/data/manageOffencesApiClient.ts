@@ -78,4 +78,15 @@ export default class ManageOffencesApiClient extends RestClient {
       { token: user.token }
     )
   }
+
+  unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
+    const a = [{ schedulePartId, offenceId }]
+    return this.post(
+      {
+        path: `/schedule/unlink-offences`,
+        data: [{ schedulePartId, offenceId }],
+      },
+      { token: user.token }
+    )
+  }
 }
