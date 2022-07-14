@@ -1,0 +1,65 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{# Used by the main search screen and to link offences to a schedule#}
+{% macro offenceSearchTable(offences, scheduleId, schedulePartId, offenceCodeSearch, csrfToken) %}
+    {% if (offences) %}
+        {% if (offences.length > 0) %}
+            <table id="load-results-table" class="govuk-table alternate-shade" data-qa="load-results-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Last change date</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16"></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body govuk-body-s">
+                {% for offence in offences %}
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            {{ offence.code }}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {{ offence.cjsTitle }}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {{ offence.startDate | dateFormat }}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {{ offence.endDate | dateFormat }}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {{ offence.changedDate | dateTimeFormat }}
+                        </td>
+                        {% if (scheduleId) %}
+                            <td class="govuk-table__cell text-align-right">
+                                <form method="post" action="/schedules/link-offence">
+                                    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                                    <input type="hidden" name="scheduleId" value="{{ scheduleId }}"/>
+                                    <input type="hidden" name="schedulePartId" value="{{ schedulePartId }}"/>
+                                    <input type="hidden" name="offenceId" value="{{ offence.id }}"/>
+                                    <input type="hidden" name="offenceCodeSearch" value="{{ offenceCodeSearch }}"/>
+
+                                    {{ govukButton({
+                                        text: "Add",
+                                        value: 'add-button',
+                                        classes: 'govuk-button--secondary govuk-!-margin-bottom-0',
+                                        preventDoubleClick: true
+                                    }) }}
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        {% else %}
+            <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
+        {% endif %}
+    {% endif %}
+{% endmacro %}

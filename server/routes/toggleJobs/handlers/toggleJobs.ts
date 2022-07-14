@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import OffenceService from '../../../services/offenceService'
 import FeatureToggleEnum from '../../../enums/FeatureToggleEnum'
 
-export default class SearchRoutes {
+export default class ToggleJobsRoutes {
   constructor(private readonly offenceService: OffenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

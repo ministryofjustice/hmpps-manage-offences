@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
 import path from 'path'
@@ -97,6 +98,14 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('loadType', (loadType: string) => {
     if (!loadType) return null
     return loadType === 'FULL_LOAD' ? 'Full load' : 'Update'
+  })
+
+  njkEnv.addFilter('asValueText', (list, valueKey, textKey) => {
+    return list?.map((item: any) => ({ value: item[valueKey], text: item[textKey] }))
+  })
+
+  njkEnv.addFilter('checkRadioIfIncludes', (array, itemToCheck) => {
+    return array.map((item: any) => (String(item.value) === String(itemToCheck) ? { ...item, checked: true } : item))
   })
 
   return njkEnv
