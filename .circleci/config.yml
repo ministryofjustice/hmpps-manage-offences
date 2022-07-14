@@ -139,7 +139,7 @@ workflows:
       - unit_test:
           requires:
             - build
-      - integration_test:
+      - integration_tests:
           requires:
             - build
       - hmpps/helm_lint:
@@ -161,7 +161,7 @@ workflows:
           requires:
             - helm_lint
             - unit_test
-            - integration_test
+            - integration_tests
             - build_docker
 
 #      - request-preprod-approval:
