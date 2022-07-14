@@ -103,14 +103,15 @@ jobs:
       - attach_workspace:
           at: ~/app
       - run:
+          name: Install missing OS dependency
+          command: sudo apt-get install libxss1
+      - run:
           name: Get wiremock
           command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.2/wiremock-standalone-2.27.2.jar
       - run:
-          name: Run auth wiremock
+          name: Run wiremock
           command: java -jar wiremock.jar --port 9091
           background: true
-      - restore_cache:
-          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
           name: Install cypress.
           command: npx cypress install
@@ -121,6 +122,8 @@ jobs:
       - run:
           name: Wait for node app to start
           command: sleep 5
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: integration tests
           command: npm run int-test
