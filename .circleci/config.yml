@@ -94,7 +94,7 @@ jobs:
       - store_artifacts:
           path: test_results/unit-test-reports.html
 
-  integration_tests:
+  integration_test:
     working_directory: ~/app
     docker:
       - image: cimg/node:16.14-browsers
@@ -121,7 +121,7 @@ jobs:
           background: true
       - run:
           name: Wait for node app to start
-          command: sleep 5
+          command: sleep 15
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -145,7 +145,7 @@ workflows:
       - unit_test:
           requires:
             - build
-      - integration_tests:
+      - integration_test:
           requires:
             - build
       - hmpps/helm_lint:
@@ -167,7 +167,7 @@ workflows:
           requires:
             - helm_lint
             - unit_test
-            - integration_tests
+            - integration_test
             - build_docker
 
 #      - request-preprod-approval:
