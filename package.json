@@ -102,7 +102,7 @@
     "express-prom-bundle": "^6.4.1",
     "express-request-id": "^2.0.1",
     "express-session": "^1.17.2",
-    "govuk-frontend": "^4.1.0",
+    "govuk-frontend": "^4.2.0",
     "helmet": "^5.0.2",
     "http-errors": "^2.0.0",
     "jquery": "^3.6.0",
@@ -167,6 +167,6 @@
     "sass": "^1.52.1",
     "supertest": "^6.2.3",
     "ts-jest": "^27.1.4",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.4"
   }
 }

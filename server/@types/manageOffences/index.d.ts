@@ -7,6 +7,21 @@ export interface paths {
   '/admin/toggle-feature': {
     put: operations['toggleFeature']
   }
+  '/schedule/unlink-offences': {
+    post: operations['unlinkOffences']
+  }
+  '/schedule/link-offences/{schedulePartId}': {
+    post: operations['linkOffences']
+  }
+  '/schedule/create': {
+    post: operations['createSchedule']
+  }
+  '/schedule/by-id/{scheduleId}': {
+    get: operations['findScheduleById']
+  }
+  '/schedule/all': {
+    get: operations['findAllSchedules']
+  }
   '/offences/load-results': {
     /** Get the results of the most recent load */
     get: operations['findLoadResults']
@@ -32,30 +47,12 @@ export interface components {
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
-    /** @description Details of the load by alpha char (A to Z) */
-    MostRecentLoadResult: {
-      /** @description Single alphabetic character between A and Z - indicates the part of the SDRS load this status relates to */
-      alphaChar: string
-      /**
-       * @description Load Status: SUCCESS or FAIL
-       * @enum {string}
-       */
-      status?: 'SUCCESS' | 'FAIL'
-      /**
-       * @description Load Type: FULL_LOAD or UPDATE
-       * @enum {string}
-       */
-      type?: 'FULL_LOAD' | 'UPDATE'
-      /**
-       * Format: date-time
-       * @description The date and time of the load
-       */
-      loadDate?: string
-      /**
-       * Format: date-time
-       * @description The date and time of the most recent successful load; if the load was successful this is the same as the loadDate
-       */
-      lastSuccessfulLoadDate?: string
+    /** @description Schedule part ID and Offence ID - used for unlinking offences from schedules */
+    SchedulePartIdAndOffenceId: {
+      /** Format: int64 */
+      schedulePartId: number
+      /** Format: int64 */
+      offenceId: number
     }
     /** @description Offence details */
     Offence: {
@@ -98,6 +95,48 @@ export interface components {
        */
       loadDate?: string
     }
+    /** @description Schedule details */
+    Schedule: {
+      /** Format: int64 */
+      id?: number
+      act: string
+      code: string
+      url?: string
+      scheduleParts?: components['schemas']['SchedulePart'][]
+    }
+    /** @description Schedule part details and associated offences */
+    SchedulePart: {
+      /** Format: int64 */
+      id?: number
+      /** Format: int32 */
+      partNumber: number
+      offences?: components['schemas']['Offence'][]
+    }
+    /** @description Details of the load by alpha char (A to Z) */
+    MostRecentLoadResult: {
+      /** @description Single alphabetic character between A and Z - indicates the part of the SDRS load this status relates to */
+      alphaChar: string
+      /**
+       * @description Load Status: SUCCESS or FAIL
+       * @enum {string}
+       */
+      status?: 'SUCCESS' | 'FAIL'
+      /**
+       * @description Load Type: FULL_LOAD or UPDATE
+       * @enum {string}
+       */
+      type?: 'FULL_LOAD' | 'UPDATE'
+      /**
+       * Format: date-time
+       * @description The date and time of the load
+       */
+      loadDate?: string
+      /**
+       * Format: date-time
+       * @description The date and time of the most recent successful load; if the load was successful this is the same as the loadDate
+       */
+      lastSuccessfulLoadDate?: string
+    }
   }
 }
 
@@ -110,6 +149,71 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['FeatureToggle']
+      }
+    }
+  }
+  unlinkOffences: {
+    responses: {
+      /** OK */
+      200: unknown
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SchedulePartIdAndOffenceId'][]
+      }
+    }
+  }
+  linkOffences: {
+    parameters: {
+      path: {
+        /** The schedule part ID */
+        schedulePartId: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: unknown
+    }
+    requestBody: {
+      content: {
+        'application/json': number[]
+      }
+    }
+  }
+  createSchedule: {
+    responses: {
+      /** OK */
+      200: unknown
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['Schedule']
+      }
+    }
+  }
+  findScheduleById: {
+    parameters: {
+      path: {
+        /** The schedule ID */
+        scheduleId: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['Schedule']
+        }
+      }
+    }
+  }
+  findAllSchedules: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['Schedule'][]
+        }
       }
     }
   }

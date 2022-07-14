@@ -1,6 +1,11 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import { FeatureToggle, MostRecentLoadResult, Offence } from '../@types/manageOffences/manageOffencesClientTypes'
+import {
+  FeatureToggle,
+  MostRecentLoadResult,
+  Offence,
+  Schedule,
+} from '../@types/manageOffences/manageOffencesClientTypes'
 
 type User = Express.User
 
@@ -41,6 +46,34 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/admin/toggle-feature',
         data: featureToggle,
+      },
+      { token: user.token }
+    )
+  }
+
+  getAllSchedules(user: User): Promise<[Schedule]> {
+    return this.get(
+      {
+        path: '/schedule/all',
+      },
+      { token: user.token }
+    ) as Promise<[Schedule]>
+  }
+
+  getScheduleById(scheduleId: number, user: User): Promise<Schedule> {
+    return this.get(
+      {
+        path: `/schedule/by-id/${scheduleId}`,
+      },
+      { token: user.token }
+    ) as Promise<Schedule>
+  }
+
+  linkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
+    return this.post(
+      {
+        path: `/schedule/link-offences/${schedulePartId}`,
+        data: [offenceId],
       },
       { token: user.token }
     )

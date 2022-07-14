@@ -99,5 +99,13 @@ export function registerNunjucks(app?: express.Express): Environment {
     return loadType === 'FULL_LOAD' ? 'Full load' : 'Update'
   })
 
+  njkEnv.addFilter('asValueText', (list, valueKey, textKey) => {
+    return list?.map((item: any) => ({ value: item[valueKey], text: item[textKey] }))
+  })
+
+  njkEnv.addFilter('checkRadioIfIncludes', (array, itemToCheck) => {
+    return array.map((item: any) => (String(item.value) === String(itemToCheck) ? { ...item, checked: true } : item))
+  })
+
   return njkEnv
 }
