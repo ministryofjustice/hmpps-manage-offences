@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
 import path from 'path'
