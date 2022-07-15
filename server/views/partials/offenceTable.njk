@@ -1,9 +1,10 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "partials/addOffenceColumn.njk" import addOffenceColumn %}
+{% from "partials/removeOffenceColumn.njk" import removeOffenceColumn %}
 
 {# Used by the main search screen and to link offences to a schedule#}
-{% macro offenceSearchTable(offences, scheduleId, schedulePartId, offenceCodeSearch, csrfToken) %}
+{% macro offenceTable(offences, scheduleId, schedulePartId, offenceCodeSearch, csrfToken, linkType) %}
     {% if (offences) %}
         {% if (offences.length > 0) %}
             <table id="load-results-table" class="govuk-table alternate-shade" data-qa="load-results-table">
@@ -35,23 +36,12 @@
                         <td class="govuk-table__cell">
                             {{ offence.changedDate | dateTimeFormat }}
                         </td>
-                        {% if (scheduleId) %}
-                            <td class="govuk-table__cell text-align-right">
-                                <form method="post" action="/schedules/link-offence">
-                                    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                                    <input type="hidden" name="scheduleId" value="{{ scheduleId }}"/>
-                                    <input type="hidden" name="schedulePartId" value="{{ schedulePartId }}"/>
-                                    <input type="hidden" name="offenceId" value="{{ offence.id }}"/>
-                                    <input type="hidden" name="offenceCodeSearch" value="{{ offenceCodeSearch }}"/>
-
-                                    {{ govukButton({
-                                        text: "Add",
-                                        value: 'add-button',
-                                        classes: 'govuk-button--secondary govuk-!-margin-bottom-0',
-                                        preventDoubleClick: true
-                                    }) }}
-                                </form>
-                            </td>
+                        {% if (linkType) %}
+                            {% if (linkType === 'ADD') %}
+                                {{ addOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offence.id, csrfToken) }}
+                            {% elseif (linkType === 'REMOVE') %}
+                                {{ removeOffenceColumn(scheduleId, schedulePartId, offence.id, csrfToken) }}
+                            {% endif %}
                         {% endif %}
                     </tr>
                 {% endfor %}
@@ -61,5 +51,7 @@
         {% else %}
             <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
         {% endif %}
+    {% elseif (linkType === 'REMOVE') %}
+        <p class="govuk-body govuk-!-font-weight-bold">There are no linked offences.</p>
     {% endif %}
 {% endmacro %}

@@ -1,0 +1,78 @@
+{% extends "layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/offenceTable.njk" import offenceTable %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+
+
+{% set pageTitle = applicationName + " - Schedules" %}
+{% set pageId = "schedules" %}
+
+{% block navBar %}
+    {{ navBar("schedules") }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Schedules",
+                href: "/schedules"
+            },
+            {
+                text: "Parts and offences",
+                href: "/schedules/parts-and-offences/" + fullSchedule.id
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">Schedule {{ fullSchedule.code }} ({{ fullSchedule.act }})</h1>
+
+    {% set tabRows = [] %}
+    {% for part in fullSchedule.scheduleParts %}
+        {% set tabRows = (tabRows.push(
+            {
+                label: "Part " + part.partNumber,
+                id: "part-" + part.id,
+                panel: {
+                    html: partTab(part, fullSchedule, csrfToken)
+                }
+            }
+        ), tabRows) %}
+    {% endfor %}
+
+    {{ govukTabs({
+        classes: 'borderless-tabs',
+        items: tabRows
+    }) }}
+
+    {{ govukButton({
+        classes: "govuk-button--secondary",
+        text: "Back",
+        preventDoubleClick: true,
+        href: '/schedules',
+        attributes: {  'data-qa': 'search-offences' }
+    }) }}
+{% endblock %}
+
+{% macro partTab(part, fullSchedule, csrfToken) %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <a href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener" target="_blank">Schedule {{ fullSchedule.code }} legislation (opens in new tab)</a>
+        </div>
+        <div class="govuk-grid-column-one-quarter text-align-right">
+
+            {{ govukButton({
+                classes: "govuk-button--tertiary",
+                text: "Add offences",
+                preventDoubleClick: true,
+                href: '/schedules/add-offences/' + fullSchedule.id + '/' + part.id,
+                attributes: {  'data-qa': 'add-offences' }
+            }) }}
+        </div>
+    </div>
+    {{ offenceTable(part.offences, fullSchedule.id, part.id, null, csrfToken, 'REMOVE') }}
+{% endmacro %}
