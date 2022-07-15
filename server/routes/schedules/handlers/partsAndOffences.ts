@@ -12,11 +12,4 @@ export default class PartsAndOffencesRoutes {
       fullSchedule,
     })
   }
-
-  POST = async (req: Request, res: Response): Promise<void> => {
-    const { scheduleId, schedulePartId, offenceCodeSearch, offenceId } = req.body
-    await this.offenceService.linkOffence(schedulePartId, offenceId, res.locals.user)
-    const queryString = new URLSearchParams({ offenceCode: offenceCodeSearch }).toString()
-    res.redirect(`/schedules/add-offences/${scheduleId}/${schedulePartId}?${queryString}`)
-  }
 }

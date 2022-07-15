@@ -36,7 +36,7 @@
         <div class="govuk-grid-column-full">
             <div id="offence-search-container">
                 <h1 class="govuk-heading-l">Add offences to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }} ({{ fullSchedule.act }})</h1>
-                {{ offenceSearch(offenceCode, '/schedules?scheduleId=' + fullSchedule.id) }}
+                {{ offenceSearch(offenceCode, '/schedules/parts-and-offences/' + fullSchedule.id + '#part-' + schedulePart.id) }}
                 {{ offenceTable(offences, fullSchedule.id, schedulePart.id, offenceCode, csrfToken, 'ADD') }}
             </div>
         </div>

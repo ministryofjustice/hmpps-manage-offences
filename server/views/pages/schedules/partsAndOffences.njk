@@ -1,12 +1,9 @@
 {% extends "layout.njk" %}
-{%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% from "partials/nav.njk" import navBar with context %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "partials/offenceTable.njk" import offenceTable %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
 
 
 {% set pageTitle = applicationName + " - Schedules" %}
@@ -34,23 +31,24 @@
 {% block content %}
     <h1 class="govuk-heading-l">Schedule {{ fullSchedule.code }} ({{ fullSchedule.act }})</h1>
 
+    {% set tabRows = [] %}
     {% for part in fullSchedule.scheduleParts %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-                <h2 class="govuk-heading-m">Part {{ part.partNumber }}</h2>
-            </div>
-            <div class="govuk-grid-column-one-quarter text-align-right">
-                {{ govukButton({
-                    classes: "govuk-button--tertiary",
-                    text: "Add offences",
-                    preventDoubleClick: true,
-                    href: '/schedules/add-offences/' + fullSchedule.id + '/' + part.id,
-                    attributes: {  'data-qa': 'add-offences' }
-                }) }}
-            </div>
-        </div>
-        {{ offenceTable(part.offences, fullSchedule.id, part.id, null, csrfToken, 'REMOVE') }}
+        {% set tabRows = (tabRows.push(
+            {
+                label: "Part " + part.partNumber,
+                id: "part-" + part.id,
+                panel: {
+                    html: partTab(part, fullSchedule, csrfToken)
+                }
+            }
+        ), tabRows) %}
     {% endfor %}
+
+    {{ govukTabs({
+        classes: 'borderless-tabs',
+        items: tabRows
+    }) }}
+
     {{ govukButton({
         classes: "govuk-button--secondary",
         text: "Back",
@@ -59,3 +57,22 @@
         attributes: {  'data-qa': 'search-offences' }
     }) }}
 {% endblock %}
+
+{% macro partTab(part, fullSchedule, csrfToken) %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <a href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener" target="_blank">Schedule {{ fullSchedule.code }} legislation (opens in new tab)</a>
+        </div>
+        <div class="govuk-grid-column-one-quarter text-align-right">
+
+            {{ govukButton({
+                classes: "govuk-button--tertiary",
+                text: "Add offences",
+                preventDoubleClick: true,
+                href: '/schedules/add-offences/' + fullSchedule.id + '/' + part.id,
+                attributes: {  'data-qa': 'add-offences' }
+            }) }}
+        </div>
+    </div>
+    {{ offenceTable(part.offences, fullSchedule.id, part.id, null, csrfToken, 'REMOVE') }}
+{% endmacro %}
