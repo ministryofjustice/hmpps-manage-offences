@@ -80,7 +80,6 @@ export default class ManageOffencesApiClient extends RestClient {
   }
 
   unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
-    const a = [{ schedulePartId, offenceId }]
     return this.post(
       {
         path: `/schedule/unlink-offences`,
