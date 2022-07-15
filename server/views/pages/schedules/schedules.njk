@@ -1,10 +1,7 @@
 {% extends "layout.njk" %}
-{%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% from "partials/nav.njk" import navBar with context %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 
 {% set pageTitle = applicationName + " - Schedules" %}
@@ -26,7 +23,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class='govuk-heading-l'>Select a schedule</h1>
+    <h1 class='govuk-heading-l'>Select a schedule to manage its offences</h1>
 
     <form method="get">
         {{ govukRadios({

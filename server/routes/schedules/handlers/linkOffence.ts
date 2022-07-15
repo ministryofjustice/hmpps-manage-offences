@@ -31,6 +31,6 @@ export default class LinkOffenceRoutes {
   POST_UNLINK = async (req: Request, res: Response): Promise<void> => {
     const { scheduleId, schedulePartId, offenceId } = req.body
     await this.offenceService.unlinkOffence(schedulePartId, offenceId, res.locals.user)
-    res.redirect(`/schedules/parts-and-offences/${scheduleId}`)
+    res.redirect(`/schedules/parts-and-offences/${scheduleId}#part-${schedulePartId}`)
   }
 }
