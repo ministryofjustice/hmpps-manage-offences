@@ -1,7 +1,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "partials/addOffenceColumn.njk" import addOffenceColumn %}
-{% from "partials/removeOffenceColumn.njk" import removeOffenceColumn %}
+{% from "partials/linkOffenceColumn.njk" import linkOffenceColumn %}
+{% from "partials/unlinkOffenceColumn.njk" import unlinkOffenceColumn %}
 
 {# Used by the main search screen and to link offences to a schedule#}
 {% macro offenceTable(offences, scheduleId, schedulePartId, offenceCodeSearch, csrfToken, linkType) %}
@@ -37,10 +37,10 @@
                             {{ offence.changedDate | dateTimeFormat }}
                         </td>
                         {% if (linkType) %}
-                            {% if (linkType === 'ADD') %}
-                                {{ addOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offence.id, csrfToken) }}
-                            {% elseif (linkType === 'REMOVE') %}
-                                {{ removeOffenceColumn(scheduleId, schedulePartId, offence.id, csrfToken) }}
+                            {% if (linkType === 'LINK') %}
+                                {{ linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offence.id, csrfToken) }}
+                            {% elseif (linkType === 'UNLINK') %}
+                                {{ unlinkOffenceColumn(scheduleId, schedulePartId, offence.id, csrfToken) }}
                             {% endif %}
                         {% endif %}
                     </tr>
@@ -51,7 +51,7 @@
         {% else %}
             <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
         {% endif %}
-    {% elseif (linkType === 'REMOVE') %}
+    {% elseif (linkType === 'UNLINK') %}
         <p class="govuk-body govuk-!-font-weight-bold">There are no linked offences.</p>
     {% endif %}
 {% endmacro %}

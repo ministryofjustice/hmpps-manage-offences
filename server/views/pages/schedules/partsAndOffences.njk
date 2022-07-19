@@ -4,7 +4,7 @@
 {% from "partials/offenceTable.njk" import offenceTable %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
-
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% set pageTitle = applicationName + " - Schedules" %}
 {% set pageId = "schedules" %}
@@ -13,7 +13,7 @@
     {{ navBar("schedules") }}
 {% endblock %}
 
-{% block beforeContent %}
+{% block aside %}
     {{ govukBreadcrumbs({
         items: [
             {
@@ -21,15 +21,18 @@
                 href: "/schedules"
             },
             {
-                text: "Parts and offences",
-                href: "/schedules/parts-and-offences/" + fullSchedule.id
+                text: "Schedule " + fullSchedule.code
             }
         ]
     }) }}
 {% endblock %}
 
 {% block content %}
-    <h1 class="govuk-heading-l">Schedule {{ fullSchedule.code }} ({{ fullSchedule.act }})</h1>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-1">
+        <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
+        Schedule {{ fullSchedule.code }}
+    </h1>
+    <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review <a href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener" target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk</p>
 
     {% set tabRows = [] %}
     {% for part in fullSchedule.scheduleParts %}
@@ -49,30 +52,24 @@
         items: tabRows
     }) }}
 
-    {{ govukButton({
-        classes: "govuk-button--secondary",
+    {{ govukBackLink({
         text: "Back",
-        preventDoubleClick: true,
-        href: '/schedules',
-        attributes: {  'data-qa': 'search-offences' }
+        href: '/schedules'
     }) }}
 {% endblock %}
 
 {% macro partTab(part, fullSchedule, csrfToken) %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <a href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener" target="_blank">Schedule {{ fullSchedule.code }} legislation (opens in new tab)</a>
-        </div>
-        <div class="govuk-grid-column-one-quarter text-align-right">
+        <div class="govuk-grid-column-full text-align-right">
 
             {{ govukButton({
                 classes: "govuk-button--tertiary",
-                text: "Add offences",
+                text: "Link offences",
                 preventDoubleClick: true,
-                href: '/schedules/add-offences/' + fullSchedule.id + '/' + part.id,
-                attributes: {  'data-qa': 'add-offences' }
+                href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
+                attributes: {  'data-qa': 'link-offences' }
             }) }}
         </div>
     </div>
-    {{ offenceTable(part.offences, fullSchedule.id, part.id, null, csrfToken, 'REMOVE') }}
+    {{ offenceTable(part.offences, fullSchedule.id, part.id, null, csrfToken, 'UNLINK') }}
 {% endmacro %}
