@@ -11,12 +11,11 @@
     {{ navBar("schedules") }}
 {% endblock %}
 
-{% block beforeContent %}
+{% block aside %}
     {{ govukBreadcrumbs({
         items: [
             {
-                text: "Schedules",
-                href: "/schedules"
+                text: "Schedules"
             }
         ]
     }) }}

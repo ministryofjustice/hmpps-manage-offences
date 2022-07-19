@@ -17,7 +17,7 @@ export default function Index(offenceService: OffenceService): Router {
 
   get('/', scheduleHandler.GET)
   get('/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
-  get('/add-offences/:scheduleId/:schedulePartId', linkOffenceRoutes.GET)
+  get('/link-offences/:scheduleId/:schedulePartId', linkOffenceRoutes.GET)
   post('/link-offence', linkOffenceRoutes.POST_LINK)
   post('/unlink-offence', linkOffenceRoutes.POST_UNLINK)
 

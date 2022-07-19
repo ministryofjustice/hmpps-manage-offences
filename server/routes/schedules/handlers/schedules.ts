@@ -6,7 +6,9 @@ export default class ScheduleRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const allSchedules = await this.offenceService.getAllSchedules(res.locals.user)
-    const schedules = allSchedules.map(s => ({ ...s, fullName: `Schedule ${s.code} (${s.act})` }))
+    const schedules = allSchedules
+      .map(s => ({ ...s, fullName: `Schedule ${s.code} (${s.act})` }))
+      .sort((a, b) => a.code.localeCompare(b.code))
     const { scheduleId } = req.query as Record<string, string>
     if (!scheduleId) {
       return res.render('pages/schedules/schedules', { schedules })

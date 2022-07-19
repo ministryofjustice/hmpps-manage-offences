@@ -12,7 +12,7 @@
     {{ navBar('schedules') }}
 {% endblock %}
 
-{% block beforeContent %}
+{% block aside %}
     {{ govukBreadcrumbs({
         items: [
             {
@@ -20,12 +20,11 @@
                 href: "/schedules"
             },
             {
-                text: "Parts and offences",
+                text: "Schedule " + fullSchedule.code,
                 href: "/schedules/parts-and-offences/" + fullSchedule.id
             },
             {
-                text: "Add offences",
-                href: "/schedules/parts-and-offences/" + fullSchedule.id + "/" + schedulePart.id
+                text: "Link offences"
             }
         ]
     }) }}
@@ -35,9 +34,12 @@
     <div class="govuk-grid-row govuk-!-margin-bottom-4" data-qa="offence-search-section">
         <div class="govuk-grid-column-full">
             <div id="offence-search-container">
-                <h1 class="govuk-heading-l">Add offences to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }} ({{ fullSchedule.act }})</h1>
+                <h1 class="govuk-heading-l">
+                    <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
+                    Link offences to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }}
+                </h1>
                 {{ offenceSearch(offenceCode, '/schedules/parts-and-offences/' + fullSchedule.id + '#part-' + schedulePart.id) }}
-                {{ offenceTable(offences, fullSchedule.id, schedulePart.id, offenceCode, csrfToken, 'ADD') }}
+                {{ offenceTable(offences, fullSchedule.id, schedulePart.id, offenceCode, csrfToken, 'LINK') }}
             </div>
         </div>
     </div>

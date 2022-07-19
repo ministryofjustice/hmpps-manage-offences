@@ -25,7 +25,7 @@ export default class LinkOffenceRoutes {
     const { scheduleId, schedulePartId, offenceCodeSearch, offenceId } = req.body
     await this.offenceService.linkOffence(schedulePartId, offenceId, res.locals.user)
     const queryString = new URLSearchParams({ offenceCode: offenceCodeSearch }).toString()
-    res.redirect(`/schedules/add-offences/${scheduleId}/${schedulePartId}?${queryString}`)
+    res.redirect(`/schedules/link-offences/${scheduleId}/${schedulePartId}?${queryString}`)
   }
 
   POST_UNLINK = async (req: Request, res: Response): Promise<void> => {
