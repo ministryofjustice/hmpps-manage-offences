@@ -18,7 +18,7 @@ describe('GET /', () => {
 
     expect($('h1').text().trim()).toBe('Manage offences')
     expect($('#service-uses-list').text()).toContain(
-      'Manage offences, including loading, publishing, searching and augmenting'
+      'Manage offences, including loading, publishing, searching and augmenting',
     )
   })
 })

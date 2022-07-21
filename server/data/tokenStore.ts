@@ -29,15 +29,15 @@ export default class TokenStore {
 
     const clientToken = generateOauthClientToken(
       config.apis.hmppsAuth.systemClientId,
-      config.apis.hmppsAuth.systemClientSecret
+      config.apis.hmppsAuth.systemClientSecret,
     )
 
     const authRequest = new URLSearchParams(
-      username ? { grant_type: 'client_credentials', username } : { grant_type: 'client_credentials' }
+      username ? { grant_type: 'client_credentials', username } : { grant_type: 'client_credentials' },
     ).toString()
 
     logger.info(
-      `HMPPS Auth request '${authRequest}' for client id '${config.apis.hmppsAuth.systemClientId}' and user '${username}'`
+      `HMPPS Auth request '${authRequest}' for client id '${config.apis.hmppsAuth.systemClientId}' and user '${username}'`,
     )
 
     const response = await superagent

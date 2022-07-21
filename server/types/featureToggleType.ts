@@ -5,7 +5,7 @@ export default class FeatureToggleType {
 
   public static readonly DELTA_SYNC_NOMIS = new FeatureToggleType(
     FeatureToggleEnum.DELTA_SYNC_NOMIS,
-    'Delta sync NOMIS'
+    'Delta sync NOMIS',
   )
 
   public static readonly SYNC_SDRS = new FeatureToggleType(FeatureToggleEnum.SYNC_SDRS, 'Sync SDRS')

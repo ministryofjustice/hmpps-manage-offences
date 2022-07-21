@@ -19,7 +19,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: `/offences/code/${offenceCode}`,
       },
-      { token: user.token }
+      { token: user.token },
     ) as Promise<[Offence]>
   }
 
@@ -28,7 +28,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/offences/load-results',
       },
-      { token: user.token }
+      { token: user.token },
     ) as Promise<[MostRecentLoadResult]>
   }
 
@@ -37,7 +37,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/admin/feature-toggles',
       },
-      { token: user.token }
+      { token: user.token },
     ) as Promise<[FeatureToggle]>
   }
 
@@ -47,7 +47,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: '/admin/toggle-feature',
         data: featureToggle,
       },
-      { token: user.token }
+      { token: user.token },
     )
   }
 
@@ -56,7 +56,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/schedule/all',
       },
-      { token: user.token }
+      { token: user.token },
     ) as Promise<[Schedule]>
   }
 
@@ -65,7 +65,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: `/schedule/by-id/${scheduleId}`,
       },
-      { token: user.token }
+      { token: user.token },
     ) as Promise<Schedule>
   }
 
@@ -75,7 +75,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: `/schedule/link-offences/${schedulePartId}`,
         data: [offenceId],
       },
-      { token: user.token }
+      { token: user.token },
     )
   }
 
@@ -85,7 +85,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: `/schedule/unlink-offences`,
         data: [{ schedulePartId, offenceId }],
       },
-      { token: user.token }
+      { token: user.token },
     )
   }
 }

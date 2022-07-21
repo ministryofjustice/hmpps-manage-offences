@@ -56,7 +56,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     {
       autoescape: true,
       express: app,
-    }
+    },
   )
 
   njkEnv.addFilter('initialiseName', (fullName: string) => {
@@ -80,7 +80,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     const date = new Date(dateString)
     if (!date || Number.isNaN(date.getTime())) return null
     return `${toTwoDigits(date.getDate())} ${months[date.getMonth()][monthLength]} ${date.getFullYear()} ${toTwoDigits(
-      date.getHours()
+      date.getHours(),
     )}:${toTwoDigits(date.getMinutes())}`
   })
 
