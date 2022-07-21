@@ -14,19 +14,19 @@ export default class ToggleJobsRoutes {
     await this.offenceService.toggleFeature(
       FeatureToggleEnum.FULL_SYNC_NOMIS,
       req.body[FeatureToggleEnum.FULL_SYNC_NOMIS],
-      res.locals.user
+      res.locals.user,
     )
 
     await this.offenceService.toggleFeature(
       FeatureToggleEnum.SYNC_SDRS,
       req.body[FeatureToggleEnum.SYNC_SDRS],
-      res.locals.user
+      res.locals.user,
     )
 
     await this.offenceService.toggleFeature(
       FeatureToggleEnum.DELTA_SYNC_NOMIS,
       req.body[FeatureToggleEnum.DELTA_SYNC_NOMIS],
-      res.locals.user
+      res.locals.user,
     )
 
     res.redirect('/toggle-jobs')

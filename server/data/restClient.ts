@@ -56,7 +56,7 @@ export default class RestClient {
 
   async get(
     { path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest,
-    signedWithMethod?: SignedWithMethod
+    signedWithMethod?: SignedWithMethod,
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
@@ -85,7 +85,7 @@ export default class RestClient {
 
   async post(
     { path = null, headers = {}, responseType = '', data = {}, raw = false }: PostRequest,
-    signedWithMethod?: SignedWithMethod
+    signedWithMethod?: SignedWithMethod,
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
@@ -114,7 +114,7 @@ export default class RestClient {
 
   async put(
     { path = null, headers = {}, responseType = '', data = {}, raw = false }: PutRequest,
-    signedWithMethod?: SignedWithMethod
+    signedWithMethod?: SignedWithMethod,
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
