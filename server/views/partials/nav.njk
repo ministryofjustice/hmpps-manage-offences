@@ -1,4 +1,4 @@
-{%  macro navBar(selected) %}
+{% macro navBar(selected) %}
 
     <nav class="app-navigation govuk-clearfix">
         <div class="govuk-width-container">
@@ -16,15 +16,18 @@
                 </li>
 
 
-                <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "load-results" }}">
-                    <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/load-results"
-                       data-topnav="Load monitor">Load monitor</a>
-                </li>
+                {% if 'ROLE_MANAGE_OFFENCES_ADMIN' in user.roles %}
+                    <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "load-results" }}">
+                        <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/load-results"
+                           data-topnav="Load monitor">Load monitor</a>
+                    </li>
 
-                <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "toggle-jobs" }}">
-                    <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/toggle-jobs"
-                        data-topnav="Toggle jobs">Toggle jobs</a>
-                </li>
+
+                    <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "toggle-jobs" }}">
+                        <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/toggle-jobs"
+                           data-topnav="Toggle jobs">Toggle jobs</a>
+                    </li>
+                {% endif %}
 
                 <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "schedules" }}">
                     <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/schedules"

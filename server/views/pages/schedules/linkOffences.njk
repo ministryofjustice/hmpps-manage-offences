@@ -39,7 +39,17 @@
                     Link offences to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }}
                 </h1>
                 {{ offenceSearch(offenceCode, '/schedules/parts-and-offences/' + fullSchedule.id + '#part-' + schedulePart.id) }}
-                {{ offenceTable(offences, fullSchedule.id, schedulePart.id, offenceCode, csrfToken, 'LINK') }}
+                {{ offenceTable(
+                    {
+                        offences: offences,
+                        scheduleId: fullSchedule.id,
+                        schedulePartId: schedulePart.id,
+                        offenceCodeSearch: offenceCode,
+                        csrfToken: csrfToken,
+                        linkType: 'LINK',
+                        user: user
+                    }
+                ) }}
             </div>
         </div>
     </div>

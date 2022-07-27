@@ -32,7 +32,10 @@
         <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
         Schedule {{ fullSchedule.code }}
     </h1>
-    <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review <a href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener" target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk</p>
+    <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review <a
+                href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener"
+                target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk
+    </p>
 
     {% set tabRows = [] %}
     {% for part in fullSchedule.scheduleParts %}
@@ -41,8 +44,8 @@
                 label: "Part " + part.partNumber,
                 id: "part-" + part.id,
                 panel: {
-                    html: partTab(part, fullSchedule, csrfToken)
-                }
+                html: partTab(part, fullSchedule, csrfToken)
+            }
             }
         ), tabRows) %}
     {% endfor %}
@@ -59,17 +62,28 @@
 {% endblock %}
 
 {% macro partTab(part, fullSchedule, csrfToken) %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full text-align-right">
+    {% if ('ROLE_MANAGE_OFFENCES_ADMIN' in user.roles) %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full text-align-right">
 
-            {{ govukButton({
-                classes: "govuk-button--tertiary",
-                text: "Link offences",
-                preventDoubleClick: true,
-                href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
-                attributes: {  'data-qa': 'link-offences' }
-            }) }}
+                {{ govukButton({
+                    classes: "govuk-button--tertiary",
+                    text: "Link offences",
+                    preventDoubleClick: true,
+                    href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
+                    attributes: {  'data-qa': 'link-offences' }
+                }) }}
+            </div>
         </div>
-    </div>
-    {{ offenceTable(part.offences, fullSchedule.id, part.id, null, csrfToken, 'UNLINK') }}
+    {% endif %}
+    {{ offenceTable(
+        {
+            offences: part.offences,
+            scheduleId: fullSchedule.id,
+            schedulePartId: part.id,
+            csrfToken: csrfToken,
+            linkType: 'UNLINK',
+            user: user
+        }
+    ) }}
 {% endmacro %}
