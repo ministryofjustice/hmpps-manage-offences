@@ -3,20 +3,30 @@
 {% from "partials/linkOffenceColumn.njk" import linkOffenceColumn %}
 {% from "partials/unlinkOffenceColumn.njk" import unlinkOffenceColumn %}
 
-{# Used by the main search screen and to link offences to a schedule#}
-{% macro offenceTable(offences, scheduleId, schedulePartId, offenceCodeSearch, csrfToken, linkType) %}
+{# Used by the main search screen and to link offences to a schedule #}
+{#{% macro offenceTable(offences, scheduleId, schedulePartId, offenceCodeSearch, csrfToken, linkType, user) %}#}
+{% macro offenceTable(attributes) %}
+    {% set offences = attributes.offences %}
+    {% set scheduleId = attributes.scheduleId %}
+    {% set schedulePartId = attributes.schedulePartId %}
+    {% set offenceCodeSearch = attributes.offenceCodeSearch %}
+    {% set csrfToken = attributes.csrfToken %}
+    {% set linkType = attributes.linkType %}
+    {% set user = attributes.user %}
     {% if (offences) %}
         {% if (offences.length > 0) %}
             <table id="load-results-table" class="govuk-table alternate-shade" data-qa="load-results-table">
                 <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Last change date</th>
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Last change date</th>
+                    {% if ('ROLE_MANAGE_OFFENCES_ADMIN' in user.roles) %}
                         <th scope="col" class="govuk-table__header govuk-!-font-size-16"></th>
-                    </tr>
+                    {% endif %}
+                </tr>
                 </thead>
                 <tbody class="govuk-table__body govuk-body-s">
                 {% for offence in offences %}
@@ -36,7 +46,7 @@
                         <td class="govuk-table__cell">
                             {{ offence.changedDate | dateTimeFormat }}
                         </td>
-                        {% if (linkType) %}
+                        {% if (linkType) and ('ROLE_MANAGE_OFFENCES_ADMIN' in user.roles) %}
                             {% if (linkType === 'LINK') %}
                                 {{ linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offence.id, csrfToken) }}
                             {% elseif (linkType === 'UNLINK') %}

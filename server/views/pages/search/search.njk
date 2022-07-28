@@ -17,7 +17,12 @@
             <div id="offence-search-container">
                 <h1 class="govuk-heading-l">Search for offences</h1>
                 {{ offenceSearch(offenceCode) }}
-                {{ offenceTable(offences) }}
+                {{ offenceTable(
+                    {
+                        offences: offences,
+                        user: user
+                    }
+                ) }}
             </div>
         </div>
     </div>

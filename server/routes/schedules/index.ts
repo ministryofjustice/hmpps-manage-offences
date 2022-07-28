@@ -1,25 +1,30 @@
-import { RequestHandler, Router } from 'express'
+import { type RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import ScheduleRoutes from './handlers/schedules'
 import LinkOffenceRoutes from './handlers/linkOffence'
 import OffenceService from '../../services/offenceService'
 import PartsAndOffencesRoutes from './handlers/partsAndOffences'
 
+export const schedulePaths = {
+  LINK_OFFENCE_POST: '/schedules/link-offence',
+  UNLINK_OFFENCE_POST: '/schedules/unlink-offence',
+  LINK_OFFENCES: '/schedules/link-offences/:scheduleId/:schedulePartId',
+}
+
 export default function Index(offenceService: OffenceService): Router {
   const router = Router()
-  const routePrefix = (path: string) => `/schedules${path}`
-  const get = (path: string, handler: RequestHandler) => router.get(routePrefix(path), asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(routePrefix(path), asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   const scheduleHandler = new ScheduleRoutes(offenceService)
   const linkOffenceRoutes = new LinkOffenceRoutes(offenceService)
   const partsAndOffencesHandler = new PartsAndOffencesRoutes(offenceService)
 
-  get('/', scheduleHandler.GET)
-  get('/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
-  get('/link-offences/:scheduleId/:schedulePartId', linkOffenceRoutes.GET)
-  post('/link-offence', linkOffenceRoutes.POST_LINK)
-  post('/unlink-offence', linkOffenceRoutes.POST_UNLINK)
+  get('/schedules', scheduleHandler.GET)
+  get('/schedules/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
+  get(schedulePaths.LINK_OFFENCES, linkOffenceRoutes.GET)
+  post(schedulePaths.LINK_OFFENCE_POST, linkOffenceRoutes.POST_LINK)
+  post(schedulePaths.UNLINK_OFFENCE_POST, linkOffenceRoutes.POST_UNLINK)
 
   return router
 }
