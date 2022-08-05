@@ -40,10 +40,10 @@ export interface components {
     /** @description Feature toggle details */
     FeatureToggle: {
       /**
-       * @description Feature to be toggled: FULL_SYNC_NOMIS, DELTA_SYNC_NOMIS or SYNC_SDRS
+       * @description Feature to be toggled: FULL_SYNC_NOMIS, DELTA_SYNC_NOMIS, FULL_SYNC_SDRS or DELTA_SYNC_SDRS
        * @enum {string}
        */
-      feature: 'FULL_SYNC_NOMIS' | 'DELTA_SYNC_NOMIS' | 'SYNC_SDRS'
+      feature: 'FULL_SYNC_NOMIS' | 'DELTA_SYNC_NOMIS' | 'FULL_SYNC_SDRS' | 'DELTA_SYNC_SDRS'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
@@ -94,6 +94,8 @@ export interface components {
        * @description The date this offence was loaded into manage-offences from SDRS
        */
       loadDate?: string
+      /** @description The schedules linked to this offence */
+      schedules?: components['schemas']['ScheduleDetails'][]
     }
     /** @description Schedule details */
     Schedule: {
@@ -103,6 +105,15 @@ export interface components {
       code: string
       url?: string
       scheduleParts?: components['schemas']['SchedulePart'][]
+    }
+    /** @description Schedule details */
+    ScheduleDetails: {
+      /** Format: int64 */
+      id?: number
+      act: string
+      code: string
+      url?: string
+      schedulePartNumbers?: number[]
     }
     /** @description Schedule part details and associated offences */
     SchedulePart: {
@@ -148,7 +159,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['FeatureToggle']
+        'application/json': components['schemas']['FeatureToggle'][]
       }
     }
   }
