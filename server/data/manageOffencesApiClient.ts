@@ -41,11 +41,11 @@ export default class ManageOffencesApiClient extends RestClient {
     ) as Promise<[FeatureToggle]>
   }
 
-  toggleFeature(featureToggle: FeatureToggle, user: User): Promise<unknown> {
+  toggleFeatures(featureToggles: FeatureToggle[], user: User): Promise<unknown> {
     return this.put(
       {
         path: '/admin/toggle-feature',
-        data: featureToggle,
+        data: featureToggles,
       },
       { token: user.token },
     )

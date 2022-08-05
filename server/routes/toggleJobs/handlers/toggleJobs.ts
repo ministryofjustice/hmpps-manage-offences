@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import OffenceService from '../../../services/offenceService'
 import FeatureToggleEnum from '../../../enums/FeatureToggleEnum'
+import { FeatureToggle } from '../../../@types/manageOffences/manageOffencesClientTypes'
 
 export default class ToggleJobsRoutes {
   constructor(private readonly offenceService: OffenceService) {}
@@ -11,23 +12,26 @@ export default class ToggleJobsRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    await this.offenceService.toggleFeature(
-      FeatureToggleEnum.FULL_SYNC_NOMIS,
-      req.body[FeatureToggleEnum.FULL_SYNC_NOMIS],
-      res.locals.user,
-    )
+    const featureToggles: FeatureToggle[] = [
+      {
+        feature: FeatureToggleEnum.FULL_SYNC_NOMIS,
+        enabled: req.body[FeatureToggleEnum.FULL_SYNC_NOMIS],
+      },
+      {
+        feature: FeatureToggleEnum.FULL_SYNC_SDRS,
+        enabled: req.body[FeatureToggleEnum.FULL_SYNC_SDRS],
+      },
+      {
+        feature: FeatureToggleEnum.DELTA_SYNC_SDRS,
+        enabled: req.body[FeatureToggleEnum.DELTA_SYNC_SDRS],
+      },
+      {
+        feature: FeatureToggleEnum.DELTA_SYNC_NOMIS,
+        enabled: req.body[FeatureToggleEnum.DELTA_SYNC_NOMIS],
+      },
+    ]
 
-    await this.offenceService.toggleFeature(
-      FeatureToggleEnum.SYNC_SDRS,
-      req.body[FeatureToggleEnum.SYNC_SDRS],
-      res.locals.user,
-    )
-
-    await this.offenceService.toggleFeature(
-      FeatureToggleEnum.DELTA_SYNC_NOMIS,
-      req.body[FeatureToggleEnum.DELTA_SYNC_NOMIS],
-      res.locals.user,
-    )
+    await this.offenceService.toggleFeatures(featureToggles, res.locals.user)
 
     res.redirect('/toggle-jobs')
   }

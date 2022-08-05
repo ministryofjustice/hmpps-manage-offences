@@ -8,7 +8,9 @@ export default class FeatureToggleType {
     'Delta sync NOMIS',
   )
 
-  public static readonly SYNC_SDRS = new FeatureToggleType(FeatureToggleEnum.SYNC_SDRS, 'Sync SDRS')
+  public static readonly FULL_SYNC_SDRS = new FeatureToggleType(FeatureToggleEnum.FULL_SYNC_SDRS, 'Full Sync SDRS')
+
+  public static readonly DELTA_SYNC_SDRS = new FeatureToggleType(FeatureToggleEnum.DELTA_SYNC_SDRS, 'Delta Sync SDRS')
 
   private constructor(public readonly featureName: FeatureToggleEnum, public readonly displayName: string) {}
 }

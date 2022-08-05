@@ -1,7 +1,11 @@
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
-import { MostRecentLoadResult, Offence, Schedule } from '../@types/manageOffences/manageOffencesClientTypes'
+import {
+  FeatureToggle,
+  MostRecentLoadResult,
+  Offence,
+  Schedule,
+} from '../@types/manageOffences/manageOffencesClientTypes'
 import FeatureToggleType from '../types/featureToggleType'
-import FeatureToggleEnum from '../enums/FeatureToggleEnum'
 import FeatureToggleDisplay from '../types/featureToggleDisplay'
 
 type User = Express.User
@@ -26,8 +30,8 @@ export default class OffenceService {
       })
   }
 
-  async toggleFeature(feature: FeatureToggleEnum, enabled: boolean, user: User): Promise<unknown> {
-    return this.manageOffencesApiClient.toggleFeature({ feature, enabled }, user)
+  async toggleFeatures(featureToggles: FeatureToggle[], user: User): Promise<unknown> {
+    return this.manageOffencesApiClient.toggleFeatures(featureToggles, user)
   }
 
   async getAllSchedules(user: User): Promise<[Schedule]> {
