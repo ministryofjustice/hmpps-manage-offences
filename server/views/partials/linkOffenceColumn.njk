@@ -1,20 +1,22 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offenceId, csrfToken) %}
+{% macro linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offenceId, csrfToken, isChild) %}
     <td class="govuk-table__cell text-align-right">
-        <form method="post" action="/schedules/link-offence">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-            <input type="hidden" name="scheduleId" value="{{ scheduleId }}"/>
-            <input type="hidden" name="schedulePartId" value="{{ schedulePartId }}"/>
-            <input type="hidden" name="offenceId" value="{{ offenceId }}"/>
-            <input type="hidden" name="offenceCodeSearch" value="{{ offenceCodeSearch }}"/>
+        {% if not isChild %}
+            <form method="post" action="/schedules/link-offence">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <input type="hidden" name="scheduleId" value="{{ scheduleId }}"/>
+                <input type="hidden" name="schedulePartId" value="{{ schedulePartId }}"/>
+                <input type="hidden" name="offenceId" value="{{ offenceId }}"/>
+                <input type="hidden" name="offenceCodeSearch" value="{{ offenceCodeSearch }}"/>
 
-            {{ govukButton({
-                text: "Link",
-                value: 'add-button',
-                classes: 'govuk-button--secondary govuk-!-margin-bottom-0',
-                preventDoubleClick: true
-            }) }}
-        </form>
+                {{ govukButton({
+                    text: "Link",
+                    value: 'add-button',
+                    classes: 'govuk-button--secondary govuk-!-margin-bottom-0',
+                    preventDoubleClick: true
+                }) }}
+            </form>
+        {% endif %}
     </td>
 {% endmacro %}

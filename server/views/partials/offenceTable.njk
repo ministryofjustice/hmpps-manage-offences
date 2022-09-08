@@ -48,9 +48,9 @@
                         </td>
                         {% if (linkType) and ('ROLE_MANAGE_OFFENCES_ADMIN' in user.roles) %}
                             {% if (linkType === 'LINK') %}
-                                {{ linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offence.id, csrfToken) }}
+                                {{ linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offence.id, csrfToken, offence.isChild) }}
                             {% elseif (linkType === 'UNLINK') %}
-                                {{ unlinkOffenceColumn(scheduleId, schedulePartId, offence.id, csrfToken) }}
+                                {{ unlinkOffenceColumn(scheduleId, schedulePartId, offence.id, csrfToken, offence.isChild) }}
                             {% endif %}
                         {% endif %}
                     </tr>
