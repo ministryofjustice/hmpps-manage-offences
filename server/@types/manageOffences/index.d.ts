@@ -96,6 +96,15 @@ export interface components {
       loadDate?: string
       /** @description The schedules linked to this offence */
       schedules?: components['schemas']['ScheduleDetails'][]
+      /** @description If true then this is a inchoate offence; i.e. a child of another offence */
+      isChild: boolean
+      /**
+       * Format: int64
+       * @description The parent offence id of an inchoate offence
+       */
+      parentOffenceId?: number
+      /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
+      childOffenceIds?: number[]
     }
     /** @description Schedule details */
     Schedule: {
