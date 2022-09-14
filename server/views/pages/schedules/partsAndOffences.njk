@@ -62,7 +62,7 @@
 {% endblock %}
 
 {% macro partTab(part, fullSchedule, csrfToken) %}
-    {% if ('ROLE_MANAGE_OFFENCES_ADMIN' in user.roles) %}
+    {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full text-align-right">
 

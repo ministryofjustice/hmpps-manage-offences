@@ -23,7 +23,7 @@
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">Last change date</th>
-                    {% if ('ROLE_MANAGE_OFFENCES_ADMIN' in user.roles) %}
+                    {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
                         <th scope="col" class="govuk-table__header govuk-!-font-size-16"></th>
                     {% endif %}
                 </tr>
@@ -46,7 +46,7 @@
                         <td class="govuk-table__cell">
                             {{ offence.changedDate | dateTimeFormat }}
                         </td>
-                        {% if (linkType) and ('ROLE_MANAGE_OFFENCES_ADMIN' in user.roles) %}
+                        {% if (linkType) and ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
                             {% if (linkType === 'LINK') %}
                                 {{ linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offence.id, csrfToken, offence.isChild) }}
                             {% elseif (linkType === 'UNLINK') %}
