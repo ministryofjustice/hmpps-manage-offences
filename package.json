@@ -1,8 +1,8 @@
 {
-  "name": "manage-offences",
+  "name": "hmpps-manage-offences",
   "version": "0.0.1",
   "description": "Manage Offences",
-  "repository": "git@github.com:ministryofjustice/manage-offences.git",
+  "repository": "git@github.com:ministryofjustice/hmpps-manage-offences.git",
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",

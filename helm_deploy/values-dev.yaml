@@ -1,5 +1,5 @@
 ---
-# Per environment values which override defaults in manage-offences/values.yaml
+# Per environment values which override defaults in hmpps-manage-offences/values.yaml
 
 generic-service:
   replicaCount: 2
