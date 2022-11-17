@@ -30,6 +30,9 @@ export interface paths {
     /** This endpoint will return the the offences that start with the passed offence code */
     get: operations['getOffencesByOffenceCode']
   }
+  '/change-history/nomis': {
+    get: operations['getOffencesByOffenceCode_1']
+  }
   '/admin/feature-toggles': {
     get: operations['getAllToggles']
   }
@@ -157,6 +160,30 @@ export interface components {
        */
       lastSuccessfulLoadDate?: string
     }
+    /** @description This shows a change to NOMIS */
+    NomisChangeHistory: {
+      /** Format: int64 */
+      id: number
+      /** @description This is set depending on the nomisChangeType - could be the code of the offence, statute or Home Office Stats */
+      code: string
+      /** @description This description of the nomisChangeType */
+      description: string
+      /**
+       * @description Could be INSERT or UPDATE
+       * @enum {string}
+       */
+      changeType: 'INSERT' | 'DELETE' | 'UPDATE'
+      /**
+       * @description Could be OFFENCE, STATUTE or HOME_OFFICE_CODE
+       * @enum {string}
+       */
+      nomisChangeType: 'OFFENCE' | 'STATUTE' | 'HOME_OFFICE_CODE'
+      /**
+       * Format: date-time
+       * @description The date this change was made in NOMIS
+       */
+      sentToNomisDate: string
+    }
   }
 }
 
@@ -261,6 +288,22 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['Offence'][]
+        }
+      }
+    }
+  }
+  getOffencesByOffenceCode_1: {
+    parameters: {
+      query: {
+        from: string
+        to?: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['NomisChangeHistory'][]
         }
       }
     }

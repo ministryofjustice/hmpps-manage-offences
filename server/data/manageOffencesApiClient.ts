@@ -3,6 +3,7 @@ import RestClient from './restClient'
 import {
   FeatureToggle,
   MostRecentLoadResult,
+  NomisChangeHistory,
   Offence,
   Schedule,
 } from '../@types/manageOffences/manageOffencesClientTypes'
@@ -87,5 +88,16 @@ export default class ManageOffencesApiClient extends RestClient {
       },
       { token: user.token },
     )
+  }
+
+  getNomisChangeHistory(fromDate: Date, toDate: Date, user: User): Promise<[NomisChangeHistory]> {
+    return this.get(
+      {
+        path: `/change-history/nomis?from=${fromDate.toISOString().split('T')[0]}&to=${
+          toDate.toISOString().split('T')[0]
+        }`,
+      },
+      { token: user.token },
+    ) as Promise<[NomisChangeHistory]>
   }
 }
