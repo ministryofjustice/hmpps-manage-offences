@@ -6,6 +6,7 @@ import searchRoutes from './search'
 import loadResultsRoutes from './loadResults'
 import toggleJobs from './toggleJobs'
 import scheduleRoutes from './schedules'
+import changeHistory from './changeHistory'
 import auth from '../authentication/auth'
 import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
@@ -22,6 +23,7 @@ export default function Index(services: Services): Router {
   router.use(loadResultsRoutes(services.offenceService))
   router.use(toggleJobs(services.offenceService))
   router.use(scheduleRoutes(services.offenceService))
+  router.use(changeHistory(services.changeHistoryService))
 
   return router
 }

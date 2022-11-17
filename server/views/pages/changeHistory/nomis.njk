@@ -1,0 +1,195 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% set pageTitle = applicationName + " - Nomis history" %}
+{% set pageId = "nomis-history" %}
+
+{% block navBar %}
+    {{ navBar('home') }}
+{% endblock %}
+
+{% block aside %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: "/"
+            },
+            {
+                text: "NOMIS Change History"
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-4" data-qa="nomis-history-section">
+        <form method="get">
+            <div class="govuk-grid-column-full">
+                <div id="nomis-history-container">
+                    <h1 class="govuk-heading-l">NOMIS Change History</h1>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-third">
+                            {{ govukDateInput({
+                                id: "fromDate",
+                                fieldset: {
+                                    legend: {
+                                        text: "Date from"
+                                    }
+                                },
+                                items: [
+                                    {
+                                        id: "fromDateDay",
+                                        label: "Day",
+                                        name: "fromDate[day]",
+                                        value: fromDate.getDate(),
+                                        classes: "govuk-input--width-2",
+                                        attributes: { 'maxlength': 2 }
+                                    },
+                                    {
+                                        id: "fromDateMonth",
+                                        label: "Month",
+                                        name: "fromDate[month]",
+                                        value: fromDate.getMonth() + 1,
+                                        classes: "govuk-input--width-2",
+                                        attributes: { 'maxlength': 2 }
+                                    },
+                                    {
+                                        id: "fromDateYear",
+                                        label: "Year",
+                                        name: "fromDate[year]",
+                                        value: fromDate.getFullYear(),
+                                        classes: "govuk-input--width-4",
+                                        attributes: { 'maxlength': 4 }
+                                    }
+                                ]
+                            }) }}
+                        </div>
+
+                        <div class="govuk-grid-column-one-third">
+                            {{ govukDateInput({
+                                id: "toDate",
+                                fieldset: {
+                                    legend: {
+                                        text: "Date to"
+                                    }
+                                },
+                                items: [
+                                    {
+                                        id: "toDateDay",
+                                        label: "Day",
+                                        name: "toDate[day]",
+                                        value: toDate.getDate(),
+                                        classes: "govuk-input--width-2",
+                                        attributes: { 'maxlength': 2 }
+                                    },
+                                    {
+                                        id: "toDateMonth",
+                                        label: "Month",
+                                        name: "toDate[month]",
+                                        value: toDate.getMonth() + 1,
+                                        classes: "govuk-input--width-2",
+                                        attributes: { 'maxlength': 2 }
+                                    },
+                                    {
+                                        id: "toDateYear",
+                                        label: "Year",
+                                        name: "toDate[year]",
+                                        value: toDate.getFullYear(),
+                                        classes: "govuk-input--width-4",
+                                        attributes: { 'maxlength': 4 }
+                                    }
+                                ]
+                            }) }}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-three-quarters ">
+                        <div>
+                            {{ govukButton({
+                                classes: "govuk-button--primary",
+                                text: "Search",
+                                preventDoubleClick: true,
+                                attributes: {  'data-qa': 'search-history' }
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        {{ govukTabs({
+            items: [
+                {
+                    label: "Offences - new",
+                    id: "offences-new",
+                    panel: {
+                    html: historyTab(newOffences)
+                }
+                },
+                {
+                    label: "Offences - updated",
+                    id: "offences-updated",
+                    panel: {
+                    html: historyTab(updatedOffences)
+                }
+                },
+                {
+                    label: "Statutes - new",
+                    id: "statutes-new",
+                    panel: {
+                    html: historyTab(statutes)
+                }
+                },
+                {
+                    label: "Home Office Codes - new",
+                    id: "ho-codes-new",
+                    panel: {
+                    html: historyTab(hoCodes)
+                }
+                }
+            ]
+        }) }}
+    </div>
+{% endblock %}
+
+{% macro historyTab(historyRecords) %}
+    {% if (historyRecords.length > 0) %}
+        <p class="govuk-body">Number of changes: {{ historyRecords.length }}</p>
+        <table id="load-results-table" class="govuk-table alternate-shade" data-qa="load-results-table">
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
+                <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
+                <th scope="col" class="govuk-table__header govuk-!-font-size-16">Sent to NOMIS date</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body govuk-body-s">
+            {% for historyRecord in historyRecords %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
+                        {{ historyRecord.code }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ historyRecord.description }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ historyRecord.sentToNomisDate | dateTimeFormat }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <p class="govuk-body govuk-!-font-weight-bold">There are no changes.</p>
+    {% endif %}
+{% endmacro %}
