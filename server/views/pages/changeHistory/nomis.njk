@@ -165,6 +165,7 @@
 
 {% macro historyTab(historyRecords) %}
     {% if (historyRecords.length > 0) %}
+        <p class="govuk-body">Number of changes: {{ historyRecords.length }}</p>
         <table id="load-results-table" class="govuk-table alternate-shade" data-qa="load-results-table">
             <thead class="govuk-table__head">
             <tr class="govuk-table__row">
@@ -191,6 +192,6 @@
         </table>
 
     {% else %}
-        <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
+        <p class="govuk-body govuk-!-font-weight-bold">There are no changes.</p>
     {% endif %}
 {% endmacro %}
