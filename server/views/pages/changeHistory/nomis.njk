@@ -1,14 +1,12 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/nav.njk" import navBar with context %}
-{% from "partials/offenceTable.njk" import offenceTable %}
-{% from "partials/offenceSearch.njk" import offenceSearch %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 
-{% set pageTitle = applicationName + " - Search" %}
-{% set pageId = "search-offences" %}
+{% set pageTitle = applicationName + " - Nomis history" %}
+{% set pageId = "nomis-history" %}
 
 {% block navBar %}
     {{ navBar('home') }}
