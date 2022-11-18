@@ -10,12 +10,12 @@ export default class ChangeHistoryRoutes {
     const fromDate = from ? this.parseDate(from, this.getStartOfMonth()) : this.getStartOfMonth()
     const toDate = to ? this.parseDate(to, new Date()) : new Date()
 
-    const { newOffences, updatedOffences, statutes, hoCodes } = await this.changeHistoryService.getNomisChangeHistory(
+    const { newOffences, updatedOffences, statutes } = await this.changeHistoryService.getNomisChangeHistory(
       fromDate,
       toDate,
       res.locals.user,
     )
-    res.render('pages/changeHistory/nomis', { newOffences, updatedOffences, statutes, hoCodes, fromDate, toDate })
+    res.render('pages/changeHistory/nomis', { newOffences, updatedOffences, statutes, fromDate, toDate })
   }
 
   private getStartOfMonth() {

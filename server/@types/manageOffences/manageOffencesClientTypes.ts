@@ -14,5 +14,4 @@ export type NomisHistoryRecords = {
   newOffences: NomisChangeHistory[]
   updatedOffences: NomisChangeHistory[]
   statutes: NomisChangeHistory[]
-  hoCodes: NomisChangeHistory[]
 }

@@ -11,7 +11,6 @@ export default class ChangeHistoryService {
     const newOffences = historyRecords.filter(h => h.changeType === 'INSERT' && h.nomisChangeType === 'OFFENCE')
     const updatedOffences = historyRecords.filter(h => h.changeType === 'UPDATE' && h.nomisChangeType === 'OFFENCE')
     const statutes = historyRecords.filter(h => h.nomisChangeType === 'STATUTE')
-    const hoCodes = historyRecords.filter(h => h.nomisChangeType === 'HOME_OFFICE_CODE')
-    return { newOffences, updatedOffences, statutes, hoCodes }
+    return { newOffences, updatedOffences, statutes }
   }
 }
