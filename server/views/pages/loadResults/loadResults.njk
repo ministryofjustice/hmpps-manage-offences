@@ -17,7 +17,7 @@
                 <table id="load-results-table" class="govuk-table" data-qa="load-results">
                     <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">Offence group</th>
+                        <th class="govuk-table__header" scope="col">SDRS Cache</th>
                         <th class="govuk-table__header" scope="col">Load type</th>
                         <th class="govuk-table__header" scope="col">Load date</th>
                         <th class="govuk-table__header" scope="col">Last successful load date</th>
@@ -28,7 +28,7 @@
                     {% for loadResult in loadResults %}
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">
-                                {{ loadResult.alphaChar }}
+                                {{ loadResult.sdrsCache }}
                             </td>
                             <td class="govuk-table__cell">
                                 {{ loadResult.type | loadType }}
