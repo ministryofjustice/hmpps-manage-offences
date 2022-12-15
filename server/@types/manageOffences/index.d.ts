@@ -65,7 +65,7 @@ export interface components {
        */
       id: number
       /** @description The offence code */
-      code?: string
+      code: string
       /** @description The offence description */
       description?: string
       /** @description The CJS Title (usually the same as description) */
@@ -135,10 +135,41 @@ export interface components {
       partNumber: number
       offences?: components['schemas']['Offence'][]
     }
-    /** @description Details of the load by alpha char (A to Z) */
+    /** @description Details of the load by SDRS Cache */
     MostRecentLoadResult: {
-      /** @description Single alphabetic character between A and Z - indicates the part of the SDRS load this status relates to */
-      alphaChar: string
+      /**
+       * @description Associated SDRS Cache - indicates the part of the SDRS load this status relates to
+       * @enum {string}
+       */
+      sdrsCache:
+        | 'OFFENCES_A'
+        | 'OFFENCES_B'
+        | 'OFFENCES_C'
+        | 'OFFENCES_D'
+        | 'OFFENCES_E'
+        | 'OFFENCES_F'
+        | 'OFFENCES_G'
+        | 'OFFENCES_H'
+        | 'OFFENCES_I'
+        | 'OFFENCES_J'
+        | 'OFFENCES_K'
+        | 'OFFENCES_L'
+        | 'OFFENCES_M'
+        | 'OFFENCES_N'
+        | 'OFFENCES_O'
+        | 'OFFENCES_P'
+        | 'OFFENCES_Q'
+        | 'OFFENCES_R'
+        | 'OFFENCES_S'
+        | 'OFFENCES_T'
+        | 'OFFENCES_U'
+        | 'OFFENCES_V'
+        | 'OFFENCES_W'
+        | 'OFFENCES_X'
+        | 'OFFENCES_Y'
+        | 'OFFENCES_Z'
+        | 'GET_APPLICATIONS'
+        | 'GET_MOJ_OFFENCE'
       /**
        * @description Load Status: SUCCESS or FAIL
        * @enum {string}
@@ -174,10 +205,10 @@ export interface components {
        */
       changeType: 'INSERT' | 'DELETE' | 'UPDATE'
       /**
-       * @description Could be OFFENCE, STATUTE or HOME_OFFICE_CODE
+       * @description Could be OFFENCE or STATUTE
        * @enum {string}
        */
-      nomisChangeType: 'OFFENCE' | 'STATUTE' | 'HOME_OFFICE_CODE'
+      nomisChangeType: 'OFFENCE' | 'STATUTE'
       /**
        * Format: date-time
        * @description The date this change was made in NOMIS
