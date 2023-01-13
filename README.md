@@ -30,7 +30,7 @@ docker-compose -f docker-compose-dev.yml up --no-start
 docker-compose -f docker-compose-dev.yml start redis
 ```
 
-Install dependencies using `npm install`, ensuring you are using >= `Node v16.x`
+Install dependencies using `npm install`, ensuring you are using >= `Node v18.x`
 
 And then, to build the assets and start the app with nodemon:
 
