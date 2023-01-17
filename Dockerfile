@@ -32,6 +32,7 @@ RUN apt-get update && \
     apt-get install -y make python g++
 
 COPY package*.json ./
+RUN npm install -g npm@9.2.0
 RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
 
 COPY . .
