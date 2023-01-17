@@ -33,7 +33,7 @@ RUN apt-get update && \
 
 COPY package*.json ./
 RUN npm install -g npm@9.2.0
-RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
+RUN CYPRESS_INSTALL_BINARY=0 npm install --no-audit
 
 COPY . .
 RUN npm run build
