@@ -120,6 +120,7 @@ jobs:
           name: integration tests
           command: |
             npm install
+            cypress install
             npm run int-test
       - store_test_results:
           path: test_results
