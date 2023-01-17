@@ -90,15 +90,15 @@ jobs:
       - store_artifacts:
           path: test_results/unit-test-reports.html
 
-#  integration_test:
-#    executor:
-#      name: hmpps/node_redis
-#      node_tag: << pipeline.parameters.node-version >>
-#      redis_tag: "6.2"
-#    steps:
-#      - checkout
-#      - attach_workspace:
-#          at: ~/app
+  integration_test:
+    executor:
+      name: hmpps/node_redis
+      node_tag: << pipeline.parameters.node-version >>
+      redis_tag: "6.2"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
 #      - run:
 #          name: Install missing OS dependency
 #          command: sudo apt-get install libxss1
