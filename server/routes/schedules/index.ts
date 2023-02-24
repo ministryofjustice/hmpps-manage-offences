@@ -9,6 +9,7 @@ export const schedulePaths = {
   LINK_OFFENCE_POST: '/schedules/link-offence',
   UNLINK_OFFENCE_POST: '/schedules/unlink-offence',
   LINK_OFFENCES: '/schedules/link-offences/:scheduleId/:schedulePartId',
+  LINK_OFFENCE_CREATE: '/schedules/link-offence/create',
 }
 
 export default function Index(offenceService: OffenceService): Router {
@@ -23,6 +24,7 @@ export default function Index(offenceService: OffenceService): Router {
   get('/schedules', scheduleHandler.GET)
   get('/schedules/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
   get(schedulePaths.LINK_OFFENCES, linkOffenceRoutes.GET)
+  get(schedulePaths.LINK_OFFENCE_CREATE, linkOffenceRoutes.GET_LINK_SCREEN)
   post(schedulePaths.LINK_OFFENCE_POST, linkOffenceRoutes.POST_LINK)
   post(schedulePaths.UNLINK_OFFENCE_POST, linkOffenceRoutes.POST_UNLINK)
 

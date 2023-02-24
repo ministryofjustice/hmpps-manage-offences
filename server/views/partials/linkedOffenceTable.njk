@@ -1,0 +1,74 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/linkOffenceColumn.njk" import linkOffenceColumn %}
+{% from "partials/unlinkOffenceColumn.njk" import unlinkOffenceColumn %}
+
+{# Used by the main search screen and to link offences to a schedule #}
+{# {% macro offenceTable(scheduleParagraphs, scheduleId, schedulePartId, offenceCodeSearch, csrfToken, linkType, user) %} #}
+{% macro linkedOffenceTable(attributes) %}
+    {% set scheduleParagraphs = attributes.scheduleParagraphs %}
+    {% set scheduleId = attributes.scheduleId %}
+    {% set schedulePartId = attributes.schedulePartId %}
+    {% set offenceCodeSearch = attributes.offenceCodeSearch %}
+    {% set csrfToken = attributes.csrfToken %}
+    {% set linkType = attributes.linkType %}
+    {% set user = attributes.user %}
+    {% for paragraph in scheduleParagraphs %}
+        {% set offences = paragraph.offences %}
+        {% if (offences) %}
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
+                Paragraph {{ paragraph.paragraphNumber }}: {{ paragraph.paragraphTitle }}
+            </h2>
+
+            {% if (offences.length > 0) %}
+                <table id="load-results-table" class="govuk-table alternate-shade" data-qa="load-results-table">
+                    <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Line reference</th>
+                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Legislation</th>
+                        {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+                            <th scope="col" class="govuk-table__header govuk-!-font-size-16"></th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody class="govuk-table__body govuk-body-s">
+                    {% for offence in offences %}
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                {{ offence.code }}
+                            </td>
+                            <td class="govuk-table__cell">
+                                {{ offence.cjsTitle }}
+                            </td>
+                            <td class="govuk-table__cell">
+                                {{ offence.startDate | dateFormat }}
+                            </td>
+                            <td class="govuk-table__cell">
+                                {{ offence.lineReference }}
+                            </td>
+                            <td class="govuk-table__cell">
+                                {{ offence.scheduleParagraphId }}
+                            </td>
+                            {% if (linkType) and ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+                                {% if (linkType === 'LINK') %}
+                                    {{ linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offence.id, csrfToken, offence.isChild) }}
+                                {% elseif (linkType === 'UNLINK') %}
+                                    {{ unlinkOffenceColumn(scheduleId, schedulePartId, offence.id, csrfToken, offence.isChild, offence.scheduleParagraphId) }}
+                                {% endif %}
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+                <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
+            {% endif %}
+        {% elseif (linkType === 'UNLINK') %}
+            <p class="govuk-body govuk-!-font-weight-bold">There are no linked offences.</p>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

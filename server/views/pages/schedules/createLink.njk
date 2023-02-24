@@ -1,0 +1,56 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "partials/offenceTable.njk" import offenceTable %}
+{% from "partials/offenceSearch.njk" import offenceSearch %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% set pageTitle = applicationName + " - Link" %}
+{% set pageId = "create-link" %}
+
+{% block navBar %}
+    {{ navBar('schedules') }}
+{% endblock %}
+
+{% block aside %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Schedules",
+                href: "/schedules"
+            },
+            {
+                text: "Schedule " + fullSchedule.code,
+                href: "/schedules/parts-and-offences/" + fullSchedule.id
+            },
+            {
+                text: "Create link"
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-4" data-qa="offence-search-section">
+        <div class="govuk-grid-column-full">
+            <div id="offence-search-container">
+                <h1 class="govuk-heading-l">
+                    <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
+                    Link offences to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }}
+                </h1>
+                {{ offenceSearch(offenceCode, '/schedules/parts-and-offences/' + fullSchedule.id + '#part-' + schedulePart.id) }}
+                {{ offenceTable(
+                    {
+                        offences: offences,
+                        scheduleId: fullSchedule.id,
+                        schedulePartId: schedulePart.id,
+                        offenceCodeSearch: offenceCode,
+                        csrfToken: csrfToken,
+                        linkType: 'LINK',
+                        user: user
+                    }
+                ) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

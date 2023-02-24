@@ -7,6 +7,8 @@ export default class PartsAndOffencesRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { scheduleId } = req.params
     const fullSchedule = await this.offenceService.getScheduleById(Number(scheduleId), res.locals.user)
+    console.log('fullschedule')
+    console.log(JSON.stringify(fullSchedule))
 
     res.render('pages/schedules/partsAndOffences', {
       fullSchedule,

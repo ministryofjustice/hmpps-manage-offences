@@ -17,6 +17,10 @@ export default class OffenceService {
     return this.manageOffencesApiClient.getOffencesByCode(offenceCode, user)
   }
 
+  async getOffenceById(offenceId: number, user: User): Promise<Offence> {
+    return this.manageOffencesApiClient.getOffenceById(offenceId, user)
+  }
+
   async getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
     return this.manageOffencesApiClient.getMostRecentLoadResult(user)
   }
@@ -45,8 +49,8 @@ export default class OffenceService {
   async getOffencesNotLinked(offenceCode: string, schedule: Schedule, user: User): Promise<Offence[]> {
     const offences = await this.getOffencesByCode(offenceCode, user)
     const existingOffenceIds = schedule.scheduleParts
-      .filter(sp => sp.offences != null)
-      .flatMap(sp => sp.offences)
+      .filter(sp => sp.scheduleParagraphs.filter(para => para.offences != null))
+      .flatMap(sp => sp.scheduleParagraphs.flatMap(para => para.offences))
       .map(o => o.id)
     return offences.filter(o => !existingOffenceIds.includes(o.id))
   }
@@ -55,7 +59,7 @@ export default class OffenceService {
     return this.manageOffencesApiClient.linkOffence(schedulePartId, offenceId, user)
   }
 
-  unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
-    return this.manageOffencesApiClient.unlinkOffence(schedulePartId, offenceId, user)
+  unlinkOffence(scheduleParagraphId: number, offenceId: number, user: User): Promise<unknown> {
+    return this.manageOffencesApiClient.unlinkOffence(scheduleParagraphId, offenceId, user)
   }
 }

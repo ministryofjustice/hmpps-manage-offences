@@ -1,12 +1,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro unlinkOffenceColumn(scheduleId, schedulePartId, offenceId, csrfToken, isChild) %}
+{% macro unlinkOffenceColumn(scheduleId, schedulePartId, offenceId, csrfToken, isChild, scheduleParagraphId) %}
     <td class="govuk-table__cell text-align-right">
         {% if not isChild %}
             <form method="post" action="/schedules/unlink-offence">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                 <input type="hidden" name="scheduleId" value="{{ scheduleId }}"/>
                 <input type="hidden" name="schedulePartId" value="{{ schedulePartId }}"/>
+                <input type="hidden" name="scheduleParagraphId" value="{{ scheduleParagraphId }}"/>
                 <input type="hidden" name="offenceId" value="{{ offenceId }}"/>
 
                 {{ govukButton({

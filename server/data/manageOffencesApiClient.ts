@@ -24,6 +24,15 @@ export default class ManageOffencesApiClient extends RestClient {
     ) as Promise<[Offence]>
   }
 
+  getOffenceById(offenceId: number, user: User): Promise<Offence> {
+    return this.get(
+      {
+        path: `/offences/id/${offenceId}`,
+      },
+      { token: user.token },
+    ) as Promise<Offence>
+  }
+
   getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
     return this.get(
       {
@@ -80,11 +89,11 @@ export default class ManageOffencesApiClient extends RestClient {
     )
   }
 
-  unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
+  unlinkOffence(scheduleParagraphId: number, offenceId: number, user: User): Promise<unknown> {
     return this.post(
       {
         path: `/schedule/unlink-offences`,
-        data: [{ schedulePartId, offenceId }],
+        data: [{ scheduleParagraphId, offenceId }],
       },
       { token: user.token },
     )
