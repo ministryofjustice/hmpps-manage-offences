@@ -78,11 +78,10 @@
     {% endif %}
     {{ linkedOffenceTable(
         {
-            scheduleParagraphs: part.scheduleParagraphs,
+            offences: part.offences,
             scheduleId: fullSchedule.id,
             schedulePartId: part.id,
             csrfToken: csrfToken,
-            linkType: 'UNLINK',
             user: user
         }
     ) }}

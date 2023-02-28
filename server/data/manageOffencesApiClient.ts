@@ -2,9 +2,11 @@ import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import {
   FeatureToggle,
+  LinkOffence,
   MostRecentLoadResult,
   NomisChangeHistory,
   Offence,
+  OffenceWithScheduleData,
   Schedule,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 
@@ -31,6 +33,15 @@ export default class ManageOffencesApiClient extends RestClient {
       },
       { token: user.token },
     ) as Promise<Offence>
+  }
+
+  getOffenceWithScheduleDataById(offenceId: number, user: User): Promise<OffenceWithScheduleData> {
+    return this.get(
+      {
+        path: `/schedule/offence/id/${offenceId}`,
+      },
+      { token: user.token },
+    ) as Promise<OffenceWithScheduleData>
   }
 
   getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
@@ -79,21 +90,21 @@ export default class ManageOffencesApiClient extends RestClient {
     ) as Promise<Schedule>
   }
 
-  linkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
+  linkOffence(linkOffence: LinkOffence, user: User): Promise<unknown> {
     return this.post(
       {
-        path: `/schedule/link-offences/${schedulePartId}`,
-        data: [offenceId],
+        path: '/schedule/link-offence',
+        data: linkOffence,
       },
       { token: user.token },
     )
   }
 
-  unlinkOffence(scheduleParagraphId: number, offenceId: number, user: User): Promise<unknown> {
+  unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
     return this.post(
       {
-        path: `/schedule/unlink-offences`,
-        data: [{ scheduleParagraphId, offenceId }],
+        path: '/schedule/unlink-offences',
+        data: [{ schedulePartId, offenceId }],
       },
       { token: user.token },
     )

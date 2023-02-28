@@ -1,9 +1,8 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/nav.njk" import navBar with context %}
-{% from "partials/offenceTable.njk" import offenceTable %}
-{% from "partials/offenceSearch.njk" import offenceSearch %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set pageTitle = applicationName + " - Link" %}
 {% set pageId = "create-link" %}
@@ -24,33 +23,147 @@
                 href: "/schedules/parts-and-offences/" + fullSchedule.id
             },
             {
-                text: "Create link"
+                text: "Search " + offenceCodeSearch,
+                href: "/schedules/link-offences/"  + fullSchedule.id + "/" + schedulePart.id + "/" + "?offenceCode=" + offenceCodeSearch
+            },
+            {
+                text: "Link " + offence.code
             }
         ]
     }) }}
 {% endblock %}
 
 {% block content %}
-    <div class="govuk-grid-row govuk-!-margin-bottom-4" data-qa="offence-search-section">
+
+    <div id="offence-search-container">
+        <h1 class="govuk-heading-l">
+            <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
+            Link {{ offence.code }} to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }}
+        </h1>
+    </div>
+    <div class="govuk-grid-row govuk-body">
         <div class="govuk-grid-column-full">
-            <div id="offence-search-container">
-                <h1 class="govuk-heading-l">
-                    <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
-                    Link offences to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }}
-                </h1>
-                {{ offenceSearch(offenceCode, '/schedules/parts-and-offences/' + fullSchedule.id + '#part-' + schedulePart.id) }}
-                {{ offenceTable(
-                    {
-                        offences: offences,
-                        scheduleId: fullSchedule.id,
-                        schedulePartId: schedulePart.id,
-                        offenceCodeSearch: offenceCode,
-                        csrfToken: csrfToken,
-                        linkType: 'LINK',
-                        user: user
-                    }
-                ) }}
-            </div>
+            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Offence</p>
+            <p class="govuk-!-margin-bottom-0">{{ offence.code + ': ' + offence.cjsTitle }}</p>
         </div>
     </div>
+    <div class="govuk-grid-row govuk-body">
+        <div class="govuk-grid-column-one-quarter">
+            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Start Date</p>
+            <p class="govuk-!-margin-bottom-0">{{ offence.startDate | dateFormat }}</p>
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">End Date</p>
+            <p class="govuk-!-margin-bottom-0">{{ offence.endDate | dateFormat }}</p>
+        </div>
+    </div>
+    <div class="govuk-grid-row govuk-body">
+        <div class="govuk-grid-column-full">
+            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Offence type</p>
+            <p class="govuk-!-margin-bottom-0">{{ offence.offenceType }}</p>
+        </div>
+    </div>
+    <div class="govuk-grid-row govuk-body">
+        <div class="govuk-grid-column-full">
+            {% if offence.childOffences.length == 0 %}
+                <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Inchoate offences</p>
+                <p class="govuk-!-margin-bottom-0">None</p>
+            {% else %}
+            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Inchoate offences (will also be
+                linked)</p>
+            <table id="inchoate-offences-table" class="govuk-table" data-qa="inchoate-table">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body govuk-body-s">
+                {% for childOffence in offence.childOffences %}
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            {{ childOffence.code }}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {{ childOffence.title }}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {{ childOffence.startDate | dateFormat }}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {{ childOffence.endDate | dateFormat }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <p class="govuk-body govuk-!-padding-top-0"><a
+                href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener"
+                target="_blank">View legislation for Schedule {{ fullSchedule.code }}</a>
+    </p>
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="scheduleId" value="{{ fullSchedule.id }}"/>
+        <input type="hidden" name="schedulePartId" value="{{ schedulePart.id }}"/>
+        <input type="hidden" name="offenceId" value="{{ offence.id }}"/>
+        {{ govukInput({
+            label: {
+                text: "What is the associated paragraph number that relates to this mapping? (optional)"
+            },
+            classes: "govuk-input--width-3",
+            id: "paragraphNumber",
+            name: "paragraphNumber",
+            inputmode: "numeric",
+            type: "number",
+            spellcheck: false
+        }) }}
+        {{ govukInput({
+            label: {
+                text: "What is the associated paragraph title that relates to this mapping? (optional)"
+            },
+            classes: "govuk-input--width-30",
+            id: "paragraphTitle",
+            name: "paragraphTitle"
+        }) }}
+
+        {{ govukInput({
+            label: {
+                text: "What is the line reference in the paragraph that relates to this mapping? (optional)"
+            },
+            classes: "govuk-input--width-30",
+            id: "lineReference",
+            name: "lineReference"
+        }) }}
+        {{ govukInput({
+            label: {
+                text: "What is the legislation text that relates to this mapping? (optional)"
+            },
+            classes: "govuk-input--width-30",
+            id: "legislationText",
+            name: "legislationText"
+        }) }}
+
+        {{ govukButton({
+            classes: "govuk-button--primary govuk-!-margin-right-2",
+            text: "Link",
+            preventDoubleClick: true,
+            type: submit,
+            attributes: {  'data-qa': 'link-offence' }
+        }) }}
+
+        {{ govukButton({
+            classes: "govuk-button--secondary govuk-!-margin-right-2",
+            text: "Cancel",
+            preventDoubleClick: true,
+            href: "/schedules/link-offences/"  + fullSchedule.id + "/" + schedulePart.id + "/" + "?offenceCode=" + offenceCodeSearch,
+            attributes: {  'data-qa': 'link-offence' }
+        }) }}
+    </form>
+
 {% endblock %}

@@ -1,6 +1,7 @@
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import {
   FeatureToggle,
+  LinkOffence,
   MostRecentLoadResult,
   Offence,
   Schedule,
@@ -19,6 +20,10 @@ export default class OffenceService {
 
   async getOffenceById(offenceId: number, user: User): Promise<Offence> {
     return this.manageOffencesApiClient.getOffenceById(offenceId, user)
+  }
+
+  async getOffenceWithScheduleDataById(offenceId: number, user: User): Promise<Offence> {
+    return this.manageOffencesApiClient.getOffenceWithScheduleDataById(offenceId, user)
   }
 
   async getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
@@ -49,17 +54,17 @@ export default class OffenceService {
   async getOffencesNotLinked(offenceCode: string, schedule: Schedule, user: User): Promise<Offence[]> {
     const offences = await this.getOffencesByCode(offenceCode, user)
     const existingOffenceIds = schedule.scheduleParts
-      .filter(sp => sp.scheduleParagraphs.filter(para => para.offences != null))
-      .flatMap(sp => sp.scheduleParagraphs.flatMap(para => para.offences))
+      .filter(sp => sp.offences != null)
+      .flatMap(sp => sp.offences)
       .map(o => o.id)
     return offences.filter(o => !existingOffenceIds.includes(o.id))
   }
 
-  linkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
-    return this.manageOffencesApiClient.linkOffence(schedulePartId, offenceId, user)
+  linkOffence(linkOffence: LinkOffence, user: User): Promise<unknown> {
+    return this.manageOffencesApiClient.linkOffence(linkOffence, user)
   }
 
-  unlinkOffence(scheduleParagraphId: number, offenceId: number, user: User): Promise<unknown> {
-    return this.manageOffencesApiClient.unlinkOffence(scheduleParagraphId, offenceId, user)
+  unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
+    return this.manageOffencesApiClient.unlinkOffence(schedulePartId, offenceId, user)
   }
 }
