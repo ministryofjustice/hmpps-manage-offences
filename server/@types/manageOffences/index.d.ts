@@ -4,17 +4,30 @@
  */
 
 export interface paths {
+  '/queue-admin/retry-dlq/{dlqName}': {
+    put: operations['retryDlq']
+  }
+  '/queue-admin/retry-all-dlqs': {
+    put: operations['retryAllDlqs']
+  }
+  '/queue-admin/purge-queue/{queueName}': {
+    put: operations['purgeQueue']
+  }
   '/admin/toggle-feature': {
     put: operations['toggleFeature']
   }
   '/schedule/unlink-offences': {
     post: operations['unlinkOffences']
   }
-  '/schedule/link-offences/{schedulePartId}': {
+  '/schedule/link-offence': {
     post: operations['linkOffences']
   }
   '/schedule/create': {
     post: operations['createSchedule']
+  }
+  '/schedule/offence/id/{offenceId}': {
+    /** This endpoint will return the offence that matches the unique ID passed in */
+    get: operations['getOffenceById']
   }
   '/schedule/by-id/{scheduleId}': {
     get: operations['findScheduleById']
@@ -22,12 +35,23 @@ export interface paths {
   '/schedule/all': {
     get: operations['findAllSchedules']
   }
+  '/queue-admin/get-dlq-messages/{dlqName}': {
+    get: operations['getDlqMessages']
+  }
   '/offences/load-results': {
     /** Get the results of the most recent load */
     get: operations['findLoadResults']
   }
+  '/offences/id/{offenceId}': {
+    /** This endpoint will return the offence that matches the unique ID passed in */
+    get: operations['getOffenceById_1']
+  }
+  '/offences/ho-code/{offenceCode}': {
+    /** This endpoint will return the HO Code associated with an offence code, could return null */
+    get: operations['getHoCodeByOffenceCode']
+  }
   '/offences/code/{offenceCode}': {
-    /** This endpoint will return the the offences that start with the passed offence code */
+    /** This endpoint will return the offences that start with the passed offence code */
     get: operations['getOffencesByOffenceCode']
   }
   '/change-history/nomis': {
@@ -40,6 +64,61 @@ export interface paths {
 
 export interface components {
   schemas: {
+    Message: {
+      messageId?: string
+      receiptHandle?: string
+      body?: string
+      attributes?: { [key: string]: string }
+      messageAttributes?: {
+        [key: string]: components['schemas']['MessageAttributeValue']
+      }
+      md5OfBody?: string
+      md5OfMessageAttributes?: string
+    }
+    MessageAttributeValue: {
+      stringValue?: string
+      binaryValue?: {
+        /** Format: int32 */
+        short?: number
+        char?: string
+        /** Format: int32 */
+        int?: number
+        /** Format: int64 */
+        long?: number
+        /** Format: float */
+        float?: number
+        /** Format: double */
+        double?: number
+        direct?: boolean
+        readOnly?: boolean
+      }
+      stringListValues?: string[]
+      binaryListValues?: {
+        /** Format: int32 */
+        short?: number
+        char?: string
+        /** Format: int32 */
+        int?: number
+        /** Format: int64 */
+        long?: number
+        /** Format: float */
+        float?: number
+        /** Format: double */
+        double?: number
+        direct?: boolean
+        readOnly?: boolean
+      }[]
+      dataType?: string
+    }
+    RetryDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      messages: components['schemas']['Message'][]
+    }
+    PurgeQueueResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+    }
     /** @description Feature toggle details */
     FeatureToggle: {
       /**
@@ -57,8 +136,52 @@ export interface components {
       /** Format: int64 */
       offenceId: number
     }
-    /** @description Offence details */
-    Offence: {
+    LinkOffence: {
+      /**
+       * Format: int64
+       * @description Unique ID of the offence
+       */
+      offenceId: number
+      /**
+       * Format: int64
+       * @description The offence code
+       */
+      schedulePartId: number
+      /** @description The line reference for the associated schedule's legislation */
+      lineReference?: string
+      /** @description The legislation text for the associated schedule */
+      legislationText?: string
+      /** @description Schedule paragraph title that this offence is mapped to */
+      paragraphTitle?: string
+      /**
+       * Format: int32
+       * @description Schedule paragraph number that this offence is mapped to
+       */
+      paragraphNumber?: number
+    }
+    /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
+    BasicOffence: {
+      /**
+       * Format: int64
+       * @description Unique ID of the offence
+       */
+      id: number
+      /** @description The offence code */
+      code: string
+      /** @description The CJS Title (usually the same as description) */
+      title?: string
+      /**
+       * Format: date
+       * @description The offence start date
+       */
+      startDate: string
+      /**
+       * Format: date
+       * @description The offence end date
+       */
+      endDate?: string
+    }
+    OffenceWithScheduleData: {
       /**
        * Format: int64
        * @description Unique ID of the offence
@@ -70,16 +193,18 @@ export interface components {
       description?: string
       /** @description The CJS Title (usually the same as description) */
       cjsTitle?: string
+      /** @description The offence type (e.g CI) */
+      offenceType?: string
       /**
        * Format: int32
        * @description The revision number of the offence
        */
-      revisionId?: number
+      revisionId: number
       /**
        * Format: date
        * @description The offence start date
        */
-      startDate?: string
+      startDate: string
       /**
        * Format: date
        * @description The offence end date
@@ -91,7 +216,7 @@ export interface components {
        * Format: date-time
        * @description The date this offence was last changed in SDRS
        */
-      changedDate?: string
+      changedDate: string
       /**
        * Format: date-time
        * @description The date this offence was loaded into manage-offences from SDRS
@@ -107,12 +232,23 @@ export interface components {
        */
       parentOffenceId?: number
       /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
-      childOffenceIds?: number[]
+      childOffences?: components['schemas']['BasicOffence'][]
+      /** @description The line reference for the associated schedule's legislation */
+      lineReference?: string
+      /** @description The legislation text for the associated schedule */
+      legislationText?: string
+      /** @description Schedule paragraph title that this offence is mapped to */
+      paragraphTitle?: string
+      /**
+       * Format: int32
+       * @description Schedule paragraph number that this offence is mapped to
+       */
+      paragraphNumber?: number
     }
     /** @description Schedule details */
     Schedule: {
       /** Format: int64 */
-      id?: number
+      id: number
       act: string
       code: string
       url?: string
@@ -130,10 +266,21 @@ export interface components {
     /** @description Schedule part details and associated offences */
     SchedulePart: {
       /** Format: int64 */
-      id?: number
+      id: number
       /** Format: int32 */
       partNumber: number
-      offences?: components['schemas']['Offence'][]
+      offences?: components['schemas']['OffenceWithScheduleData'][]
+    }
+    DlqMessage: {
+      body: { [key: string]: { [key: string]: unknown } }
+      messageId: string
+    }
+    GetDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesReturnedCount: number
+      messages: components['schemas']['DlqMessage'][]
     }
     /** @description Details of the load by SDRS Cache */
     MostRecentLoadResult: {
@@ -191,6 +338,60 @@ export interface components {
        */
       lastSuccessfulLoadDate?: string
     }
+    /** @description Offence details */
+    Offence: {
+      /**
+       * Format: int64
+       * @description Unique ID of the offence
+       */
+      id: number
+      /** @description The offence code */
+      code: string
+      /** @description The offence description */
+      description?: string
+      /** @description The CJS Title (usually the same as description) */
+      cjsTitle?: string
+      /** @description The offence type (e.g CI) */
+      offenceType?: string
+      /**
+       * Format: int32
+       * @description The revision number of the offence
+       */
+      revisionId: number
+      /**
+       * Format: date
+       * @description The offence start date
+       */
+      startDate: string
+      /**
+       * Format: date
+       * @description The offence end date
+       */
+      endDate?: string
+      /** @description The offence's home office stats code */
+      homeOfficeStatsCode?: string
+      /**
+       * Format: date-time
+       * @description The date this offence was last changed in SDRS
+       */
+      changedDate: string
+      /**
+       * Format: date-time
+       * @description The date this offence was loaded into manage-offences from SDRS
+       */
+      loadDate?: string
+      /** @description The schedules linked to this offence */
+      schedules?: components['schemas']['ScheduleDetails'][]
+      /** @description If true then this is a inchoate offence; i.e. a child of another offence */
+      isChild: boolean
+      /**
+       * Format: int64
+       * @description The parent offence id of an inchoate offence
+       */
+      parentOffenceId?: number
+      /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
+      childOffenceIds?: number[]
+    }
     /** @description This shows a change to NOMIS */
     NomisChangeHistory: {
       /** Format: int64 */
@@ -219,6 +420,46 @@ export interface components {
 }
 
 export interface operations {
+  retryDlq: {
+    parameters: {
+      path: {
+        dlqName: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['RetryDlqResult']
+        }
+      }
+    }
+  }
+  retryAllDlqs: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['RetryDlqResult'][]
+        }
+      }
+    }
+  }
+  purgeQueue: {
+    parameters: {
+      path: {
+        queueName: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['PurgeQueueResult']
+        }
+      }
+    }
+  }
   toggleFeature: {
     responses: {
       /** OK */
@@ -242,19 +483,13 @@ export interface operations {
     }
   }
   linkOffences: {
-    parameters: {
-      path: {
-        /** The schedule part ID */
-        schedulePartId: number
-      }
-    }
     responses: {
       /** OK */
       200: unknown
     }
     requestBody: {
       content: {
-        'application/json': number[]
+        'application/json': components['schemas']['LinkOffence']
       }
     }
   }
@@ -266,6 +501,23 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['Schedule']
+      }
+    }
+  }
+  /** This endpoint will return the offence that matches the unique ID passed in */
+  getOffenceById: {
+    parameters: {
+      path: {
+        /** The offence ID */
+        offenceId: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['OffenceWithScheduleData']
+        }
       }
     }
   }
@@ -295,6 +547,24 @@ export interface operations {
       }
     }
   }
+  getDlqMessages: {
+    parameters: {
+      path: {
+        dlqName: string
+      }
+      query: {
+        maxMessages?: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+    }
+  }
   /** Get the results of the most recent load */
   findLoadResults: {
     responses: {
@@ -306,7 +576,47 @@ export interface operations {
       }
     }
   }
-  /** This endpoint will return the the offences that start with the passed offence code */
+  /** This endpoint will return the offence that matches the unique ID passed in */
+  getOffenceById_1: {
+    parameters: {
+      path: {
+        /** The offence ID */
+        offenceId: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['Offence']
+        }
+      }
+    }
+  }
+  /** This endpoint will return the HO Code associated with an offence code, could return null */
+  getHoCodeByOffenceCode: {
+    parameters: {
+      path: {
+        /** The offence code */
+        offenceCode: string
+      }
+    }
+    responses: {
+      /** Offence code exists and associated hoCode returned (could be null/empty) */
+      200: {
+        content: {
+          'application/json': string
+        }
+      }
+      /** No offence exists for the passed in offence code */
+      404: {
+        content: {
+          'application/json': string
+        }
+      }
+    }
+  }
+  /** This endpoint will return the offences that start with the passed offence code */
   getOffencesByOffenceCode: {
     parameters: {
       path: {

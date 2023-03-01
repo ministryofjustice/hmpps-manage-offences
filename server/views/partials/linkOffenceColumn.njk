@@ -3,7 +3,7 @@
 {% macro linkOffenceColumn(scheduleId, schedulePartId, offenceCodeSearch, offenceId, csrfToken, isChild) %}
     <td class="govuk-table__cell text-align-right">
         {% if not isChild %}
-            <form method="post" action="/schedules/link-offence">
+{#            <form method="post" action="/schedules/link-offence">#}
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                 <input type="hidden" name="scheduleId" value="{{ scheduleId }}"/>
                 <input type="hidden" name="schedulePartId" value="{{ schedulePartId }}"/>
@@ -14,9 +14,10 @@
                     text: "Link",
                     value: 'add-button',
                     classes: 'govuk-button--secondary govuk-!-margin-bottom-0',
+                    href: '/schedules/link-offence/create?scheduleId=' + scheduleId + '&partId=' + schedulePartId + '&offenceId=' + offenceId + '&offenceCodeSearch=' + offenceCodeSearch ,
                     preventDoubleClick: true
                 }) }}
-            </form>
+{#            </form>#}
         {% endif %}
     </td>
 {% endmacro %}

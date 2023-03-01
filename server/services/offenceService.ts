@@ -1,6 +1,7 @@
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import {
   FeatureToggle,
+  LinkOffence,
   MostRecentLoadResult,
   Offence,
   Schedule,
@@ -15,6 +16,14 @@ export default class OffenceService {
 
   async getOffencesByCode(offenceCode: string, user: User): Promise<[Offence]> {
     return this.manageOffencesApiClient.getOffencesByCode(offenceCode, user)
+  }
+
+  async getOffenceById(offenceId: number, user: User): Promise<Offence> {
+    return this.manageOffencesApiClient.getOffenceById(offenceId, user)
+  }
+
+  async getOffenceWithScheduleDataById(offenceId: number, user: User): Promise<Offence> {
+    return this.manageOffencesApiClient.getOffenceWithScheduleDataById(offenceId, user)
   }
 
   async getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
@@ -51,8 +60,8 @@ export default class OffenceService {
     return offences.filter(o => !existingOffenceIds.includes(o.id))
   }
 
-  linkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
-    return this.manageOffencesApiClient.linkOffence(schedulePartId, offenceId, user)
+  linkOffence(linkOffence: LinkOffence, user: User): Promise<unknown> {
+    return this.manageOffencesApiClient.linkOffence(linkOffence, user)
   }
 
   unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {

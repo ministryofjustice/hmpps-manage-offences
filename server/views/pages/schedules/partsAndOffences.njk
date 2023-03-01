@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "partials/nav.njk" import navBar with context %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "partials/offenceTable.njk" import offenceTable %}
+{% from "partials/linkedOffenceTable.njk" import linkedOffenceTable %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
@@ -76,13 +76,12 @@
             </div>
         </div>
     {% endif %}
-    {{ offenceTable(
+    {{ linkedOffenceTable(
         {
             offences: part.offences,
             scheduleId: fullSchedule.id,
             schedulePartId: part.id,
             csrfToken: csrfToken,
-            linkType: 'UNLINK',
             user: user
         }
     ) }}
