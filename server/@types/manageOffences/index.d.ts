@@ -25,9 +25,9 @@ export interface paths {
   '/schedule/create': {
     post: operations['createSchedule']
   }
-  '/schedule/offence/id/{offenceId}': {
+  '/schedule/offence-mapping/id/{offenceId}': {
     /** This endpoint will return the offence that matches the unique ID passed in */
-    get: operations['getOffenceById']
+    get: operations['getOffenceToScheduleMapping']
   }
   '/schedule/by-id/{scheduleId}': {
     get: operations['findScheduleById']
@@ -44,7 +44,7 @@ export interface paths {
   }
   '/offences/id/{offenceId}': {
     /** This endpoint will return the offence that matches the unique ID passed in */
-    get: operations['getOffenceById_1']
+    get: operations['getOffenceById']
   }
   '/offences/ho-code/{offenceCode}': {
     /** This endpoint will return the HO Code associated with an offence code, could return null */
@@ -181,7 +181,22 @@ export interface components {
        */
       endDate?: string
     }
-    OffenceWithScheduleData: {
+    /** @description Schedule details when associated to an offence */
+    LinkedScheduleDetails: {
+      /** Format: int64 */
+      id: number
+      act: string
+      code: string
+      url?: string
+      /** Format: int32 */
+      partNumber: number
+      /** Format: int32 */
+      paragraphNumber?: number
+      paragraphTitle?: string
+      lineReference?: string
+      legislationText?: string
+    }
+    OffenceToScheduleMapping: {
       /**
        * Format: int64
        * @description Unique ID of the offence
@@ -223,7 +238,7 @@ export interface components {
        */
       loadDate?: string
       /** @description The schedules linked to this offence */
-      schedules?: components['schemas']['ScheduleDetails'][]
+      schedules?: components['schemas']['LinkedScheduleDetails'][]
       /** @description If true then this is a inchoate offence; i.e. a child of another offence */
       isChild: boolean
       /**
@@ -254,22 +269,13 @@ export interface components {
       url?: string
       scheduleParts?: components['schemas']['SchedulePart'][]
     }
-    /** @description Schedule details */
-    ScheduleDetails: {
-      /** Format: int64 */
-      id?: number
-      act: string
-      code: string
-      url?: string
-      schedulePartNumbers?: number[]
-    }
     /** @description Schedule part details and associated offences */
     SchedulePart: {
       /** Format: int64 */
       id: number
       /** Format: int32 */
       partNumber: number
-      offences?: components['schemas']['OffenceWithScheduleData'][]
+      offences?: components['schemas']['OffenceToScheduleMapping'][]
     }
     DlqMessage: {
       body: { [key: string]: { [key: string]: unknown } }
@@ -381,7 +387,7 @@ export interface components {
        */
       loadDate?: string
       /** @description The schedules linked to this offence */
-      schedules?: components['schemas']['ScheduleDetails'][]
+      schedules?: components['schemas']['LinkedScheduleDetails'][]
       /** @description If true then this is a inchoate offence; i.e. a child of another offence */
       isChild: boolean
       /**
@@ -505,7 +511,7 @@ export interface operations {
     }
   }
   /** This endpoint will return the offence that matches the unique ID passed in */
-  getOffenceById: {
+  getOffenceToScheduleMapping: {
     parameters: {
       path: {
         /** The offence ID */
@@ -516,7 +522,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['OffenceWithScheduleData']
+          'application/json': components['schemas']['OffenceToScheduleMapping']
         }
       }
     }
@@ -577,7 +583,7 @@ export interface operations {
     }
   }
   /** This endpoint will return the offence that matches the unique ID passed in */
-  getOffenceById_1: {
+  getOffenceById: {
     parameters: {
       path: {
         /** The offence ID */

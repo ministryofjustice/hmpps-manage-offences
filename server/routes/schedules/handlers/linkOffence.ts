@@ -26,7 +26,7 @@ export default class LinkOffenceRoutes {
     const { scheduleId, partId, offenceId, offenceCodeSearch } = req.query as Record<string, string>
     const fullSchedule = await this.offenceService.getScheduleById(scheduleId as unknown as number, res.locals.user)
     const schedulePart = fullSchedule.scheduleParts.find(sp => sp.id === Number(partId))
-    const offence = await this.offenceService.getOffenceWithScheduleDataById(
+    const offence = await this.offenceService.getOffenceToScheduleMapping(
       offenceId as unknown as number,
       res.locals.user,
     )

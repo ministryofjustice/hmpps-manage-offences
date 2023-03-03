@@ -6,7 +6,7 @@ import {
   MostRecentLoadResult,
   NomisChangeHistory,
   Offence,
-  OffenceWithScheduleData,
+  OffenceToScheduleMapping,
   Schedule,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 
@@ -35,13 +35,13 @@ export default class ManageOffencesApiClient extends RestClient {
     ) as Promise<Offence>
   }
 
-  getOffenceWithScheduleDataById(offenceId: number, user: User): Promise<OffenceWithScheduleData> {
+  getOffenceToScheduleMapping(offenceId: number, user: User): Promise<OffenceToScheduleMapping> {
     return this.get(
       {
-        path: `/schedule/offence/id/${offenceId}`,
+        path: `/schedule/offence-mapping/id/${offenceId}`,
       },
       { token: user.token },
-    ) as Promise<OffenceWithScheduleData>
+    ) as Promise<OffenceToScheduleMapping>
   }
 
   getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
