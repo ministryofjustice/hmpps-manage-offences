@@ -18,8 +18,6 @@ export default class SearchRoutes {
       !offence.isChild && (await this.offenceService.getOffencesByIds(offence.childOffenceIds, res.locals.user))
     const parentOffence =
       offence.isChild && (await this.offenceService.getOffenceById(offence.parentOffenceId, res.locals.user))
-    console.log(JSON.stringify(offence))
-    console.log(JSON.stringify(childOffences))
     res.render('pages/search/viewOffence', { offence, offenceCodeSearch, childOffences, parentOffence })
   }
 }
