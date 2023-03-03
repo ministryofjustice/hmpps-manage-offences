@@ -11,6 +11,7 @@ export default function Index(offenceService: OffenceService): Router {
   const searchHandler = new SearchRoutes(offenceService)
 
   get('/offence-code', searchHandler.GET)
+  get('/offence/:offenceId/view', searchHandler.VIEW_OFFENCE)
 
   return router
 }

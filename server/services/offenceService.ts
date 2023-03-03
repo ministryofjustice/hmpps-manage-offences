@@ -4,6 +4,7 @@ import {
   LinkOffence,
   MostRecentLoadResult,
   Offence,
+  OffenceToScheduleMapping,
   Schedule,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 import FeatureToggleType from '../types/featureToggleType'
@@ -22,8 +23,12 @@ export default class OffenceService {
     return this.manageOffencesApiClient.getOffenceById(offenceId, user)
   }
 
-  async getOffenceWithScheduleDataById(offenceId: number, user: User): Promise<Offence> {
-    return this.manageOffencesApiClient.getOffenceWithScheduleDataById(offenceId, user)
+  async getOffencesByIds(offenceIds: number[], user: User): Promise<Offence[]> {
+    return Promise.all(offenceIds.map(id => this.manageOffencesApiClient.getOffenceById(id, user)))
+  }
+
+  async getOffenceToScheduleMapping(offenceId: number, user: User): Promise<OffenceToScheduleMapping> {
+    return this.manageOffencesApiClient.getOffenceToScheduleMapping(offenceId, user)
   }
 
   async getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
