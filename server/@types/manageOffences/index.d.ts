@@ -168,8 +168,8 @@ export interface components {
       id: number
       /** @description The offence code */
       code: string
-      /** @description The CJS Title (usually the same as description) */
-      title?: string
+      /** @description The offence description (taken from SDRS CJSTitle field) */
+      description?: string
       /**
        * Format: date
        * @description The offence start date
@@ -204,10 +204,8 @@ export interface components {
       id: number
       /** @description The offence code */
       code: string
-      /** @description The offence description */
+      /** @description The offence description (taken from SDRS CJSTitle field) */
       description?: string
-      /** @description The CJS Title (usually the same as description) */
-      cjsTitle?: string
       /** @description The offence type (e.g CI) */
       offenceType?: string
       /**
@@ -353,10 +351,8 @@ export interface components {
       id: number
       /** @description The offence code */
       code: string
-      /** @description The offence description */
+      /** @description The offence description (taken from SDRS CJSTitle field) */
       description?: string
-      /** @description The CJS Title (usually the same as description) */
-      cjsTitle?: string
       /** @description The offence type (e.g CI) */
       offenceType?: string
       /**
@@ -397,6 +393,15 @@ export interface components {
       parentOffenceId?: number
       /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
       childOffenceIds?: number[]
+      /** @description The legislation associated to this offence (from actsAndSections in the SDRS response) */
+      legislation?: string
+      /** @description Set to true if max period is life */
+      maxPeriodIsLife?: boolean
+      /**
+       * Format: int32
+       * @description Set to the max period of indictment in years
+       */
+      maxPeriodOfIndictmentYears?: number
     }
     /** @description This shows a change to NOMIS */
     NomisChangeHistory: {

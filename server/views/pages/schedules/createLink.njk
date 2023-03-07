@@ -3,6 +3,8 @@
 {% from "partials/nav.njk" import navBar with context %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "partials/offenceDetailsSection.njk" import offenceDetailsSection %}
+{% from "partials/inchoateTable.njk" import inchoateTable %}
 
 {% set pageTitle = applicationName + " - Link" %}
 {% set pageId = "create-link" %}
@@ -41,28 +43,9 @@
             Link {{ offence.code }} to Schedule {{ fullSchedule.code }} Part {{ schedulePart.partNumber }}
         </h1>
     </div>
-    <div class="govuk-grid-row govuk-body">
-        <div class="govuk-grid-column-full">
-            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Offence</p>
-            <p class="govuk-!-margin-bottom-0">{{ offence.code + ': ' + offence.cjsTitle }}</p>
-        </div>
-    </div>
-    <div class="govuk-grid-row govuk-body">
-        <div class="govuk-grid-column-one-quarter">
-            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Start Date</p>
-            <p class="govuk-!-margin-bottom-0">{{ offence.startDate | dateFormat }}</p>
-        </div>
-        <div class="govuk-grid-column-one-quarter">
-            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">End Date</p>
-            <p class="govuk-!-margin-bottom-0">{{ offence.endDate | dateFormat }}</p>
-        </div>
-    </div>
-    <div class="govuk-grid-row govuk-body">
-        <div class="govuk-grid-column-full">
-            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Offence type</p>
-            <p class="govuk-!-margin-bottom-0">{{ offence.offenceType }}</p>
-        </div>
-    </div>
+
+    {{ offenceDetailsSection(offence) }}
+
     <div class="govuk-grid-row govuk-body">
         <div class="govuk-grid-column-full">
             {% if offence.childOffences.length == 0 %}
@@ -71,34 +54,7 @@
             {% else %}
             <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">Inchoate offences (will also be
                 linked)</p>
-            <table id="inchoate-offences-table" class="govuk-table" data-qa="inchoate-table">
-                <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
-                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
-                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
-                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
-                </tr>
-                </thead>
-                <tbody class="govuk-table__body govuk-body-s">
-                {% for childOffence in offence.childOffences %}
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">
-                            {{ childOffence.code }}
-                        </td>
-                        <td class="govuk-table__cell">
-                            {{ childOffence.title }}
-                        </td>
-                        <td class="govuk-table__cell">
-                            {{ childOffence.startDate | dateFormat }}
-                        </td>
-                        <td class="govuk-table__cell">
-                            {{ childOffence.endDate | dateFormat }}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                {{ inchoateTable(offence.childOffences) }}
             {% endif %}
         </div>
     </div>

@@ -4,6 +4,8 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
+{% from "partials/offenceDetailsSection.njk" import offenceDetailsSection %}
+{% from "partials/inchoateTable.njk" import inchoateTable %}
 
 {% set pageTitle = applicationName + " - View Offence" %}
 {% set pageId = "view-offence" %}
@@ -29,53 +31,62 @@
 {% block content %}
 
     <h1 class="govuk-heading-l">
-        {{ offence.code }}: {{ offence.cjsTitle }}
+        {{ offence.code }}: {{ offence.description }}
     </h1>
 
+    {{ offenceDetailsSection(offence, parentOffence) }}
 
-    <div class="govuk-grid-row govuk-body basic-details">
-        <div class="govuk-grid-column-one-quarter">
-            <div id="basic-details-content">
-                <div>
-                    <p>
-                        <span class="govuk-!-font-weight-bold">Start date</span>
-                        <span data-qa="-start-date">{{ offence.startDate | dateFormat }}</span>
-                    </p>
-                    <p>
-                        <span class="govuk-!-font-weight-bold">Offence type</span>
-                        <span data-qa="start-date">{{ offence.offenceType or 'None' }}</span>
-                    </p>
-                    {% if offence.isChild %}
-                        <p>
-                            <span class="govuk-!-font-weight-bold">Inchoate offence</span>
-                            <span data-qa="parent-offence">Yes</span>
-                        </p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <div class="govuk-grid-column-three-quarters">
-            <div id="basic-details-content">
-                <div>
-                    <p>
-                        <span class="govuk-!-font-weight-bold">End date</span>
-                        <span data-qa="-start-date">{{ (offence.endDate | dateFormat) or 'None' }}</span>
-                    </p>
-                    <p>
-                        <span class="govuk-!-font-weight-bold">Home Office code</span>
-                        <span data-qa="-start-date">{{ offence.homeOfficeStatsCode or 'None' }}</span>
-                    </p>
-                    {% if offence.isChild %}
-                        <p>
-                            <span class="govuk-!-font-weight-bold">Parent offence</span>
-                            <span data-qa="parent-offence">{{ parentOffence.code }}: {{ parentOffence.cjsTitle }}</span>
-                        </p>
-                    {% endif %}
-                </div>
-            </div>
+    <div class="govuk-grid-row govuk-body">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-m">Linked schedules</h2>
+            {% if offence.schedules.length == 0 %}
+                <p class="govuk-!-margin-bottom-0">None</p>
+            {% else %}
+                {% for schedule in offence.schedules %}
+                    <div class="govuk-summary-card">
+                        <div class="govuk-summary-card__title-wrapper"><h2 class="govuk-summary-card__title">
+                                Schedule {{ schedule.code }}</h2>
+                            <ul class="govuk-summary-card__actions">
+                                <li class="govuk-summary-card__action">
+                                    <a href="{{ schedule.url }}" rel="noreferrer noopener" target="_blank">View
+                                        Legislation</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="govuk-summary-card__content">
+                            <dl class="govuk-summary-list">
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">Act</dt>
+                                    <dd class="govuk-summary-list__value">{{ schedule.act }}</dd>
+                                </div>
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">Schedule and Part</dt>
+                                    <dd class="govuk-summary-list__value">Schedule {{ schedule.code }}
+                                        Part {{ schedule.partNumber }}</dd>
+                                </div>
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">Schedule Text</dt>
+                                    <dd class="govuk-summary-list__value">{{ schedule.paragraphNumber }}
+                                        . {{ schedule.paragraphTitle }}</dd>
+                                </div>
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">Line reference</dt>
+                                    <dd class="govuk-summary-list__value">{{ schedule.lineReference }}</dd>
+                                </div>
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">Legislation</dt>
+                                    <dd class="govuk-summary-list__value">{{ schedule.legislationText }}</dd>
+                                </div>
+
+                            </dl>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
         </div>
     </div>
-
 
     {% if not offence.isChild %}
         <div class="govuk-grid-row govuk-body">
@@ -85,85 +96,11 @@
                     <p class="govuk-!-margin-bottom-0">None</p>
                 {% else %}
                     <h1 class="govuk-heading-m">Associated inchoate offences</h1>
-                    <table id="inchoate-offences-table" class="govuk-table" data-qa="inchoate-table">
-                        <thead class="govuk-table__head">
-                        <tr class="govuk-table__row">
-                            <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
-                            <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
-                            <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
-                            <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
-                        </tr>
-                        </thead>
-                        <tbody class="govuk-table__body govuk-body-s">
-                        {% for childOffence in childOffences %}
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">
-                                    {{ childOffence.code }}
-                                </td>
-                                <td class="govuk-table__cell">
-                                    {{ childOffence.cjsTitle }}
-                                </td>
-                                <td class="govuk-table__cell">
-                                    {{ childOffence.startDate | dateFormat }}
-                                </td>
-                                <td class="govuk-table__cell">
-                                    {{ childOffence.endDate | dateFormat }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    {{ inchoateTable(childOffences) }}
                 {% endif %}
             </div>
         </div>
     {% endif %}
-
-    <div class="govuk-grid-row govuk-body">
-        <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-m">Linked schedules</h1>
-            {% if offence.schedules.length == 0 %}
-                <p class="govuk-!-margin-bottom-0">None</p>
-            {% else %}
-                <table id="linked-schedules-table" class="govuk-table" data-qa="linked-schedules-table">
-                    <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Act</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Schedule</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Legislation URL</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Paragraph</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Line</th>
-                        <th scope="col" class="govuk-table__header govuk-!-font-size-16">Legislation</th>
-                    </tr>
-                    </thead>
-                    <tbody class="govuk-table__body govuk-body-s">
-                    {% for schedule in offence.schedules %}
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">
-                                {{ schedule.act }}
-                            </td>
-                            <td class="govuk-table__cell">
-                                {{ schedule.code }} Part {{ schedule.partNumber }}
-                            </td>
-                            <td class="govuk-table__cell">
-                                <a href="{{ schedule.url }}" rel="noreferrer noopener"
-                                   target="_blank">{{ schedule.code }}</a>
-                            </td>
-                            <td class="govuk-table__cell">
-                                {{ schedule.paragraphNumber }} {{ schedule.paragraphTitle }}
-                            </td>
-                            <td class="govuk-table__cell">
-                                {{ schedule.lineReference }}
-                            </td>
-                            <td class="govuk-table__cell">
-                                {{ schedule.legislationText }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
-        </div>
-    </div>
 
     {{ govukButton({
         classes: "govuk-button--secondary govuk-!-margin-right-2",
