@@ -1,0 +1,30 @@
+{% macro inchoateTable(childOffences) %}
+    <table id="inchoate-offences-table" class="govuk-table" data-qa="inchoate-table">
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
+            <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
+            <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
+            <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body govuk-body-s">
+        {% for childOffence in childOffences %}
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                    {{ childOffence.code }}
+                </td>
+                <td class="govuk-table__cell">
+                    {{ childOffence.description }}
+                </td>
+                <td class="govuk-table__cell">
+                    {{ childOffence.startDate | dateFormat }}
+                </td>
+                <td class="govuk-table__cell">
+                    {{ childOffence.endDate | dateFormat }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}

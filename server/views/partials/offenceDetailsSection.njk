@@ -1,0 +1,66 @@
+{% macro offenceDetailsSection(offence, parentOffence) %}
+    <div class="govuk-grid-row govuk-body basic-details">
+        <div class="govuk-grid-column-one-quarter">
+            <div id="basic-details-content">
+                <div>
+                    <p>
+                        <span class="govuk-!-font-weight-bold">Code</span>
+                        <span data-qa="-start-date">{{ offence.code }}</span>
+                    </p>
+                    <p>
+                        <span class="govuk-!-font-weight-bold">Start date</span>
+                        <span data-qa="-start-date">{{ offence.startDate | dateFormat }}</span>
+                    </p>
+                    <p>
+                        <span class="govuk-!-font-weight-bold">Offence type</span>
+                        <span data-qa="start-date">{{ offence.offenceType or 'None' }}</span>
+                    </p>
+                    <p>
+                        <span class="govuk-!-font-weight-bold">Maximum indictment</span>
+                        {% if offence.maxPeriodIsLife %}
+                            <span data-qa="start-date">Life</span>
+                        {% elseif offence.maxPeriodOfIndictmentYears %}
+                            <span data-qa="start-date">{{ offence.maxPeriodOfIndictmentYears }} Years</span>
+                        {% else %}
+                            <span data-qa="start-date">Not entered</span>
+                        {% endif %}
+                    </p>
+                    {% if offence.isChild %}
+                        <p>
+                            <span class="govuk-!-font-weight-bold">Inchoate offence</span>
+                            <span data-qa="parent-offence">Yes</span>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="govuk-grid-column-one-half">
+            <div id="basic-details-content">
+                <div>
+                    <p>
+                        <span class="govuk-!-font-weight-bold">Description</span>
+                        <span data-qa="-start-date">{{ offence.description }}</span>
+                    </p>
+                    <p>
+                        <span class="govuk-!-font-weight-bold">End date</span>
+                        <span data-qa="-start-date">{{ (offence.endDate | dateFormat) or 'None' }}</span>
+                    </p>
+                    <p>
+                        <span class="govuk-!-font-weight-bold">Home Office code</span>
+                        <span data-qa="-start-date">{{ offence.homeOfficeStatsCode or 'None' }}</span>
+                    </p>
+                    <p>
+                        <span class="govuk-!-font-weight-bold">Legislation</span>
+                        <span data-qa="start-date">{{ offence.legislation or 'Not entered' }}</span>
+                    </p>
+                    {% if offence.isChild %}
+                        <p>
+                            <span class="govuk-!-font-weight-bold">Parent offence</span>
+                            <span data-qa="parent-offence">{{ parentOffence.code }}: {{ parentOffence.description }}</span>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
