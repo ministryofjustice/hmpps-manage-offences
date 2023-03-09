@@ -12,7 +12,7 @@
         {% for childOffence in childOffences %}
             <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                    {{ childOffence.code }}
+                    <a class="govuk-link" href="/search/offence/{{ childOffence.id }}/view">{{ childOffence.code }}</a>
                 </td>
                 <td class="govuk-table__cell">
                     {{ childOffence.description }}

@@ -35,8 +35,8 @@ describe('Route Handlers - Search', () => {
       req = {
         query: { offenceCode: 'ABC' },
       } as unknown as Request
-      offenceService.getOffencesByCode = jest.fn()
-      offenceService.getOffencesByCode.mockResolvedValue([{ id: 1 } as unknown as Offence])
+      offenceService.searchOffences = jest.fn()
+      offenceService.searchOffences.mockResolvedValue([{ id: 1 } as unknown as Offence])
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/search/search', { offences: [{ id: 1 }], offenceCode: 'ABC' })
     })

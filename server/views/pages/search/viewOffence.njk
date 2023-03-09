@@ -15,12 +15,18 @@
     {{ navBar('search') }}
 {% endblock %}
 
+{% if offenceCodeSearch !== undefined%}
+    {% set searchUrl = "/search/offence-code?offenceCode=" + offenceCodeSearch %}
+{% else %}
+    {% set searchUrl = "/search/offence-code"%}
+{% endif %}
+
 {% block aside %}
     {{ govukBreadcrumbs({
         items: [
             {
-                text: "Search " + offenceCodeSearch,
-                href: "/search/offence-code?offenceCode=" + offenceCodeSearch
+                text: "Search " + (offenceCodeSearch or ''),
+                href: searchUrl
             },
             {
                 text: "View " + offence.code
@@ -67,7 +73,7 @@
         classes: "govuk-button--secondary govuk-!-margin-right-2",
         text: "Back",
         preventDoubleClick: true,
-        href: "/search/offence-code?offenceCode=" + offenceCodeSearch,
+        href: searchUrl,
         attributes: {  'data-qa': 'Back-view' }
     }) }}
 

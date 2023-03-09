@@ -7,7 +7,7 @@
             <div class="govuk-grid-column-one-half">
                 {{ govukInput({
                     label: {
-                        text: "Offence code"
+                        text: "Search text"
                     },
                     id: "offenceCode",
                     value: offenceCode,
@@ -15,7 +15,7 @@
                     classes: "govuk-input--width-10",
                     attributes: {  'data-qa': 'offence-code' },
                     hint: {
-                        text: "Searches on all codes that start with the entered text"
+                        text: "Searches on code, description and legislation"
                     }
                 }) }}
             </div>

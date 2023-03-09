@@ -7,14 +7,14 @@
     {% set user = attributes.user %}
     {% if (offences) %}
         {% if (offences.length > 0) %}
-            <table id="load-results-table" class="govuk-table alternate-shade" data-qa="load-results-table">
+            <table id="offence-table" class="offence-table govuk-table alternate-shade" data-qa="load-results-table">
                 <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Legislation</th>
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
-                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Last change date</th>
                 </tr>
                 </thead>
                 <tbody class="govuk-table__body govuk-body-s">
@@ -27,13 +27,13 @@
                             {{ offence.description }}
                         </td>
                         <td class="govuk-table__cell">
+                            {{ offence.legislation }}
+                        </td>
+                        <td class="govuk-table__cell">
                             {{ offence.startDate | dateFormat }}
                         </td>
                         <td class="govuk-table__cell">
                             {{ offence.endDate | dateFormat }}
-                        </td>
-                        <td class="govuk-table__cell">
-                            {{ offence.changedDate | dateTimeFormat }}
                         </td>
                     </tr>
                 {% endfor %}
