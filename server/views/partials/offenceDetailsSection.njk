@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="govuk-grid-column-one-half">
+        <div class="govuk-grid-column-three-quarters">
             <div id="basic-details-content">
                 <div>
                     <p>
@@ -56,7 +56,11 @@
                     {% if offence.isChild %}
                         <p>
                             <span class="govuk-!-font-weight-bold">Parent offence</span>
-                            <span data-qa="parent-offence">{{ parentOffence.code }}: {{ parentOffence.description }}</span>
+                            <span data-qa="parent-offence">
+                                <a class="govuk-link" href="/search/offence/{{ parentOffence.id }}/view">
+                                    {{ parentOffence.code }}: {{ parentOffence.description }}
+                                </a>
+                            </span>
                         </p>
                     {% endif %}
                 </div>

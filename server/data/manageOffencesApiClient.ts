@@ -26,6 +26,15 @@ export default class ManageOffencesApiClient extends RestClient {
     ) as Promise<[Offence]>
   }
 
+  searchOffences(searchString: string, user: User): Promise<[Offence]> {
+    return this.get(
+      {
+        path: `/offences/search?searchString=${searchString}`,
+      },
+      { token: user.token },
+    ) as Promise<[Offence]>
+  }
+
   getOffenceById(offenceId: number, user: User): Promise<Offence> {
     return this.get(
       {

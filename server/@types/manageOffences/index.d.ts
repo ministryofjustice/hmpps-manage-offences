@@ -38,6 +38,10 @@ export interface paths {
   '/queue-admin/get-dlq-messages/{dlqName}': {
     get: operations['getDlqMessages']
   }
+  '/offences/search': {
+    /** This endpoint will return the offences that start with the passed offence code */
+    get: operations['searchOffences']
+  }
   '/offences/load-results': {
     /** Get the results of the most recent load */
     get: operations['findLoadResults']
@@ -246,6 +250,15 @@ export interface components {
       parentOffenceId?: number
       /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
       childOffences?: components['schemas']['BasicOffence'][]
+      /** @description The legislation associated to this offence (from actsAndSections in the SDRS response) */
+      legislation?: string
+      /** @description Set to true if max period is life */
+      maxPeriodIsLife?: boolean
+      /**
+       * Format: int32
+       * @description Set to the max period of indictment in years
+       */
+      maxPeriodOfIndictmentYears?: number
       /** @description The line reference for the associated schedule's legislation */
       lineReference?: string
       /** @description The legislation text for the associated schedule */
@@ -285,62 +298,6 @@ export interface components {
       /** Format: int32 */
       messagesReturnedCount: number
       messages: components['schemas']['DlqMessage'][]
-    }
-    /** @description Details of the load by SDRS Cache */
-    MostRecentLoadResult: {
-      /**
-       * @description Associated SDRS Cache - indicates the part of the SDRS load this status relates to
-       * @enum {string}
-       */
-      sdrsCache:
-        | 'OFFENCES_A'
-        | 'OFFENCES_B'
-        | 'OFFENCES_C'
-        | 'OFFENCES_D'
-        | 'OFFENCES_E'
-        | 'OFFENCES_F'
-        | 'OFFENCES_G'
-        | 'OFFENCES_H'
-        | 'OFFENCES_I'
-        | 'OFFENCES_J'
-        | 'OFFENCES_K'
-        | 'OFFENCES_L'
-        | 'OFFENCES_M'
-        | 'OFFENCES_N'
-        | 'OFFENCES_O'
-        | 'OFFENCES_P'
-        | 'OFFENCES_Q'
-        | 'OFFENCES_R'
-        | 'OFFENCES_S'
-        | 'OFFENCES_T'
-        | 'OFFENCES_U'
-        | 'OFFENCES_V'
-        | 'OFFENCES_W'
-        | 'OFFENCES_X'
-        | 'OFFENCES_Y'
-        | 'OFFENCES_Z'
-        | 'GET_APPLICATIONS'
-        | 'GET_MOJ_OFFENCE'
-      /**
-       * @description Load Status: SUCCESS or FAIL
-       * @enum {string}
-       */
-      status?: 'SUCCESS' | 'FAIL'
-      /**
-       * @description Load Type: FULL_LOAD or UPDATE
-       * @enum {string}
-       */
-      type?: 'FULL_LOAD' | 'UPDATE'
-      /**
-       * Format: date-time
-       * @description The date and time of the load
-       */
-      loadDate?: string
-      /**
-       * Format: date-time
-       * @description The date and time of the most recent successful load; if the load was successful this is the same as the loadDate
-       */
-      lastSuccessfulLoadDate?: string
     }
     /** @description Offence details */
     Offence: {
@@ -402,6 +359,62 @@ export interface components {
        * @description Set to the max period of indictment in years
        */
       maxPeriodOfIndictmentYears?: number
+    }
+    /** @description Details of the load by SDRS Cache */
+    MostRecentLoadResult: {
+      /**
+       * @description Associated SDRS Cache - indicates the part of the SDRS load this status relates to
+       * @enum {string}
+       */
+      sdrsCache:
+        | 'OFFENCES_A'
+        | 'OFFENCES_B'
+        | 'OFFENCES_C'
+        | 'OFFENCES_D'
+        | 'OFFENCES_E'
+        | 'OFFENCES_F'
+        | 'OFFENCES_G'
+        | 'OFFENCES_H'
+        | 'OFFENCES_I'
+        | 'OFFENCES_J'
+        | 'OFFENCES_K'
+        | 'OFFENCES_L'
+        | 'OFFENCES_M'
+        | 'OFFENCES_N'
+        | 'OFFENCES_O'
+        | 'OFFENCES_P'
+        | 'OFFENCES_Q'
+        | 'OFFENCES_R'
+        | 'OFFENCES_S'
+        | 'OFFENCES_T'
+        | 'OFFENCES_U'
+        | 'OFFENCES_V'
+        | 'OFFENCES_W'
+        | 'OFFENCES_X'
+        | 'OFFENCES_Y'
+        | 'OFFENCES_Z'
+        | 'GET_APPLICATIONS'
+        | 'GET_MOJ_OFFENCE'
+      /**
+       * @description Load Status: SUCCESS or FAIL
+       * @enum {string}
+       */
+      status?: 'SUCCESS' | 'FAIL'
+      /**
+       * @description Load Type: FULL_LOAD or UPDATE
+       * @enum {string}
+       */
+      type?: 'FULL_LOAD' | 'UPDATE'
+      /**
+       * Format: date-time
+       * @description The date and time of the load
+       */
+      loadDate?: string
+      /**
+       * Format: date-time
+       * @description The date and time of the most recent successful load; if the load was successful this is the same as the loadDate
+       */
+      lastSuccessfulLoadDate?: string
     }
     /** @description This shows a change to NOMIS */
     NomisChangeHistory: {
@@ -572,6 +585,22 @@ export interface operations {
       200: {
         content: {
           '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+    }
+  }
+  /** This endpoint will return the offences that start with the passed offence code */
+  searchOffences: {
+    parameters: {
+      query: {
+        searchString: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['Offence'][]
         }
       }
     }

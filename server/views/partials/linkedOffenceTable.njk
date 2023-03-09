@@ -11,7 +11,7 @@
     {% set user = attributes.user %}
 
     {% if (offences and offences.length > 0) %}
-        <table id="load-results-table" class="govuk-table alternate-shade" data-qa="load-results-table">
+        <table id="linked-offence-table" class="offence-table govuk-table alternate-shade" data-qa="load-results-table">
             <thead class="govuk-table__head">
             <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Code</th>
@@ -27,7 +27,7 @@
             {% for offence in offences %}
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
-                        {{ offence.code }}
+                        <a class="govuk-link" href="/search/offence/{{ offence.id }}/view">{{ offence.code }}</a>
                     </td>
                     <td class="govuk-table__cell">
                         {{ offence.description }}

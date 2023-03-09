@@ -19,6 +19,10 @@ export default class OffenceService {
     return this.manageOffencesApiClient.getOffencesByCode(offenceCode, user)
   }
 
+  async searchOffences(searchString: string, user: User): Promise<[Offence]> {
+    return this.manageOffencesApiClient.searchOffences(searchString, user)
+  }
+
   async getOffenceById(offenceId: number, user: User): Promise<Offence> {
     return this.manageOffencesApiClient.getOffenceById(offenceId, user)
   }

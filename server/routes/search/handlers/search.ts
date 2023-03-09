@@ -6,7 +6,7 @@ export default class SearchRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { offenceCode } = req.query as Record<string, string>
-    const offences = offenceCode ? await this.offenceService.getOffencesByCode(offenceCode, res.locals.user) : undefined
+    const offences = offenceCode ? await this.offenceService.searchOffences(offenceCode, res.locals.user) : undefined
     res.render('pages/search/search', { offences, offenceCode })
   }
 
