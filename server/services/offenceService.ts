@@ -60,8 +60,8 @@ export default class OffenceService {
     return this.manageOffencesApiClient.getScheduleById(scheduleId, user)
   }
 
-  async getOffencesNotLinked(offenceCode: string, schedule: Schedule, user: User): Promise<Offence[]> {
-    const offences = await this.getOffencesByCode(offenceCode, user)
+  async getOffencesNotLinked(searchString: string, schedule: Schedule, user: User): Promise<Offence[]> {
+    const offences = await this.searchOffences(searchString, user)
     const existingOffenceIds = schedule.scheduleParts
       .filter(sp => sp.offences != null)
       .flatMap(sp => sp.offences)
