@@ -3,11 +3,13 @@ import { Request, Response } from 'express'
 import SearchRoutes from './search'
 import OffenceService from '../../../services/offenceService'
 import { Offence } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import AdminService from '../../../services/adminService'
 
 const offenceService = new OffenceService(null) as jest.Mocked<OffenceService>
+const adminService = new AdminService(null, null) as jest.Mocked<AdminService>
 
 describe('Route Handlers - Search', () => {
-  const handler = new SearchRoutes(offenceService)
+  const handler = new SearchRoutes(offenceService, adminService)
   let req: Request
   let res: Response
 

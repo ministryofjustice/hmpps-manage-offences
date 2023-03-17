@@ -3,6 +3,7 @@ import { schedulePaths } from '../routes/schedules'
 import AuthorisedRoles from '../enums/authorisedRoles'
 import { loadResultPaths } from '../routes/loadResults'
 import { toggleJobsPaths } from '../routes/toggleJobs'
+import { adminPaths } from '../routes/search'
 
 function getMatchPath(path: string) {
   return match(path, { decode: decodeURIComponent })
@@ -28,6 +29,14 @@ const urlToRoleMapping = {
   [toggleJobsPaths.TOGGLE_JOBS]: {
     roles: [AuthorisedRoles.ROLE_MANAGE_OFFENCES_ADMIN],
     matchPath: getMatchPath(toggleJobsPaths.TOGGLE_JOBS),
+  },
+  [adminPaths.REACTIVATE_NOMIS_OFFENCE]: {
+    roles: [AuthorisedRoles.ROLE_NOMIS_OFFENCE_ACTIVATOR],
+    matchPath: getMatchPath(adminPaths.REACTIVATE_NOMIS_OFFENCE),
+  },
+  [adminPaths.DEACTIVATE_NOMIS_OFFENCE]: {
+    roles: [AuthorisedRoles.ROLE_NOMIS_OFFENCE_ACTIVATOR],
+    matchPath: getMatchPath(adminPaths.DEACTIVATE_NOMIS_OFFENCE),
   },
 }
 

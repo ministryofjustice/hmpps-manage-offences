@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import OffenceService from '../../../services/offenceService'
+import AdminService from '../../../services/adminService'
 
-export default class SearchRoutes {
-  constructor(private readonly offenceService: OffenceService) {}
+export default class LoadResultRoutes {
+  constructor(private readonly adminService: AdminService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const loadResults = await this.offenceService.getMostRecentLoadResult(res.locals.user)
+    const loadResults = await this.adminService.getMostRecentLoadResult(res.locals.user)
     res.render('pages/loadResults/loadResults', { loadResults })
   }
 }

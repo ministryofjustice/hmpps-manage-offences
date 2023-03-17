@@ -19,11 +19,11 @@ export default function Index(services: Services): Router {
   router.use(csrf())
 
   router.use(homeRoutes())
-  router.use(searchRoutes(services.offenceService))
-  router.use(loadResultsRoutes(services.offenceService))
-  router.use(toggleJobs(services.offenceService))
+  router.use(searchRoutes(services.offenceService, services.adminService))
+  router.use(loadResultsRoutes(services.adminService))
+  router.use(toggleJobs(services.adminService))
   router.use(scheduleRoutes(services.offenceService))
-  router.use(changeHistory(services.changeHistoryService))
+  router.use(changeHistory(services.adminService))
 
   return router
 }

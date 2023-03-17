@@ -1,16 +1,16 @@
 import { Request, Response } from 'express'
-import ChangeHistoryService from '../../../services/changeHistoryService'
+import AdminService from '../../../services/adminService'
 import { DateInput } from '../../../@types/manageOffences/manageOffencesClientTypes'
 
 export default class ChangeHistoryRoutes {
-  constructor(private readonly changeHistoryService: ChangeHistoryService) {}
+  constructor(private readonly adminService: AdminService) {}
 
   GET_NOMIS = async (req: Request, res: Response): Promise<void> => {
     const { fromDate: from, toDate: to } = req.query as unknown as Record<string, DateInput>
     const fromDate = from ? this.parseDate(from, this.getStartOfMonth()) : this.getStartOfMonth()
     const toDate = to ? this.parseDate(to, new Date()) : new Date()
 
-    const { newOffences, updatedOffences, statutes } = await this.changeHistoryService.getNomisChangeHistory(
+    const { newOffences, updatedOffences, statutes } = await this.adminService.getNomisChangeHistory(
       fromDate,
       toDate,
       res.locals.user,

@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 
 import LoadResultsRoutes from './loadResults'
-import OffenceService from '../../../services/offenceService'
 import { MostRecentLoadResult } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import AdminService from '../../../services/adminService'
 
-const offenceService = new OffenceService(null) as jest.Mocked<OffenceService>
+const adminService = new AdminService(null, null) as jest.Mocked<AdminService>
 
 describe('Route Handlers - LoadResults', () => {
-  const handler = new LoadResultsRoutes(offenceService)
+  const handler = new LoadResultsRoutes(adminService)
   let req: Request
   let res: Response
 
@@ -30,8 +30,8 @@ describe('Route Handlers - LoadResults', () => {
       req = {
         query: { offenceCode: 'ABC' },
       } as unknown as Request
-      offenceService.getMostRecentLoadResult = jest.fn()
-      offenceService.getMostRecentLoadResult.mockResolvedValue([{ alphaChar: 'A' } as unknown as MostRecentLoadResult])
+      adminService.getMostRecentLoadResult = jest.fn()
+      adminService.getMostRecentLoadResult.mockResolvedValue([{ alphaChar: 'A' } as unknown as MostRecentLoadResult])
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/loadResults/loadResults', { loadResults: [{ alphaChar: 'A' }] })
     })

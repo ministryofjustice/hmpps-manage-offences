@@ -1,18 +1,18 @@
 import { Request, Response } from 'express'
 
 import ChangeHistoryRoutes from './changeHistory'
-import ChangeHistoryService from '../../../services/changeHistoryService'
+import AdminService from '../../../services/adminService'
 import { NomisHistoryRecords } from '../../../@types/manageOffences/manageOffencesClientTypes'
 
-const changeHistoryService = new ChangeHistoryService(null) as jest.Mocked<ChangeHistoryService>
+const adminService = new AdminService(null, null) as jest.Mocked<AdminService>
 
 function getStartOfMonth() {
   const today = new Date()
   return new Date(today.getFullYear(), today.getMonth(), 1)
 }
 
-describe('Route Handlers - Search', () => {
-  const handler = new ChangeHistoryRoutes(changeHistoryService)
+describe('Route Handlers - Change History', () => {
+  const handler = new ChangeHistoryRoutes(adminService)
   let req: Request
   let res: Response
 
@@ -32,8 +32,8 @@ describe('Route Handlers - Search', () => {
 
   describe('GET', () => {
     it('Nomis history screen without any search params', async () => {
-      changeHistoryService.getNomisChangeHistory = jest.fn()
-      changeHistoryService.getNomisChangeHistory.mockResolvedValue({
+      adminService.getNomisChangeHistory = jest.fn()
+      adminService.getNomisChangeHistory.mockResolvedValue({
         newOffences: [{ id: 1 }],
       } as unknown as NomisHistoryRecords)
 
@@ -51,8 +51,8 @@ describe('Route Handlers - Search', () => {
       req = {
         query: { fromDate: { day: 1, month: 10, year: 2022 } },
       } as unknown as Request
-      changeHistoryService.getNomisChangeHistory = jest.fn()
-      changeHistoryService.getNomisChangeHistory.mockResolvedValue({
+      adminService.getNomisChangeHistory = jest.fn()
+      adminService.getNomisChangeHistory.mockResolvedValue({
         newOffences: [{ id: 1 }],
       } as unknown as NomisHistoryRecords)
 
