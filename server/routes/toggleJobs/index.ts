@@ -1,7 +1,6 @@
 import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import ToggleJobsRoutes from './handlers/toggleJobs'
-import OffenceService from '../../services/offenceService'
 import AdminService from '../../services/adminService'
 
 export const toggleJobsPaths = {
