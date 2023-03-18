@@ -129,4 +129,24 @@ export default class ManageOffencesApiClient extends RestClient {
       { token: user.token },
     ) as Promise<[NomisChangeHistory]>
   }
+
+  reactivateOffenceInNomis(offenceId: number, user: User): Promise<unknown> {
+    return this.post(
+      {
+        path: '/admin/nomis/offences/reactivate',
+        data: [offenceId],
+      },
+      { token: user.token },
+    )
+  }
+
+  deactivateOffenceInNomis(offenceId: number, user: User): Promise<unknown> {
+    return this.post(
+      {
+        path: '/admin/nomis/offences/deactivate',
+        data: [offenceId],
+      },
+      { token: user.token },
+    )
+  }
 }

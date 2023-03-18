@@ -1,63 +1,42 @@
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import {
-  FeatureToggle,
   LinkOffence,
-  MostRecentLoadResult,
   Offence,
   OffenceToScheduleMapping,
   Schedule,
 } from '../@types/manageOffences/manageOffencesClientTypes'
-import FeatureToggleType from '../types/featureToggleType'
-import FeatureToggleDisplay from '../types/featureToggleDisplay'
 
 type User = Express.User
 
 export default class OffenceService {
-  constructor(private readonly manageOffencesApiClient: ManageOffencesApiClient) {}
+  constructor(private readonly manageOffencesApi: ManageOffencesApiClient) {}
 
   async getOffencesByCode(offenceCode: string, user: User): Promise<[Offence]> {
-    return this.manageOffencesApiClient.getOffencesByCode(offenceCode, user)
+    return this.manageOffencesApi.getOffencesByCode(offenceCode, user)
   }
 
   async searchOffences(searchString: string, user: User): Promise<[Offence]> {
-    return this.manageOffencesApiClient.searchOffences(searchString, user)
+    return this.manageOffencesApi.searchOffences(searchString, user)
   }
 
   async getOffenceById(offenceId: number, user: User): Promise<Offence> {
-    return this.manageOffencesApiClient.getOffenceById(offenceId, user)
+    return this.manageOffencesApi.getOffenceById(offenceId, user)
   }
 
   async getOffencesByIds(offenceIds: number[], user: User): Promise<Offence[]> {
-    return Promise.all(offenceIds.map(id => this.manageOffencesApiClient.getOffenceById(id, user)))
+    return Promise.all(offenceIds.map(id => this.manageOffencesApi.getOffenceById(id, user)))
   }
 
   async getOffenceToScheduleMapping(offenceId: number, user: User): Promise<OffenceToScheduleMapping> {
-    return this.manageOffencesApiClient.getOffenceToScheduleMapping(offenceId, user)
-  }
-
-  async getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
-    return this.manageOffencesApiClient.getMostRecentLoadResult(user)
-  }
-
-  async getFeatureToggles(user: User): Promise<FeatureToggleDisplay[]> {
-    const toggles = await this.manageOffencesApiClient.getFeatureToggles(user)
-    return toggles
-      .sort((a, b) => a.feature.localeCompare(b.feature))
-      .map(t => {
-        return { ...t, displayName: FeatureToggleType[t.feature].displayName } as FeatureToggleDisplay
-      })
-  }
-
-  async toggleFeatures(featureToggles: FeatureToggle[], user: User): Promise<unknown> {
-    return this.manageOffencesApiClient.toggleFeatures(featureToggles, user)
+    return this.manageOffencesApi.getOffenceToScheduleMapping(offenceId, user)
   }
 
   async getAllSchedules(user: User): Promise<[Schedule]> {
-    return this.manageOffencesApiClient.getAllSchedules(user)
+    return this.manageOffencesApi.getAllSchedules(user)
   }
 
   async getScheduleById(scheduleId: number, user: User): Promise<Schedule> {
-    return this.manageOffencesApiClient.getScheduleById(scheduleId, user)
+    return this.manageOffencesApi.getScheduleById(scheduleId, user)
   }
 
   async getOffencesNotLinked(searchString: string, schedule: Schedule, user: User): Promise<Offence[]> {
@@ -70,10 +49,10 @@ export default class OffenceService {
   }
 
   linkOffence(linkOffence: LinkOffence, user: User): Promise<unknown> {
-    return this.manageOffencesApiClient.linkOffence(linkOffence, user)
+    return this.manageOffencesApi.linkOffence(linkOffence, user)
   }
 
   unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
-    return this.manageOffencesApiClient.unlinkOffence(schedulePartId, offenceId, user)
+    return this.manageOffencesApi.unlinkOffence(schedulePartId, offenceId, user)
   }
 }

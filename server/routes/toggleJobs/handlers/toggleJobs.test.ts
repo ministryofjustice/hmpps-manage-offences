@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 
 import ToggleJobsRoutes from './toggleJobs'
-import OffenceService from '../../../services/offenceService'
 import FeatureToggleDisplay from '../../../types/featureToggleDisplay'
+import AdminService from '../../../services/adminService'
 
-const offenceService = new OffenceService(null) as jest.Mocked<OffenceService>
+const adminService = new AdminService(null, null) as jest.Mocked<AdminService>
 
 describe('Route Handlers - ToggleJobs', () => {
-  const handler = new ToggleJobsRoutes(offenceService)
+  const handler = new ToggleJobsRoutes(adminService)
   let req: Request
   let res: Response
 
@@ -27,7 +27,7 @@ describe('Route Handlers - ToggleJobs', () => {
 
   describe('GET', () => {
     it('ToggleJobs screen without any a toggleJobs param', async () => {
-      offenceService.getFeatureToggles = jest.fn()
+      adminService.getFeatureToggles = jest.fn()
       const featureToggleDisplays = [
         {
           feature: 'DELTA_SYNC_NOMIS',
@@ -35,7 +35,7 @@ describe('Route Handlers - ToggleJobs', () => {
           displayName: 'Delta sync NOMIS',
         } as unknown as FeatureToggleDisplay,
       ]
-      offenceService.getFeatureToggles.mockResolvedValue(featureToggleDisplays)
+      adminService.getFeatureToggles.mockResolvedValue(featureToggleDisplays)
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/toggleJobs/toggleJobs', { featureToggles: featureToggleDisplays })
     })

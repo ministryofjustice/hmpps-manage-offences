@@ -41,7 +41,8 @@
         {{ offence.code }}: {{ offence.description }}
     </h1>
 
-    {{ offenceDetailsSection(offence, parentOffence) }}
+
+    {{ offenceDetailsSection(offence, parentOffence, {nomisActivationFlags: nomisActivationFlags, offenceCodeSearch: offenceCodeSearch, csrfToken: csrfToken}) }}
 
     <div class="govuk-grid-row govuk-body">
         <div class="govuk-grid-column-full">

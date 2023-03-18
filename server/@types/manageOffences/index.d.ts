@@ -25,6 +25,14 @@ export interface paths {
   '/schedule/create': {
     post: operations['createSchedule']
   }
+  '/admin/nomis/offences/reactivate': {
+    /** Reactivate offences in NOMIS, only to be used for offences that are end dated but NOMIS need them to be reactivated */
+    post: operations['reactivateNomisOffence']
+  }
+  '/admin/nomis/offences/deactivate': {
+    /** Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS */
+    post: operations['deactivateNomisOffence']
+  }
   '/schedule/offence-mapping/id/{offenceId}': {
     /** This endpoint will return the offence that matches the unique ID passed in */
     get: operations['getOffenceToScheduleMapping']
@@ -525,6 +533,30 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['Schedule']
+      }
+    }
+  }
+  /** Reactivate offences in NOMIS, only to be used for offences that are end dated but NOMIS need them to be reactivated */
+  reactivateNomisOffence: {
+    responses: {
+      /** OK */
+      200: unknown
+    }
+    requestBody: {
+      content: {
+        'application/json': number[]
+      }
+    }
+  }
+  /** Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS */
+  deactivateNomisOffence: {
+    responses: {
+      /** OK */
+      200: unknown
+    }
+    requestBody: {
+      content: {
+        'application/json': number[]
       }
     }
   }

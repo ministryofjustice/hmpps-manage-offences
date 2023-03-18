@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
-import OffenceService from '../../../services/offenceService'
 import FeatureToggleEnum from '../../../enums/FeatureToggleEnum'
 import { FeatureToggle } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import AdminService from '../../../services/adminService'
 
 export default class ToggleJobsRoutes {
-  constructor(private readonly offenceService: OffenceService) {}
+  constructor(private readonly adminService: AdminService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const featureToggles = await this.offenceService.getFeatureToggles(res.locals.user)
+    const featureToggles = await this.adminService.getFeatureToggles(res.locals.user)
     res.render('pages/toggleJobs/toggleJobs', { featureToggles })
   }
 
@@ -31,7 +31,7 @@ export default class ToggleJobsRoutes {
       },
     ]
 
-    await this.offenceService.toggleFeatures(featureToggles, res.locals.user)
+    await this.adminService.toggleFeatures(featureToggles, res.locals.user)
 
     res.redirect('/toggle-jobs')
   }
