@@ -137,7 +137,7 @@ export interface components {
        * @description Feature to be toggled: FULL_SYNC_NOMIS, DELTA_SYNC_NOMIS, FULL_SYNC_SDRS or DELTA_SYNC_SDRS
        * @enum {string}
        */
-      feature: 'FULL_SYNC_NOMIS' | 'DELTA_SYNC_NOMIS' | 'FULL_SYNC_SDRS' | 'DELTA_SYNC_SDRS'
+      feature: 'FULL_SYNC_NOMIS' | 'DELTA_SYNC_NOMIS' | 'FULL_SYNC_SDRS' | 'DELTA_SYNC_SDRS' | 'SYNC_HOME_OFFICE_CODES'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
