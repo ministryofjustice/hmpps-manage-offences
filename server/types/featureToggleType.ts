@@ -12,5 +12,10 @@ export default class FeatureToggleType {
 
   public static readonly DELTA_SYNC_SDRS = new FeatureToggleType(FeatureToggleEnum.DELTA_SYNC_SDRS, 'Delta Sync SDRS')
 
+  public static readonly SYNC_HOME_OFFICE_CODES = new FeatureToggleType(
+    FeatureToggleEnum.SYNC_HOME_OFFICE_CODES,
+    'Full Sync Home Office Codes (Analytical Platform)',
+  )
+
   private constructor(public readonly featureName: FeatureToggleEnum, public readonly displayName: string) {}
 }
