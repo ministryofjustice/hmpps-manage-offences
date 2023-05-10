@@ -29,6 +29,10 @@ export default class ToggleJobsRoutes {
         feature: FeatureToggleEnum.DELTA_SYNC_NOMIS,
         enabled: req.body[FeatureToggleEnum.DELTA_SYNC_NOMIS],
       },
+      {
+        feature: FeatureToggleEnum.SYNC_HOME_OFFICE_CODES,
+        enabled: req.body[FeatureToggleEnum.SYNC_HOME_OFFICE_CODES],
+      },
     ]
 
     await this.adminService.toggleFeatures(featureToggles, res.locals.user)
