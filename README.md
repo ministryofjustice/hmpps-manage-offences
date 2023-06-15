@@ -82,3 +82,6 @@ Procedure for full load.
 4. Disable the 'Full Sync NOMIS' after it has completed.
 5. Enable the 'Delta Sync SDRS' and 'Delta Sync NOMIS' jobs (disable the other jobs). These jobs run on a cron schedule every twenty minutes and pull any changes from SDRS and push the changes to NOMIS.
 
+# Support we have received
+
+We have received [support from a number of teams across government](docs/CONTRIBUTIONS.md) to make this possible.
