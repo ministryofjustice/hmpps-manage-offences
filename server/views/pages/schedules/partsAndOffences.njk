@@ -39,9 +39,21 @@
 
     {% set tabRows = [] %}
     {% for part in fullSchedule.scheduleParts %}
+        {% if fullSchedule.code === 'PCSC' %}
+            {% if part.partNumber ===  1 %}
+                {% set partDesc = ' (SDS between 4 and 7 years)'%}
+            {% elseif part.partNumber ===  2 %}
+                {% set partDesc = ' (SDS+)'%}
+            {% elseif part.partNumber ===  3 %}
+                {% set partDesc = ' (Sec250 >7 years)'%}
+            {% endif %}
+        {% endif %}
+
+
+        {% set labelDesc = "Part " + part.partNumber + partDesc if partDesc else "Part " + part.partNumber %}
         {% set tabRows = (tabRows.push(
             {
-                label: "Part " + part.partNumber,
+                label: labelDesc,
                 id: "part-" + part.id,
                 panel: {
                 html: partTab(part, fullSchedule, csrfToken)
