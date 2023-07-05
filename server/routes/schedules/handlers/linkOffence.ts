@@ -11,7 +11,12 @@ export default class LinkOffenceRoutes {
     const fullSchedule = await this.offenceService.getScheduleById(scheduleId as unknown as number, res.locals.user)
     const schedulePart = fullSchedule.scheduleParts.find(sp => sp.id === Number(schedulePartId))
     const offences = offenceCode
-      ? await this.offenceService.getOffencesNotLinked(offenceCode, fullSchedule, res.locals.user)
+      ? await this.offenceService.getOffencesNotLinked(
+          offenceCode,
+          fullSchedule,
+          Number(schedulePartId),
+          res.locals.user,
+        )
       : undefined
 
     res.render('pages/schedules/linkOffences', {
