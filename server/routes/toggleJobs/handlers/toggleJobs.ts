@@ -33,6 +33,10 @@ export default class ToggleJobsRoutes {
         feature: FeatureToggleEnum.SYNC_HOME_OFFICE_CODES,
         enabled: req.body[FeatureToggleEnum.SYNC_HOME_OFFICE_CODES],
       },
+      {
+        feature: FeatureToggleEnum.PUBLISH_EVENTS,
+        enabled: req.body[FeatureToggleEnum.PUBLISH_EVENTS],
+      },
     ]
 
     await this.adminService.toggleFeatures(featureToggles, res.locals.user)
