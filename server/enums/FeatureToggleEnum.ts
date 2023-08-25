@@ -4,6 +4,7 @@ enum FeatureToggleEnum {
   FULL_SYNC_SDRS = 'FULL_SYNC_SDRS',
   DELTA_SYNC_SDRS = 'DELTA_SYNC_SDRS',
   SYNC_HOME_OFFICE_CODES = 'SYNC_HOME_OFFICE_CODES',
+  PUBLISH_EVENTS = 'PUBLISH_EVENTS',
 }
 
 export default FeatureToggleEnum

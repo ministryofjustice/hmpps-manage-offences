@@ -17,5 +17,7 @@ export default class FeatureToggleType {
     'Full Sync Home Office Codes (Analytical Platform)',
   )
 
+  public static readonly PUBLISH_EVENTS = new FeatureToggleType(FeatureToggleEnum.PUBLISH_EVENTS, 'Publish events')
+
   private constructor(public readonly featureName: FeatureToggleEnum, public readonly displayName: string) {}
 }

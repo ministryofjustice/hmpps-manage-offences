@@ -14,118 +14,112 @@ export interface paths {
     put: operations['purgeQueue']
   }
   '/admin/toggle-feature': {
+    /** Enable / disable a feature */
     put: operations['toggleFeature']
   }
   '/schedule/unlink-offences': {
+    /** Unlink offences from schedules - will also unlink any associated inchoate offences (i.e. if any of the passed in offences have children they will also be unlinked) */
     post: operations['unlinkOffences']
   }
   '/schedule/link-offence': {
+    /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if  passed in offence has children they will also be linked) */
     post: operations['linkOffences']
   }
   '/schedule/create': {
+    /** Create a schedule */
     post: operations['createSchedule']
   }
   '/admin/nomis/offences/reactivate': {
-    /** Reactivate offences in NOMIS, only to be used for offences that are end dated but NOMIS need them to be reactivated */
+    /**
+     * Reactivate offences in NOMIS
+     * @description Reactivate offences in NOMIS, only to be used for offences that are end dated but NOMIS need them to be reactivated
+     */
     post: operations['reactivateNomisOffence']
   }
   '/admin/nomis/offences/deactivate': {
-    /** Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS */
+    /**
+     * Deactivate offences in NOMIS
+     * @description Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS
+     */
     post: operations['deactivateNomisOffence']
   }
   '/schedule/offence-mapping/id/{offenceId}': {
-    /** This endpoint will return the offence that matches the unique ID passed in */
+    /**
+     * Get offence matching the passed ID - with schedule related data
+     * @description This endpoint will return the offence that matches the unique ID passed in
+     */
     get: operations['getOffenceToScheduleMapping']
   }
   '/schedule/by-id/{scheduleId}': {
+    /** Get schedule by ID - includes all scheduled parts and mapped offences */
     get: operations['findScheduleById']
   }
   '/schedule/all': {
+    /** Find all schedules - does not include mapped offences */
     get: operations['findAllSchedules']
   }
   '/queue-admin/get-dlq-messages/{dlqName}': {
     get: operations['getDlqMessages']
   }
   '/offences/search': {
-    /** This endpoint will return the offences that start with the passed offence code */
+    /**
+     * Get all offences matching the passed offence code, does a start with match
+     * @description This endpoint will return the offences that start with the passed offence code
+     */
     get: operations['searchOffences']
   }
   '/offences/load-results': {
-    /** Get the results of the most recent load */
+    /**
+     * Get the results of the most recent load
+     * @description Get the results of the most recent load
+     */
     get: operations['findLoadResults']
   }
   '/offences/id/{offenceId}': {
-    /** This endpoint will return the offence that matches the unique ID passed in */
+    /**
+     * Get offence matching the passed ID
+     * @description This endpoint will return the offence that matches the unique ID passed in
+     */
     get: operations['getOffenceById']
   }
   '/offences/ho-code/{offenceCode}': {
-    /** This endpoint will return the HO Code associated with an offence code, could return null */
+    /**
+     * Get the HO Code associated with an offence code
+     * @description This endpoint will return the HO Code associated with an offence code, could return null
+     */
     get: operations['getHoCodeByOffenceCode']
   }
   '/offences/code/{offenceCode}': {
-    /** This endpoint will return the offences that start with the passed offence code */
+    /**
+     * Get all offences matching the passed offence code, does a start with match
+     * @description This endpoint will return the offences that start with the passed offence code
+     */
     get: operations['getOffencesByOffenceCode']
   }
   '/change-history/nomis': {
+    /** Fetch changes pushed to NOMIS between a from and to date range (to defaults to now) */
     get: operations['getOffencesByOffenceCode_1']
   }
   '/admin/feature-toggles': {
+    /** Get values of all feature toggles */
     get: operations['getAllToggles']
   }
 }
 
+export type webhooks = Record<string, never>
+
 export interface components {
   schemas: {
-    Message: {
-      messageId?: string
-      receiptHandle?: string
-      body?: string
-      attributes?: { [key: string]: string }
-      messageAttributes?: {
-        [key: string]: components['schemas']['MessageAttributeValue']
+    DlqMessage: {
+      body: {
+        [key: string]: Record<string, never> | undefined
       }
-      md5OfBody?: string
-      md5OfMessageAttributes?: string
-    }
-    MessageAttributeValue: {
-      stringValue?: string
-      binaryValue?: {
-        /** Format: int32 */
-        short?: number
-        char?: string
-        /** Format: int32 */
-        int?: number
-        /** Format: int64 */
-        long?: number
-        /** Format: float */
-        float?: number
-        /** Format: double */
-        double?: number
-        direct?: boolean
-        readOnly?: boolean
-      }
-      stringListValues?: string[]
-      binaryListValues?: {
-        /** Format: int32 */
-        short?: number
-        char?: string
-        /** Format: int32 */
-        int?: number
-        /** Format: int64 */
-        long?: number
-        /** Format: float */
-        float?: number
-        /** Format: double */
-        double?: number
-        direct?: boolean
-        readOnly?: boolean
-      }[]
-      dataType?: string
+      messageId: string
     }
     RetryDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
-      messages: components['schemas']['Message'][]
+      messages: components['schemas']['DlqMessage'][]
     }
     PurgeQueueResult: {
       /** Format: int32 */
@@ -137,7 +131,13 @@ export interface components {
        * @description Feature to be toggled: FULL_SYNC_NOMIS, DELTA_SYNC_NOMIS, FULL_SYNC_SDRS or DELTA_SYNC_SDRS
        * @enum {string}
        */
-      feature: 'FULL_SYNC_NOMIS' | 'DELTA_SYNC_NOMIS' | 'FULL_SYNC_SDRS' | 'DELTA_SYNC_SDRS' | 'SYNC_HOME_OFFICE_CODES'
+      feature:
+        | 'FULL_SYNC_NOMIS'
+        | 'DELTA_SYNC_NOMIS'
+        | 'FULL_SYNC_SDRS'
+        | 'DELTA_SYNC_SDRS'
+        | 'SYNC_HOME_OFFICE_CODES'
+        | 'PUBLISH_EVENTS'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
@@ -296,10 +296,6 @@ export interface components {
       partNumber: number
       offences?: components['schemas']['OffenceToScheduleMapping'][]
     }
-    DlqMessage: {
-      body: { [key: string]: { [key: string]: unknown } }
-      messageId: string
-    }
     GetDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
@@ -337,6 +333,8 @@ export interface components {
       endDate?: string
       /** @description The offence's home office stats code */
       homeOfficeStatsCode?: string
+      /** @description The offence's home office description */
+      homeOfficeDescription?: string
       /**
        * Format: date-time
        * @description The date this offence was last changed in SDRS
@@ -449,7 +447,14 @@ export interface components {
       sentToNomisDate: string
     }
   }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
+
+export type external = Record<string, never>
 
 export interface operations {
   retryDlq: {
@@ -459,7 +464,7 @@ export interface operations {
       }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           '*/*': components['schemas']['RetryDlqResult']
@@ -469,7 +474,7 @@ export interface operations {
   }
   retryAllDlqs: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           '*/*': components['schemas']['RetryDlqResult'][]
@@ -484,7 +489,7 @@ export interface operations {
       }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           '*/*': components['schemas']['PurgeQueueResult']
@@ -492,84 +497,100 @@ export interface operations {
       }
     }
   }
+  /** Enable / disable a feature */
   toggleFeature: {
-    responses: {
-      /** OK */
-      200: unknown
-    }
     requestBody: {
       content: {
         'application/json': components['schemas']['FeatureToggle'][]
       }
     }
-  }
-  unlinkOffences: {
     responses: {
-      /** OK */
-      200: unknown
+      /** @description OK */
+      200: never
     }
+  }
+  /** Unlink offences from schedules - will also unlink any associated inchoate offences (i.e. if any of the passed in offences have children they will also be unlinked) */
+  unlinkOffences: {
     requestBody: {
       content: {
         'application/json': components['schemas']['SchedulePartIdAndOffenceId'][]
       }
     }
-  }
-  linkOffences: {
     responses: {
-      /** OK */
-      200: unknown
+      /** @description OK */
+      200: never
     }
+  }
+  /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if  passed in offence has children they will also be linked) */
+  linkOffences: {
     requestBody: {
       content: {
         'application/json': components['schemas']['LinkOffence']
       }
     }
-  }
-  createSchedule: {
     responses: {
-      /** OK */
-      200: unknown
+      /** @description OK */
+      200: never
     }
+  }
+  /** Create a schedule */
+  createSchedule: {
     requestBody: {
       content: {
         'application/json': components['schemas']['Schedule']
       }
     }
+    responses: {
+      /** @description OK */
+      200: never
+    }
   }
-  /** Reactivate offences in NOMIS, only to be used for offences that are end dated but NOMIS need them to be reactivated */
+  /**
+   * Reactivate offences in NOMIS
+   * @description Reactivate offences in NOMIS, only to be used for offences that are end dated but NOMIS need them to be reactivated
+   */
   reactivateNomisOffence: {
-    responses: {
-      /** OK */
-      200: unknown
-    }
     requestBody: {
       content: {
         'application/json': number[]
       }
     }
+    responses: {
+      /** @description OK */
+      200: never
+    }
   }
-  /** Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS */
+  /**
+   * Deactivate offences in NOMIS
+   * @description Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS
+   */
   deactivateNomisOffence: {
-    responses: {
-      /** OK */
-      200: unknown
-    }
     requestBody: {
       content: {
         'application/json': number[]
       }
     }
+    responses: {
+      /** @description OK */
+      200: never
+    }
   }
-  /** This endpoint will return the offence that matches the unique ID passed in */
+  /**
+   * Get offence matching the passed ID - with schedule related data
+   * @description This endpoint will return the offence that matches the unique ID passed in
+   */
   getOffenceToScheduleMapping: {
     parameters: {
       path: {
-        /** The offence ID */
+        /**
+         * @description The offence ID
+         * @example 123456
+         */
         offenceId: number
       }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['OffenceToScheduleMapping']
@@ -577,15 +598,19 @@ export interface operations {
       }
     }
   }
+  /** Get schedule by ID - includes all scheduled parts and mapped offences */
   findScheduleById: {
     parameters: {
       path: {
-        /** The schedule ID */
+        /**
+         * @description The schedule ID
+         * @example 1000011
+         */
         scheduleId: number
       }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['Schedule']
@@ -593,9 +618,10 @@ export interface operations {
       }
     }
   }
+  /** Find all schedules - does not include mapped offences */
   findAllSchedules: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['Schedule'][]
@@ -605,15 +631,15 @@ export interface operations {
   }
   getDlqMessages: {
     parameters: {
+      query?: {
+        maxMessages?: number
+      }
       path: {
         dlqName: string
       }
-      query: {
-        maxMessages?: number
-      }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           '*/*': components['schemas']['GetDlqResult']
@@ -621,7 +647,10 @@ export interface operations {
       }
     }
   }
-  /** This endpoint will return the offences that start with the passed offence code */
+  /**
+   * Get all offences matching the passed offence code, does a start with match
+   * @description This endpoint will return the offences that start with the passed offence code
+   */
   searchOffences: {
     parameters: {
       query: {
@@ -629,7 +658,7 @@ export interface operations {
       }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['Offence'][]
@@ -637,10 +666,13 @@ export interface operations {
       }
     }
   }
-  /** Get the results of the most recent load */
+  /**
+   * Get the results of the most recent load
+   * @description Get the results of the most recent load
+   */
   findLoadResults: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['MostRecentLoadResult'][]
@@ -648,16 +680,22 @@ export interface operations {
       }
     }
   }
-  /** This endpoint will return the offence that matches the unique ID passed in */
+  /**
+   * Get offence matching the passed ID
+   * @description This endpoint will return the offence that matches the unique ID passed in
+   */
   getOffenceById: {
     parameters: {
       path: {
-        /** The offence ID */
+        /**
+         * @description The offence ID
+         * @example 123456
+         */
         offenceId: number
       }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['Offence']
@@ -665,22 +703,28 @@ export interface operations {
       }
     }
   }
-  /** This endpoint will return the HO Code associated with an offence code, could return null */
+  /**
+   * Get the HO Code associated with an offence code
+   * @description This endpoint will return the HO Code associated with an offence code, could return null
+   */
   getHoCodeByOffenceCode: {
     parameters: {
       path: {
-        /** The offence code */
+        /**
+         * @description The offence code
+         * @example AA1256A
+         */
         offenceCode: string
       }
     }
     responses: {
-      /** Offence code exists and associated hoCode returned (could be null/empty) */
+      /** @description Offence code exists and associated hoCode returned (could be null/empty) */
       200: {
         content: {
           'application/json': string
         }
       }
-      /** No offence exists for the passed in offence code */
+      /** @description No offence exists for the passed in offence code */
       404: {
         content: {
           'application/json': string
@@ -688,16 +732,22 @@ export interface operations {
       }
     }
   }
-  /** This endpoint will return the offences that start with the passed offence code */
+  /**
+   * Get all offences matching the passed offence code, does a start with match
+   * @description This endpoint will return the offences that start with the passed offence code
+   */
   getOffencesByOffenceCode: {
     parameters: {
       path: {
-        /** The offence code */
+        /**
+         * @description The offence code
+         * @example AA1256A
+         */
         offenceCode: string
       }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['Offence'][]
@@ -705,6 +755,7 @@ export interface operations {
       }
     }
   }
+  /** Fetch changes pushed to NOMIS between a from and to date range (to defaults to now) */
   getOffencesByOffenceCode_1: {
     parameters: {
       query: {
@@ -713,7 +764,7 @@ export interface operations {
       }
     }
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['NomisChangeHistory'][]
@@ -721,9 +772,10 @@ export interface operations {
       }
     }
   }
+  /** Get values of all feature toggles */
   getAllToggles: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           'application/json': components['schemas']['FeatureToggle'][]
