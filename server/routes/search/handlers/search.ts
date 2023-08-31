@@ -3,7 +3,10 @@ import OffenceService from '../../../services/offenceService'
 import AdminService from '../../../services/adminService'
 
 export default class SearchRoutes {
-  constructor(private readonly offenceService: OffenceService, private readonly adminService: AdminService) {}
+  constructor(
+    private readonly offenceService: OffenceService,
+    private readonly adminService: AdminService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { offenceCode } = req.query as Record<string, string>
