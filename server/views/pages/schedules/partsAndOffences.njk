@@ -10,91 +10,123 @@
 {% set pageId = "schedules" %}
 
 {% block navBar %}
-    {{ navBar("schedules") }}
+  {{ navBar("schedules") }}
 {% endblock %}
 
 {% block aside %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Schedules",
-                href: "/schedules"
-            },
-            {
-                text: "Schedule " + fullSchedule.code
-            }
-        ]
-    }) }}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Schedules",
+        href: "/schedules"
+      },
+      {
+        text: "Schedule " + fullSchedule.code
+      }
+    ]
+  }) }}
 {% endblock %}
 
 {% block content %}
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-1">
-        <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
-        Schedule {{ fullSchedule.code }}
-    </h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-1">
+    <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
+    Schedule {{ fullSchedule.code }}
+  </h1>
+  {% if fullSchedule.code !== 'PCSC and Legacy NOMIS' %}
     <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review <a
-                href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener"
-                target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk
+          href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener"
+          target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk
     </p>
+  {% endif %}
 
-    {% set tabRows = [] %}
-    {% for part in fullSchedule.scheduleParts %}
-        {% if fullSchedule.code === 'PCSC' %}
-            {% if part.partNumber ===  1 %}
-                {% set partDesc = ' (SDS between 4 and 7 years)'%}
-            {% elseif part.partNumber ===  2 %}
-                {% set partDesc = ' (SDS+)'%}
-            {% elseif part.partNumber ===  3 %}
-                {% set partDesc = ' (Sec250 >7 years)'%}
-            {% endif %}
-        {% endif %}
+  {% set tabRows = [] %}
+  {% for part in fullSchedule.scheduleParts %}
+    {% set labelDesc = "Part " + part.partNumber + partDesc if partDesc else "Part " + part.partNumber %}
+    {% set tabRows = (tabRows.push(
+      {
+        label: labelDesc,
+        id: "part-" + part.id,
+        panel: {
+        html: partTab(part, fullSchedule, csrfToken)
+      }
+      }
+    ), tabRows) %}
+  {% endfor %}
 
+  {{ govukTabs({
+    classes: 'borderless-tabs',
+    items: tabRows
+  }) }}
 
-        {% set labelDesc = "Part " + part.partNumber + partDesc if partDesc else "Part " + part.partNumber %}
-        {% set tabRows = (tabRows.push(
-            {
-                label: labelDesc,
-                id: "part-" + part.id,
-                panel: {
-                html: partTab(part, fullSchedule, csrfToken)
-            }
-            }
-        ), tabRows) %}
-    {% endfor %}
-
-    {{ govukTabs({
-        classes: 'borderless-tabs',
-        items: tabRows
-    }) }}
-
-    {{ govukBackLink({
-        text: "Back",
-        href: '/schedules'
-    }) }}
+  {{ govukBackLink({
+    text: "Back",
+    href: '/schedules'
+  }) }}
 {% endblock %}
 
 {% macro partTab(part, fullSchedule, csrfToken) %}
-    {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full text-align-right">
 
-                {{ govukButton({
-                    classes: "govuk-button--tertiary",
-                    text: "Link offences",
-                    preventDoubleClick: true,
-                    href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
-                    attributes: {  'data-qa': 'link-offences' }
-                }) }}
-            </div>
-        </div>
+  {# TODO remove - this is temporary labelling for NOMIS legacy schedules #}
+  {% if fullSchedule.code === 'PCSC and Legacy NOMIS' %}
+    {% if part.partNumber ===  1 %}
+      {% set partDesc = 'SDS between 4 and 7 years' %}
+    {% elseif part.partNumber ===  2 %}
+      {% set partDesc = 'SDS+' %}
+    {% elseif part.partNumber ===  3 %}
+      {% set partDesc = 'Sec250 >7 years' %}
+    {% elseif part.partNumber ===  4 %}
+      {% set partDesc = 'Schedule 15 Part 1' %}
+    {% elseif part.partNumber ===  5 %}
+      {% set partDesc = 'Schedule 15 Part 2' %}
+    {% elseif part.partNumber ===  6 %}
+      {% set partDesc = 'Schedule 15 Part 3' %}
+    {% elseif part.partNumber ===  7 %}
+      {% set partDesc = 'Schedule 15 Attracts Life' %}
     {% endif %}
-    {{ linkedOffenceTable(
-        {
-            offences: part.offences,
-            scheduleId: fullSchedule.id,
-            schedulePartId: part.id,
-            csrfToken: csrfToken,
-            user: user
-        }
-    ) }}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    {% if partDesc %}
+      <div class="govuk-grid-column-one-half govuk-!-text-align-left">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+          {{ partDesc }}
+        </h2>
+      </div>
+      {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+        <div class="govuk-grid-column-one-half text-align-right">
+
+          {{ govukButton({
+            classes: "govuk-button--tertiary",
+            text: "Link offences",
+            preventDoubleClick: true,
+            href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
+            attributes: {  'data-qa': 'link-offences' }
+          }) }}
+        </div>
+      {% endif %}
+    {% else %}
+      {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+        <div class="govuk-grid-column-full text-align-right">
+
+          {{ govukButton({
+            classes: "govuk-button--tertiary",
+            text: "Link offences",
+            preventDoubleClick: true,
+            href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
+            attributes: {  'data-qa': 'link-offences' }
+          }) }}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  {{ linkedOffenceTable(
+    {
+      offences: part.offences,
+      scheduleId: fullSchedule.id,
+      schedulePartId: part.id,
+      csrfToken: csrfToken,
+      user: user
+    }
+  ) }}
 {% endmacro %}
