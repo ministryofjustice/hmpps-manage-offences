@@ -47,7 +47,7 @@ export default class OffenceService {
   ): Promise<Offence[]> {
     const offences = await this.searchOffences(searchString, user)
     const existingOffenceIds =
-      schedule.code === 'PCSC'
+      schedule.code === 'PCSC and Legacy NOMIS'
         ? this.getExistingPCSCOffenceIds(schedule, schedulePartId)
         : this.getExistingOffenceIds(schedule)
     return offences.filter(o => !existingOffenceIds.includes(o.id))
