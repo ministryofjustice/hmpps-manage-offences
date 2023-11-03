@@ -69,11 +69,11 @@
   {# TODO remove - this is temporary labelling for NOMIS legacy schedules #}
   {% if fullSchedule.code === 'PCSC and Legacy NOMIS' %}
     {% if part.partNumber ===  1 %}
-      {% set partDesc = 'SDS between 4 and 7 years' %}
+      {% set partDesc = 'SDS between 4 and 7 years after 28 June 2022' %}
     {% elseif part.partNumber ===  2 %}
-      {% set partDesc = 'SDS+' %}
+      {% set partDesc = 'SDS >7 years after 28 June 2022' %}
     {% elseif part.partNumber ===  3 %}
-      {% set partDesc = 'Sec250 >7 years' %}
+      {% set partDesc = 'Sec250 >7 years after 28 June 2022' %}
     {% elseif part.partNumber ===  4 %}
       {% set partDesc = 'Schedule 15 Part 1' %}
     {% elseif part.partNumber ===  5 %}
@@ -81,7 +81,7 @@
     {% elseif part.partNumber ===  6 %}
       {% set partDesc = 'Schedule 15 Part 3' %}
     {% elseif part.partNumber ===  7 %}
-      {% set partDesc = 'Schedule 15 Attracts Life' %}
+      {% set partDesc = 'SDS >7 years between 01 April 2020 and 28 June 2022' %}
     {% endif %}
   {% endif %}
 
