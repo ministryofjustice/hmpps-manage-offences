@@ -46,24 +46,13 @@ export default class OffenceService {
     user: User,
   ): Promise<Offence[]> {
     const offences = await this.searchOffences(searchString, user)
-    const existingOffenceIds =
-      schedule.code === 'PCSC and Legacy NOMIS'
-        ? this.getExistingPCSCOffenceIds(schedule, schedulePartId)
-        : this.getExistingOffenceIds(schedule)
+    const existingOffenceIds = this.getExistingOffenceIds(schedule)
     return offences.filter(o => !existingOffenceIds.includes(o.id))
   }
 
   private getExistingOffenceIds(schedule: Schedule) {
     return schedule.scheduleParts
       .filter(sp => sp.offences != null)
-      .flatMap(sp => sp.offences)
-      .map(o => o.id)
-  }
-
-  // TODO Temporary change for an edge case with PCSC until we come up with a better solution, PCSC offences can be linked across parts
-  private getExistingPCSCOffenceIds(schedule: Schedule, schedulePartId: number) {
-    return schedule.scheduleParts
-      .filter(sp => sp.id === schedulePartId && sp.offences != null)
       .flatMap(sp => sp.offences)
       .map(o => o.id)
   }

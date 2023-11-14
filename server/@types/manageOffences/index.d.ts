@@ -43,6 +43,13 @@ export interface paths {
      */
     post: operations['deactivateNomisOffence']
   }
+  '/schedule/pcsc-indicators': {
+    /**
+     * Determine if the passed in offence codes are related to any of the PCSC lists
+     * @description This endpoint will return a list of offences and whether they are im any of the PCSC lists
+     */
+    get: operations['getPcscInformation']
+  }
   '/schedule/offence-mapping/id/{offenceId}': {
     /**
      * Get offence matching the passed ID - with schedule related data
@@ -96,6 +103,20 @@ export interface paths {
      */
     get: operations['getOffencesByOffenceCode']
   }
+  '/offences/code/unique/{offenceCode}': {
+    /**
+     * Get the unique offence matching the passed offence code
+     * @description This endpoint will return the offence that matches the unique code passed in
+     */
+    get: operations['getOffenceByCode']
+  }
+  '/offences/code/multiple': {
+    /**
+     * Get a list of offences that match the passed in list of offence codes
+     * @description This endpoint will return the offences that match the codes passed in
+     */
+    get: operations['getOffencesByCodes']
+  }
   '/change-history/nomis': {
     /** Fetch changes pushed to NOMIS between a from and to date range (to defaults to now) */
     get: operations['getOffencesByOffenceCode_1']
@@ -112,7 +133,7 @@ export interface components {
   schemas: {
     DlqMessage: {
       body: {
-        [key: string]: Record<string, never> | undefined
+        [key: string]: Record<string, never>
       }
       messageId: string
     }
@@ -138,6 +159,8 @@ export interface components {
         | 'DELTA_SYNC_SDRS'
         | 'SYNC_HOME_OFFICE_CODES'
         | 'PUBLISH_EVENTS'
+        | 'UNLINK_SCHEDULES_NOMIS'
+        | 'LINK_SCHEDULES_NOMIS'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
@@ -165,11 +188,8 @@ export interface components {
       legislationText?: string
       /** @description Schedule paragraph title that this offence is mapped to */
       paragraphTitle?: string
-      /**
-       * Format: int32
-       * @description Schedule paragraph number that this offence is mapped to
-       */
-      paragraphNumber?: number
+      /** @description Schedule paragraph number that this offence is mapped to */
+      paragraphNumber?: string
     }
     /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
     BasicOffence: {
@@ -202,8 +222,7 @@ export interface components {
       url?: string
       /** Format: int32 */
       partNumber: number
-      /** Format: int32 */
-      paragraphNumber?: number
+      paragraphNumber?: string
       paragraphTitle?: string
       lineReference?: string
       legislationText?: string
@@ -273,11 +292,8 @@ export interface components {
       legislationText?: string
       /** @description Schedule paragraph title that this offence is mapped to */
       paragraphTitle?: string
-      /**
-       * Format: int32
-       * @description Schedule paragraph number that this offence is mapped to
-       */
-      paragraphNumber?: number
+      /** @description Schedule paragraph number that this offence is mapped to */
+      paragraphNumber?: string
     }
     /** @description Schedule details */
     Schedule: {
@@ -295,6 +311,16 @@ export interface components {
       /** Format: int32 */
       partNumber: number
       offences?: components['schemas']['OffenceToScheduleMapping'][]
+    }
+    OffencePcscMarkers: {
+      offenceCode: string
+      pcscMarkers: components['schemas']['PcscMarkers']
+    }
+    PcscMarkers: {
+      inListA: boolean
+      inListB: boolean
+      inListC: boolean
+      inListD: boolean
     }
     GetDlqResult: {
       /** Format: int32 */
@@ -454,6 +480,8 @@ export interface components {
   pathItems: never
 }
 
+export type $defs = Record<string, never>
+
 export type external = Record<string, never>
 
 export interface operations {
@@ -506,7 +534,9 @@ export interface operations {
     }
     responses: {
       /** @description OK */
-      200: never
+      200: {
+        content: never
+      }
     }
   }
   /** Unlink offences from schedules - will also unlink any associated inchoate offences (i.e. if any of the passed in offences have children they will also be unlinked) */
@@ -518,7 +548,9 @@ export interface operations {
     }
     responses: {
       /** @description OK */
-      200: never
+      200: {
+        content: never
+      }
     }
   }
   /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if  passed in offence has children they will also be linked) */
@@ -530,7 +562,9 @@ export interface operations {
     }
     responses: {
       /** @description OK */
-      200: never
+      200: {
+        content: never
+      }
     }
   }
   /** Create a schedule */
@@ -542,7 +576,9 @@ export interface operations {
     }
     responses: {
       /** @description OK */
-      200: never
+      200: {
+        content: never
+      }
     }
   }
   /**
@@ -557,7 +593,9 @@ export interface operations {
     }
     responses: {
       /** @description OK */
-      200: never
+      200: {
+        content: never
+      }
     }
   }
   /**
@@ -572,7 +610,28 @@ export interface operations {
     }
     responses: {
       /** @description OK */
-      200: never
+      200: {
+        content: never
+      }
+    }
+  }
+  /**
+   * Determine if the passed in offence codes are related to any of the PCSC lists
+   * @description This endpoint will return a list of offences and whether they are im any of the PCSC lists
+   */
+  getPcscInformation: {
+    parameters: {
+      query: {
+        offenceCodes: string[]
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['OffencePcscMarkers'][]
+        }
+      }
     }
   }
   /**
@@ -655,6 +714,7 @@ export interface operations {
     parameters: {
       query: {
         searchString: string
+        excludeLegislation?: boolean
       }
     }
     responses: {
@@ -744,6 +804,48 @@ export interface operations {
          * @example AA1256A
          */
         offenceCode: string
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['Offence'][]
+        }
+      }
+    }
+  }
+  /**
+   * Get the unique offence matching the passed offence code
+   * @description This endpoint will return the offence that matches the unique code passed in
+   */
+  getOffenceByCode: {
+    parameters: {
+      path: {
+        /**
+         * @description The offence Code
+         * @example COML025
+         */
+        offenceCode: string
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['Offence']
+        }
+      }
+    }
+  }
+  /**
+   * Get a list of offences that match the passed in list of offence codes
+   * @description This endpoint will return the offences that match the codes passed in
+   */
+  getOffencesByCodes: {
+    parameters: {
+      query: {
+        offenceCodes: string[]
       }
     }
     responses: {

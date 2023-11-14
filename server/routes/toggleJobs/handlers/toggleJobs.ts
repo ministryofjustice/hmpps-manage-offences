@@ -37,6 +37,14 @@ export default class ToggleJobsRoutes {
         feature: FeatureToggleEnum.PUBLISH_EVENTS,
         enabled: req.body[FeatureToggleEnum.PUBLISH_EVENTS],
       },
+      {
+        feature: FeatureToggleEnum.UNLINK_SCHEDULES_NOMIS,
+        enabled: req.body[FeatureToggleEnum.UNLINK_SCHEDULES_NOMIS],
+      },
+      {
+        feature: FeatureToggleEnum.LINK_SCHEDULES_NOMIS,
+        enabled: req.body[FeatureToggleEnum.LINK_SCHEDULES_NOMIS],
+      },
     ]
 
     await this.adminService.toggleFeatures(featureToggles, res.locals.user)
