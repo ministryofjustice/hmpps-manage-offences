@@ -12,4 +12,14 @@ export default class PartsAndOffencesRoutes {
       fullSchedule,
     })
   }
+
+  GET_PCSC_LISTS = async (req: Request, res: Response): Promise<void> => {
+    const { scheduleId } = req.params
+    const pcscLists = await this.offenceService.getPcscLists(res.locals.user)
+
+    res.render('pages/schedules/pcscLists', {
+      pcscLists,
+      scheduleId,
+    })
+  }
 }

@@ -3,6 +3,7 @@ import {
   LinkOffence,
   Offence,
   OffenceToScheduleMapping,
+  PcscLists,
   Schedule,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 
@@ -63,5 +64,9 @@ export default class OffenceService {
 
   unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
     return this.manageOffencesApi.unlinkOffence(schedulePartId, offenceId, user)
+  }
+
+  async getPcscLists(user: User): Promise<PcscLists> {
+    return this.manageOffencesApi.getPcscLists(user)
   }
 }

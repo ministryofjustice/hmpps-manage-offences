@@ -32,10 +32,23 @@
     <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
     Schedule {{ fullSchedule.code }}
   </h1>
-  <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review <a
-          href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener"
-          target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk
-  </p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review <a
+            href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener"
+            target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk
+      </p>
+    </div>
+
+    {% if fullSchedule.code === '15' %}
+      <div class="govuk-grid-column-one-half govuk-!-text-align-right">
+        <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review
+          <a href="/schedules/{{ fullSchedule.id }}/pcsc-lists" class="govuk-link" rel="noreferrer noopener">PCSC
+            Lists</a>
+        </p>
+      </div>
+    {% endif %}
+  </div>
 
   {% set tabRows = [] %}
   {% for part in fullSchedule.scheduleParts %}
