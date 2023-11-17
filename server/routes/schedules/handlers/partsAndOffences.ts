@@ -14,7 +14,7 @@ export default class PartsAndOffencesRoutes {
   }
 
   GET_PCSC_LISTS = async (req: Request, res: Response): Promise<void> => {
-    const { scheduleId } = req.params
+    const { scheduleId } = req.query as Record<string, string>
     const pcscLists = await this.offenceService.getPcscLists(res.locals.user)
 
     res.render('pages/schedules/pcscLists', {
