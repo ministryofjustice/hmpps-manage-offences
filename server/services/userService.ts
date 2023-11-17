@@ -1,8 +1,7 @@
 import convertToTitleCase from '../utils/utils'
-import ManageUsersApiClient from '../data/manageUsersApiClient'
+import ManageUsersApiClient, { User } from '../data/manageUsersApiClient'
 
-interface UserDetails {
-  name: string
+interface UserDetails extends User {
   displayName: string
 }
 
@@ -11,6 +10,6 @@ export default class UserService {
 
   async getUser(userDetails: Express.User): Promise<UserDetails> {
     const user = await this.manageUsersApiClient.getUser(userDetails)
-    return { name: user.name, displayName: convertToTitleCase(user.name as string) }
+    return { ...user, displayName: convertToTitleCase(user.name as string) }
   }
 }
