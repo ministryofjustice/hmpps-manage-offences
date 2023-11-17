@@ -4,14 +4,16 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import AdminService from './adminService'
 import PrisonApiClient from '../data/prisonApiClient'
+import ManageUsersApiClient from '../data/manageUsersApiClient'
 
 const hmppsAuthClient = new HmppsAuthClient()
 const manageOffencesApiClient = new ManageOffencesApiClient()
 const prisonApiClient = new PrisonApiClient()
+const manageUsersApiClient = new ManageUsersApiClient()
 
 const offenceService = new OffenceService(manageOffencesApiClient)
 const adminService = new AdminService(manageOffencesApiClient, prisonApiClient)
-const userService = new UserService(hmppsAuthClient)
+const userService = new UserService(manageUsersApiClient)
 
 export const services = {
   offenceService,

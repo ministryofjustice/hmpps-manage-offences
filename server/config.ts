@@ -83,6 +83,14 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    manageUsersApi: {
+      url: get('MANAGE_USERS_API_URL', 'http://localhost:9091', requiredInProduction),
+      timeout: {
+        response: Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000))),
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
 }
