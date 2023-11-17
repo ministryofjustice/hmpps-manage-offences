@@ -43,6 +43,13 @@ export interface paths {
      */
     post: operations['deactivateNomisOffence']
   }
+  '/schedule/pcsc-lists': {
+    /**
+     * Retrieve all PCSC lists
+     * @description This endpoint will return all four PCSC lists
+     */
+    get: operations['getPcscLists']
+  }
   '/schedule/pcsc-indicators': {
     /**
      * Determine if the passed in offence codes are related to any of the PCSC lists
@@ -311,6 +318,12 @@ export interface components {
       /** Format: int32 */
       partNumber: number
       offences?: components['schemas']['OffenceToScheduleMapping'][]
+    }
+    PcscLists: {
+      listA: components['schemas']['OffenceToScheduleMapping'][]
+      listB: components['schemas']['OffenceToScheduleMapping'][]
+      listC: components['schemas']['OffenceToScheduleMapping'][]
+      listD: components['schemas']['OffenceToScheduleMapping'][]
     }
     OffencePcscMarkers: {
       offenceCode: string
@@ -612,6 +625,20 @@ export interface operations {
       /** @description OK */
       200: {
         content: never
+      }
+    }
+  }
+  /**
+   * Retrieve all PCSC lists
+   * @description This endpoint will return all four PCSC lists
+   */
+  getPcscLists: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['PcscLists']
+        }
       }
     }
   }
