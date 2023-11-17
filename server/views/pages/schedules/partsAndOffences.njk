@@ -42,9 +42,9 @@
 
     {% if fullSchedule.code === '15' %}
       <div class="govuk-grid-column-one-half govuk-!-text-align-right">
-        <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review
-          <a href="/schedules/{{ fullSchedule.id }}/pcsc-lists" class="govuk-link" rel="noreferrer noopener">PCSC
-            Lists</a>
+        <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">
+          <a href="/schedules/pcsc-lists?scheduleId={{ fullSchedule.id }}" class="govuk-link" rel="noreferrer noopener">SDS+
+            Offences for PCSC</a>
         </p>
       </div>
     {% endif %}
