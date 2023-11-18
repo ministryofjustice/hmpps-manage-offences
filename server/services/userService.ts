@@ -1,18 +1,15 @@
 import convertToTitleCase from '../utils/utils'
-import type HmppsAuthClient from '../data/hmppsAuthClient'
+import ManageUsersApiClient, { User } from '../data/manageUsersApiClient'
 
-type User = Express.User
-
-interface UserDetails {
-  name: string
+interface UserDetails extends User {
   displayName: string
 }
 
 export default class UserService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(private readonly manageUsersApiClient: ManageUsersApiClient) {}
 
-  async getUser(userDetails: User): Promise<UserDetails> {
-    const user = await this.hmppsAuthClient.getUser(userDetails)
+  async getUser(userDetails: Express.User): Promise<UserDetails> {
+    const user = await this.manageUsersApiClient.getUser(userDetails)
     return { ...user, displayName: convertToTitleCase(user.name as string) }
   }
 }
