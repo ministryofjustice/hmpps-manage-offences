@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
+import manageUsersApi from './integration_tests/mockApis/manageUsersApi'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 
 export default defineConfig({
@@ -22,6 +23,7 @@ export default defineConfig({
         reset: resetStubs,
         ...auth,
         ...tokenVerification,
+        ...manageUsersApi,
       })
     },
     baseUrl: 'http://localhost:3007',

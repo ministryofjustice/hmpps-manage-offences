@@ -19,6 +19,16 @@ export default class FeatureToggleType {
 
   public static readonly PUBLISH_EVENTS = new FeatureToggleType(FeatureToggleEnum.PUBLISH_EVENTS, 'Publish events')
 
+  public static readonly UNLINK_SCHEDULES_NOMIS = new FeatureToggleType(
+    FeatureToggleEnum.UNLINK_SCHEDULES_NOMIS,
+    'Unlink schedules NOMIS (migration task)',
+  )
+
+  public static readonly LINK_SCHEDULES_NOMIS = new FeatureToggleType(
+    FeatureToggleEnum.LINK_SCHEDULES_NOMIS,
+    'Link schedules NOMIS (migration task)',
+  )
+
   private constructor(
     public readonly featureName: FeatureToggleEnum,
     public readonly displayName: string,

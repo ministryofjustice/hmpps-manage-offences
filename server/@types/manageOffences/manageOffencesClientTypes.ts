@@ -7,6 +7,7 @@ export type MostRecentLoadResult = components['schemas']['MostRecentLoadResult']
 export type FeatureToggle = components['schemas']['FeatureToggle']
 export type Schedule = components['schemas']['Schedule']
 export type NomisChangeHistory = components['schemas']['NomisChangeHistory']
+export type PcscLists = components['schemas']['PcscLists']
 export type DateInput = {
   day: number
   month: number

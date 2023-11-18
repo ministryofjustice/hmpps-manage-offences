@@ -7,6 +7,7 @@ import {
   NomisChangeHistory,
   Offence,
   OffenceToScheduleMapping,
+  PcscLists,
   Schedule,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 
@@ -148,5 +149,14 @@ export default class ManageOffencesApiClient extends RestClient {
       },
       { token: user.token },
     )
+  }
+
+  getPcscLists(user: User): Promise<PcscLists> {
+    return this.get(
+      {
+        path: '/schedule/pcsc-lists',
+      },
+      { token: user.token },
+    ) as Promise<PcscLists>
   }
 }

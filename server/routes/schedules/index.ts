@@ -23,6 +23,7 @@ export default function Index(offenceService: OffenceService): Router {
 
   get('/schedules', scheduleHandler.GET)
   get('/schedules/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
+  get('/schedules/pcsc-lists', partsAndOffencesHandler.GET_PCSC_LISTS)
   get(schedulePaths.LINK_OFFENCES, linkOffenceRoutes.GET)
   get(schedulePaths.LINK_OFFENCE_CREATE, linkOffenceRoutes.GET_LINK_SCREEN)
   post(schedulePaths.LINK_OFFENCE_CREATE, linkOffenceRoutes.POST_LINK)

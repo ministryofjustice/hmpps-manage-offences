@@ -1,0 +1,103 @@
+{% extends "layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/pcscListTable.njk" import pcscListTable %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageTitle = applicationName + " - SDS+ offences for PCSC" %}
+{% set pageId = "schedules" %}
+
+{% block navBar %}
+  {{ navBar("schedules") }}
+{% endblock %}
+
+{% block aside %}
+  {% if scheduleId %}
+    {% set items = [
+      {
+        text: "Schedules",
+        href: "/schedules"
+      },
+      {
+        text: "Schedule 15",
+        href: "/schedules/parts-and-offences/" + scheduleId
+      },
+      {
+        text: "SDS+ offences for PCSC"
+      }
+    ] %}
+  {% else %}
+    {% set items = [
+      {
+        text: "Home",
+        href: "/"
+      },
+      {
+        text: "SDS+ offences for PCSC"
+      }
+    ] %}
+  {% endif %}
+  {{ govukBreadcrumbs({
+    items: items
+  }) }}
+{% endblock %}
+
+      {% block content %}
+        <h1 class="govuk-heading-l">
+          SDS+ offences for PCSC
+        </h1>
+
+        {{ govukTabs({
+          classes: 'borderless-tabs',
+          items: [
+            {
+              label: "List A",
+              id: "list-a",
+              panel: {
+              html: pcscTab(pcscLists.listA, 'SDS >7 years between 01 April 2020 and 28 June 2022')
+            }
+            },{
+              label: "List B",
+              id: "list-b",
+              panel: {
+                html: pcscTab(pcscLists.listB, 'SDS between 4 and 7 years after 28 June 2022')
+              }
+            },{
+              label: "List C",
+              id: "list-c",
+              panel: {
+                html: pcscTab(pcscLists.listC, 'Sec250 >7 years after 28 June 2022')
+              }
+            },{
+              label: "List D",
+              id: "list-d",
+              panel: {
+                html: pcscTab(pcscLists.listD, 'SDS >7 years after 28 June 2022')
+              }
+            }
+          ]
+        }) }}
+
+        {{ govukBackLink({
+          text: "Back",
+          href: "/schedules/parts-and-offences/" + scheduleId
+        }) }}
+      {% endblock %}
+
+      {% macro pcscTab(list, partDesc) %}
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full govuk-!-text-align-left">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              <span class="govuk-caption-m">Applies to sentences of</span>
+              {{ partDesc }}
+            </h2>
+          </div>
+        </div>
+        {{ pcscListTable(
+          {
+            offences: list
+          }
+        ) }}
+      {% endmacro %}
