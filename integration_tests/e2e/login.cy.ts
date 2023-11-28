@@ -7,7 +7,7 @@ context('SignIn', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubUser')
+    cy.task('stubAuthUser')
   })
 
   it('Unauthenticated user directed to auth', () => {
@@ -60,9 +60,9 @@ context('SignIn', () => {
     cy.request('/').its('body').should('contain', 'Sign in')
 
     cy.task('stubVerifyToken', true)
-    cy.task('stubUser')
+    cy.task('stubAuthUser', 'bobby brown')
     cy.signIn()
 
-    indexPage.headerUserName().contains('J. Smith')
+    indexPage.headerUserName().contains('B. Brown')
   })
 })
