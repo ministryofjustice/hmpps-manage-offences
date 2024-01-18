@@ -27,12 +27,25 @@
                             <span data-qa="start-date">Not entered</span>
                         {% endif %}
                     </p>
+                    {% if offence.custodialIndicator %}
+                    <p>
+                        <span class="govuk-!-font-weight-bold">Custodial Sentence</span>
+                        {% if offence.custodialIndicator == 'Y'%}
+                            <span data-qa="custodial-indicator">Yes</span>
+                        {% elseif offence.custodialIndicator == 'N'%}
+                            <span data-qa="custodial-indicator">No</span>
+                        {% elseif offence.custodialIndicator == 'E'%}
+                            <span data-qa="custodial-indicator">Either</span>
+                        {% endif %}
+                    </p>
+                    {% endif %}
                     {% if offence.isChild %}
                         <p>
                             <span class="govuk-!-font-weight-bold">Inchoate offence</span>
                             <span data-qa="parent-offence">Yes</span>
                         </p>
                     {% endif %}
+
 
                     {% if attributes.nomisActivationFlags.canActivate %}
                         <form method="post" action="/admin/nomis/offence/reactivate">

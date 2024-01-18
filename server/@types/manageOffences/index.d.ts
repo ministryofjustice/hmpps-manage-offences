@@ -320,19 +320,28 @@ export interface components {
       offences?: components['schemas']['OffenceToScheduleMapping'][]
     }
     PcscLists: {
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
       listA: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description SDS between 4 and 7 years : Schedule 15 Part 2 that attract life + serious violent offences */
       listB: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Sec250 >7 years = List C: Schedule 15 Part 2 that attract life + serious violent offences (same as List B) */
       listC: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
       listD: components['schemas']['OffenceToScheduleMapping'][]
     }
+    /** @description Shows which (if any) PCSC Marker the offence relates to */
     OffencePcscMarkers: {
       offenceCode: string
       pcscMarkers: components['schemas']['PcscMarkers']
     }
     PcscMarkers: {
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
       inListA: boolean
+      /** @description SDS between 4 and 7 years : Schedule 15 Part 2 that attract life + serious violent offences */
       inListB: boolean
+      /** @description Sec250 >7 years = List C: Schedule 15 Part 2 that attract life + serious violent offences (same as List B) */
       inListC: boolean
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
       inListD: boolean
     }
     GetDlqResult: {
@@ -404,6 +413,11 @@ export interface components {
        * @description Set to the max period of indictment in years
        */
       maxPeriodOfIndictmentYears?: number
+      /**
+       * @description Yes if the offence caries a custodial sentence, Either if it does when tried as an indictment and No otherwise.
+       * @enum {string}
+       */
+      custodialIndicator?: 'Y' | 'N' | 'E'
     }
     /** @description Details of the load by SDRS Cache */
     MostRecentLoadResult: {
