@@ -1,9 +1,12 @@
-{% extends "layout.njk" %}
+{% extends "partials/layout.njk" %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/nav.njk" import navBar with context %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set pageId = "landing-page" %}
+{% set mainClasses = "app-container govuk-body" %}
+
 
 {% block navBar %}
     {{ navBar('home') }}

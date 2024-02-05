@@ -1,20 +1,22 @@
 import nock from 'nock'
-import ManageUsersApiClient, { User } from './manageUsersApiClient'
-import RestClient from './restClient'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => '' }
-  })
-})
+import config from '../config'
+import ManageUsersApiClient from './manageUsersApiClient'
+import AuthTokenService from './authTokenService'
 
-const manageUsersApiClient = new ManageUsersApiClient()
+jest.mock('./authTokenService')
+
+const authTokenService = new AuthTokenService(null) as jest.Mocked<AuthTokenService>
+
+const token = { access_token: 'token-1', expires_in: 300 }
 
 describe('manageUsersApiClient', () => {
-  const get = jest.spyOn(RestClient.prototype, 'get')
+  let fakeManageUsersApiClient: nock.Scope
+  let manageUsersApiClient: ManageUsersApiClient
 
   beforeEach(() => {
-    get.mockResolvedValue(true)
+    fakeManageUsersApiClient = nock(config.apis.manageUsersApi.url)
+    manageUsersApiClient = new ManageUsersApiClient(authTokenService)
   })
 
   afterEach(() => {
@@ -24,12 +26,15 @@ describe('manageUsersApiClient', () => {
 
   describe('getUser', () => {
     it('should return data from api', async () => {
-      get.mockResolvedValue({ username: 'another' } as User)
+      const response = { data: 'data' }
 
-      const result = await manageUsersApiClient.getUser({ token: 'token' } as Express.User)
+      fakeManageUsersApiClient
+        .get('/users/me')
+        .matchHeader('authorization', `Bearer ${token.access_token}`)
+        .reply(200, response)
 
-      expect(get).toHaveBeenCalledWith({ path: '/users/me' }, { token: 'token' })
-      expect(result).toEqual({ username: 'another' })
+      const output = await manageUsersApiClient.getUser(token.access_token)
+      expect(output).toEqual(response)
     })
   })
 })

@@ -1,8 +1,11 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-param-reassign */
+import path from 'path'
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
-import path from 'path'
+import { initialiseName } from './utils'
+import { ApplicationInfo } from '../applicationInfo'
+import config from '../config'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -23,16 +26,18 @@ const months = {
   11: { short: 'Dec', full: 'December' },
 }
 
-export default function nunjucksSetup(app: express.Express): void {
+export default function nunjucksSetup(app: express.Express, applicationInfo: ApplicationInfo): void {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
   app.locals.applicationName = 'Manage Offences'
+  app.locals.environmentName = config.environmentName
+  app.locals.environmentNameColour = config.environmentName === 'PRE-PRODUCTION' ? 'govuk-tag--green' : ''
 
   // Cachebusting version string
   if (production) {
-    // Version only changes on reboot
-    app.locals.version = Date.now().toString()
+    // Version only changes with new commits
+    app.locals.version = applicationInfo.gitShortHash
   } else {
     // Version changes every request
     app.use((req, res, next) => {
@@ -47,11 +52,9 @@ export default function nunjucksSetup(app: express.Express): void {
 export function registerNunjucks(app?: express.Express): Environment {
   const njkEnv = nunjucks.configure(
     [
-      path.join(__dirname, '../views'),
-      'node_modules/govuk-frontend/',
-      'node_modules/govuk-frontend/components/',
+      path.join(__dirname, '../../server/views'),
+      'node_modules/govuk-frontend/dist/',
       'node_modules/@ministryofjustice/frontend/',
-      'node_modules/@ministryofjustice/frontend/moj/components/',
     ],
     {
       autoescape: true,
@@ -59,14 +62,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     },
   )
 
-  njkEnv.addFilter('initialiseName', (fullName: string) => {
-    // this check is for the authError page
-    if (!fullName) {
-      return null
-    }
-    const array = fullName.split(' ')
-    return `${array[0][0]}. ${array.reverse()[0]}`
-  })
+  njkEnv.addFilter('initialiseName', initialiseName)
 
   // monthLength can be 'short' (default) or 'full'
   njkEnv.addFilter('dateFormat', (dateString: string, monthLength = 'short') => {

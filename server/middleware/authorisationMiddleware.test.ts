@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 import type { Request, Response } from 'express'
 
 import authorisationMiddleware from './authorisationMiddleware'
-import { schedulePaths } from '../routes/schedules'
 
 function createToken(authorities: string[]) {
   const payload = {
@@ -17,69 +16,58 @@ function createToken(authorities: string[]) {
   return jwt.sign(payload, 'secret', { expiresIn: '1h' })
 }
 
-function createResWithToken({ authorities }: { authorities: string[] }): Response {
-  return {
-    locals: {
-      user: {
-        token: createToken(authorities),
-      },
-    },
-    redirect: (redirectUrl: string) => {
-      return redirectUrl
-    },
-  } as unknown as Response
-}
-
-const next = jest.fn()
-
 describe('authorisationMiddleware', () => {
-  const req = { session: {}, originalUrl: 'ORIGINAL' } as unknown as Request
+  const req: Request = { path: '/some-url-path' } as unknown as Request
+  const next = jest.fn()
+
+  function createResWithToken({ authorities }: { authorities: string[] }): Response {
+    return {
+      locals: {
+        user: {
+          token: createToken(authorities),
+        },
+      },
+      redirect: jest.fn(),
+    } as unknown as Response
+  }
+
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
 
   it('should return next when no required roles', () => {
     const res = createResWithToken({ authorities: [] })
 
-    const authorisationResponse = authorisationMiddleware()(req, res, next)
+    authorisationMiddleware()(req, res, next)
 
-    expect(authorisationResponse).toEqual(next())
+    expect(next).toHaveBeenCalled()
+    expect(res.redirect).not.toHaveBeenCalled()
   })
 
   it('should redirect when user has no authorised roles', () => {
     const res = createResWithToken({ authorities: [] })
 
-    const authorisationResponse = authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
+    authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
 
-    expect(authorisationResponse).toEqual('/authError')
+    expect(next).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
   })
 
   it('should return next when user has authorised role', () => {
-    const res = createResWithToken({ authorities: ['SOME_REQUIRED_ROLE'] })
+    const res = createResWithToken({ authorities: ['ROLE_SOME_REQUIRED_ROLE'] })
 
-    const authorisationResponse = authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
+    authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
 
-    expect(authorisationResponse).toEqual(next())
-  })
-})
-
-describe('Role based access to urls tests', () => {
-  const reqToLinkOffences = {
-    session: {},
-    originalUrl: schedulePaths.LINK_OFFENCES,
-    path: schedulePaths.LINK_OFFENCES,
-  } as unknown as Request
-
-  it('should redirect when user doesnt have the correct role to view the link offences page', () => {
-    const res = createResWithToken({ authorities: [] })
-
-    const authorisationResponse = authorisationMiddleware([])(reqToLinkOffences, res, next)
-
-    expect(authorisationResponse).toEqual('/authError')
+    expect(next).toHaveBeenCalled()
+    expect(res.redirect).not.toHaveBeenCalled()
   })
 
-  it('should go to next page if user has the correct role to view the link offences page', () => {
-    const res = createResWithToken({ authorities: ['ROLE_UPDATE_OFFENCE_SCHEDULES'] })
+  it('should return next when user has authorised role and middleware created with ROLE_ prefix', () => {
+    const res = createResWithToken({ authorities: ['ROLE_SOME_REQUIRED_ROLE'] })
 
-    const authorisationResponse = authorisationMiddleware([])(reqToLinkOffences, res, next)
+    authorisationMiddleware(['ROLE_SOME_REQUIRED_ROLE'])(req, res, next)
 
-    expect(authorisationResponse).toEqual(next())
+    expect(next).toHaveBeenCalled()
+    expect(res.redirect).not.toHaveBeenCalled()
   })
 })

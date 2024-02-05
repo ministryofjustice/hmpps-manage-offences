@@ -1,0 +1,31 @@
+{% extends "govuk/template.njk" %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{% block head %}
+  <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
+
+{% block header %}
+  {% include "./header.njk" %}
+  {% block navBar %}{% endblock %}
+{% endblock %}
+
+{% block bodyStart %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  <aside role="complementary">
+    {% include "./phaseBanner.njk" %}
+    {% block aside %}{% endblock %}
+  </aside>
+  <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
+{% endblock %}
+
+{% block bodyEnd %}
+  <script type="module" src="/assets/govukFrontendInit.js"></script>
+  <script src="/assets/moj/all.js"></script>
+  <script src="/assets/mojFrontendInit.js"></script>
+{% endblock %}
