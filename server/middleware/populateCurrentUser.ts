@@ -1,5 +1,4 @@
 import { RequestHandler } from 'express'
-import jwtDecode from 'jwt-decode'
 import logger from '../../logger'
 import UserService from '../services/userService'
 
@@ -7,10 +6,9 @@ export default function populateCurrentUser(userService: UserService): RequestHa
   return async (req, res, next) => {
     try {
       if (res.locals.user) {
-        const user = res.locals.user && (await userService.getUser(res.locals.user))
-        const { authorities: roles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
+        const user = res.locals.user && (await userService.getUser(res.locals.user.token))
         if (user) {
-          res.locals.user = { ...user, ...res.locals.user, roles }
+          res.locals.user = { ...user, ...res.locals.user }
         } else {
           logger.info('No user available')
         }

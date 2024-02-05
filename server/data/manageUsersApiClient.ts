@@ -1,6 +1,7 @@
-import RestClient from './restClient'
-import config, { ApiConfig } from '../config'
 import logger from '../../logger'
+import config, { ApiConfig } from '../config'
+import AuthTokenService from './authTokenService'
+import RestClient from './restClient'
 
 export interface User {
   username: string
@@ -9,8 +10,7 @@ export interface User {
   authSource?: string
   uuid?: string
   userId?: string
-  staffId?: number // deprecated, use userId
-  activeCaseLoadId?: string // deprecated, use user roles api
+  activeCaseLoadId?: string // Will be removed from User. For now, use 'me/caseloads' endpoint in 'nomis-user-roles-api'
 }
 
 export interface UserRole {
@@ -18,12 +18,12 @@ export interface UserRole {
 }
 
 export default class ManageUsersApiClient extends RestClient {
-  constructor() {
-    super('Manage Users Api Client', config.apis.manageUsersApi as ApiConfig)
+  constructor(authTokenService: AuthTokenService) {
+    super('Manage Users Api Client', config.apis.manageUsersApi as ApiConfig, authTokenService)
   }
 
-  async getUser(user: Express.User): Promise<User> {
+  async getUser(token: string): Promise<User> {
     logger.info('Getting user details: calling HMPPS Manage Users Api')
-    return (await this.get({ path: '/users/me' }, { token: user.token })) as Promise<User>
+    return (await this.get({ path: '/users/me' }, { token })) as unknown as Promise<User>
   }
 }

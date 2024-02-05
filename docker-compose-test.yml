@@ -1,17 +1,8 @@
 version: '3.1'
 services:
 
-  redis:
-    image: 'bitnami/redis:5.0'
-    networks:
-      - hmpps_int
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    ports:
-      - '6379:6379'
-
   wiremock:
-    image: rodolpheche/wiremock
+    image: wiremock/wiremock
     networks:
     - hmpps_int
     container_name: wiremock

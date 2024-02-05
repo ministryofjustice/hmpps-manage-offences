@@ -10,12 +10,13 @@ import {
   PcscLists,
   Schedule,
 } from '../@types/manageOffences/manageOffencesClientTypes'
+import AuthTokenService from './authTokenService'
 
 type User = Express.User
 
 export default class ManageOffencesApiClient extends RestClient {
-  constructor() {
-    super('Manage offences API', config.apis.manageOffences as ApiConfig)
+  constructor(authTokenService: AuthTokenService) {
+    super('Manage offences API', config.apis.manageOffences as ApiConfig, authTokenService)
   }
 
   getOffencesByCode(offenceCode: string, user: User): Promise<[Offence]> {
