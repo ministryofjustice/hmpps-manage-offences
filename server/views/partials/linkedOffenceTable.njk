@@ -18,7 +18,7 @@
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Legislation</th>
-                {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+                {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16"></th>
                 {% endif %}
             </tr>
@@ -38,7 +38,7 @@
                     <td class="govuk-table__cell">
                         {{ offence.legislationText }}
                     </td>
-                    {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+                    {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
                         {{ unlinkOffenceColumn(scheduleId, schedulePartId, offence.id, csrfToken, offence.isChild) }}
                     {% endif %}
                 </tr>

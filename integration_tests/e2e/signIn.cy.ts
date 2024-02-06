@@ -72,4 +72,12 @@ context('Sign In', () => {
 
     indexPage.headerUserName().contains('B. Brown')
   })
+
+  it('admin user can see Load monitor and Toggle jobs nav buttons', () => {
+    cy.task('stubSignIn', ['ROLE_MANAGE_OFFENCES_ADMIN'])
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.loadMonitorLink().should('exist')
+    indexPage.toggleJobsLink().should('exist')
+  })
 })

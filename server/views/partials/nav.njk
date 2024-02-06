@@ -16,7 +16,7 @@
                 </li>
 
 
-                {% if 'ROLE_MANAGE_OFFENCES_ADMIN' in user.roles %}
+                {% if 'MANAGE_OFFENCES_ADMIN' in user.roles %}
                     <li class="app-navigation__list-item {{ "app-navigation__list-item--current" if selected === "load-results" }}">
                         <a class="govuk-link govuk-link--no-visited-state app-navigation__link" href="/load-results"
                            data-topnav="Load monitor">Load monitor</a>
