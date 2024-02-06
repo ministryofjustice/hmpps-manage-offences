@@ -83,7 +83,7 @@
           {{ partDesc }}
         </h2>
       </div>
-      {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+      {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
         <div class="govuk-grid-column-one-half text-align-right">
 
           {{ govukButton({
@@ -96,7 +96,7 @@
         </div>
       {% endif %}
     {% else %}
-      {% if ('ROLE_UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+      {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
         <div class="govuk-grid-column-full text-align-right">
 
           {{ govukButton({

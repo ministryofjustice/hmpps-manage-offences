@@ -10,4 +10,8 @@ export default class IndexPage extends Page {
   courtRegisterLink = (): PageElement => cy.get('[href="/court-register"]')
 
   headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
+
+  loadMonitorLink = (): PageElement => cy.get('[href="/load-results"]')
+
+  toggleJobsLink = (): PageElement => cy.get('[href="/toggle-jobs"]')
 }
