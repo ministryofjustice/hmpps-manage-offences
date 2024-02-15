@@ -57,7 +57,7 @@ export default class AdminService {
     user: User,
     roles: string[],
   ): Promise<{ canActivate: boolean; canDeactivate: boolean }> {
-    if (!roles.includes(AuthorisedRoles.ROLE_NOMIS_OFFENCE_ACTIVATOR)) {
+    if (!roles.includes(AuthorisedRoles.NOMIS_OFFENCE_ACTIVATOR)) {
       return { canActivate: false, canDeactivate: false }
     }
     const offences = await this.prisonApi.getOffencesByCodeStartsWith(offenceCode, user)
