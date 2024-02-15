@@ -34,7 +34,7 @@ describe('Admin service', () => {
           content: [{ code: 'OF1', activeFlag: 'Y' }],
         } as PageOffenceDto)
         const result = await adminService.getNomisActivationFlags('OF1', activeOffence, user, [
-          'ROLE_NOMIS_OFFENCE_ACTIVATOR',
+          'NOMIS_OFFENCE_ACTIVATOR',
         ])
 
         expect(result).toEqual({ canActivate: false })
@@ -45,7 +45,7 @@ describe('Admin service', () => {
           content: [{ code: 'OF1', activeFlag: 'N' }],
         } as PageOffenceDto)
         const result = await adminService.getNomisActivationFlags('OF1', activeOffence, user, [
-          'ROLE_NOMIS_OFFENCE_ACTIVATOR',
+          'NOMIS_OFFENCE_ACTIVATOR',
         ])
 
         expect(result).toEqual({ canActivate: true })
@@ -56,7 +56,7 @@ describe('Admin service', () => {
           content: [{ code: 'OF1', activeFlag: 'Y' }],
         } as PageOffenceDto)
         const result = await adminService.getNomisActivationFlags('OF1', inactiveOffence, user, [
-          'ROLE_NOMIS_OFFENCE_ACTIVATOR',
+          'NOMIS_OFFENCE_ACTIVATOR',
         ])
 
         expect(result).toEqual({ canActivate: false, canDeactivate: true })
@@ -67,7 +67,7 @@ describe('Admin service', () => {
           content: [{ code: 'OF1', activeFlag: 'N' }],
         } as PageOffenceDto)
         const result = await adminService.getNomisActivationFlags('OF1', inactiveOffence, user, [
-          'ROLE_NOMIS_OFFENCE_ACTIVATOR',
+          'NOMIS_OFFENCE_ACTIVATOR',
         ])
 
         expect(result).toEqual({ canActivate: true, canDeactivate: false })
