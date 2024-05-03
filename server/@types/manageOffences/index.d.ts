@@ -4,15 +4,6 @@
  */
 
 export interface paths {
-  '/queue-admin/retry-dlq/{dlqName}': {
-    put: operations['retryDlq']
-  }
-  '/queue-admin/retry-all-dlqs': {
-    put: operations['retryAllDlqs']
-  }
-  '/queue-admin/purge-queue/{queueName}': {
-    put: operations['purgeQueue']
-  }
   '/admin/toggle-feature': {
     /** Enable / disable a feature */
     put: operations['toggleFeature']
@@ -43,6 +34,20 @@ export interface paths {
      */
     post: operations['deactivateNomisOffence']
   }
+  '/schedule/sexual-or-violent': {
+    /**
+     * Determine if the passed in offence codes are either sexual or violent offences
+     * @description This endpoint will return a list of offences and whether they are violent or sexual offences
+     */
+    get: operations['getSexualOrViolentInformation']
+  }
+  '/schedule/sexual-or-violent-lists': {
+    /**
+     * Retrieves the list of all the offences that are either sexual or violent
+     * @description This endpoint will return a list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1)
+     */
+    get: operations['getSexualOrViolentLists']
+  }
   '/schedule/pcsc-lists': {
     /**
      * Retrieve all PCSC lists
@@ -71,9 +76,6 @@ export interface paths {
   '/schedule/all': {
     /** Find all schedules - does not include mapped offences */
     get: operations['findAllSchedules']
-  }
-  '/queue-admin/get-dlq-messages/{dlqName}': {
-    get: operations['getDlqMessages']
   }
   '/offences/search': {
     /**
@@ -138,21 +140,6 @@ export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
-    DlqMessage: {
-      body: {
-        [key: string]: Record<string, never>
-      }
-      messageId: string
-    }
-    RetryDlqResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-      messages: components['schemas']['DlqMessage'][]
-    }
-    PurgeQueueResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-    }
     /** @description Feature toggle details */
     FeatureToggle: {
       /**
@@ -198,7 +185,7 @@ export interface components {
       /** @description Schedule paragraph number that this offence is mapped to */
       paragraphNumber?: string
     }
-    /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
+    /** @description A list of child offence ID's i.e. inchoate offences linked to this offence */
     BasicOffence: {
       /**
        * Format: int64
@@ -275,14 +262,14 @@ export interface components {
       loadDate?: string
       /** @description The schedules linked to this offence */
       schedules?: components['schemas']['LinkedScheduleDetails'][]
-      /** @description If true then this is a inchoate offence; i.e. a child of another offence */
+      /** @description If true then this is a inchoate offence i.e. a child of another offence */
       isChild: boolean
       /**
        * Format: int64
        * @description The parent offence id of an inchoate offence
        */
       parentOffenceId?: number
-      /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
+      /** @description A list of child offence ID's i.e. inchoate offences linked to this offence */
       childOffences?: components['schemas']['BasicOffence'][]
       /** @description The legislation associated to this offence (from actsAndSections in the SDRS response) */
       legislation?: string
@@ -319,6 +306,22 @@ export interface components {
       partNumber: number
       offences?: components['schemas']['OffenceToScheduleMapping'][]
     }
+    /** @description Categorises the offence based on the schedule it appears in */
+    OffenceSexualOrViolent: {
+      offenceCode: string
+      /**
+       * @description Categories for the offence
+       * @enum {string}
+       */
+      schedulePart: 'SEXUAL' | 'VIOLENT' | 'NONE'
+    }
+    /** @description Contains the list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1) */
+    SexualOrViolentLists: {
+      /** @description Offence is in Schedule 15, Part 2 or Schedule 3 */
+      sexual: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence is in Schedule 15, Part 1 */
+      violent: components['schemas']['OffenceToScheduleMapping'][]
+    }
     PcscLists: {
       /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
       listA: components['schemas']['OffenceToScheduleMapping'][]
@@ -343,13 +346,6 @@ export interface components {
       inListC: boolean
       /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
       inListD: boolean
-    }
-    GetDlqResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-      /** Format: int32 */
-      messagesReturnedCount: number
-      messages: components['schemas']['DlqMessage'][]
     }
     /** @description Offence details */
     Offence: {
@@ -395,14 +391,14 @@ export interface components {
       loadDate?: string
       /** @description The schedules linked to this offence */
       schedules?: components['schemas']['LinkedScheduleDetails'][]
-      /** @description If true then this is a inchoate offence; i.e. a child of another offence */
+      /** @description If true then this is a inchoate offence i.e. a child of another offence */
       isChild: boolean
       /**
        * Format: int64
        * @description The parent offence id of an inchoate offence
        */
       parentOffenceId?: number
-      /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
+      /** @description A list of child offence ID's i.e. inchoate offences linked to this offence */
       childOffenceIds?: number[]
       /** @description The legislation associated to this offence (from actsAndSections in the SDRS response) */
       legislation?: string
@@ -471,7 +467,7 @@ export interface components {
       loadDate?: string
       /**
        * Format: date-time
-       * @description The date and time of the most recent successful load; if the load was successful this is the same as the loadDate
+       * @description The date and time of the most recent successful load if the load was successful this is the same as the loadDate
        */
       lastSuccessfulLoadDate?: string
     }
@@ -512,46 +508,6 @@ export type $defs = Record<string, never>
 export type external = Record<string, never>
 
 export interface operations {
-  retryDlq: {
-    parameters: {
-      path: {
-        dlqName: string
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          '*/*': components['schemas']['RetryDlqResult']
-        }
-      }
-    }
-  }
-  retryAllDlqs: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          '*/*': components['schemas']['RetryDlqResult'][]
-        }
-      }
-    }
-  }
-  purgeQueue: {
-    parameters: {
-      path: {
-        queueName: string
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          '*/*': components['schemas']['PurgeQueueResult']
-        }
-      }
-    }
-  }
   /** Enable / disable a feature */
   toggleFeature: {
     requestBody: {
@@ -643,6 +599,39 @@ export interface operations {
     }
   }
   /**
+   * Determine if the passed in offence codes are either sexual or violent offences
+   * @description This endpoint will return a list of offences and whether they are violent or sexual offences
+   */
+  getSexualOrViolentInformation: {
+    parameters: {
+      query: {
+        offenceCodes: string[]
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['OffenceSexualOrViolent'][]
+        }
+      }
+    }
+  }
+  /**
+   * Retrieves the list of all the offences that are either sexual or violent
+   * @description This endpoint will return a list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1)
+   */
+  getSexualOrViolentLists: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['SexualOrViolentLists']
+        }
+      }
+    }
+  }
+  /**
    * Retrieve all PCSC lists
    * @description This endpoint will return all four PCSC lists
    */
@@ -725,24 +714,6 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['Schedule'][]
-        }
-      }
-    }
-  }
-  getDlqMessages: {
-    parameters: {
-      query?: {
-        maxMessages?: number
-      }
-      path: {
-        dlqName: string
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          '*/*': components['schemas']['GetDlqResult']
         }
       }
     }

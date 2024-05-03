@@ -2,7 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "./unlinkOffenceColumn.njk" import unlinkOffenceColumn %}
 
-{% macro pcscListTable(attributes) %}
+{% macro scheduleOffenceListTable(attributes) %}
     {% set offences = attributes.offences %}
 
     {% if (offences and offences.length > 0) %}
@@ -14,8 +14,10 @@
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Legislation</th>
-                <th scope="col" class="govuk-table__header govuk-!-font-size-16">Max Period</th>
-                <th scope="col" class="govuk-table__header govuk-!-font-size-16">Paragraph</th>
+                {% if attributes.showMaxPeriodAndParagraph %}
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Max Period</th>
+                    <th scope="col" class="govuk-table__header govuk-!-font-size-16">Paragraph</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody class="govuk-table__body govuk-body-s">
@@ -36,18 +38,20 @@
                     <td class="govuk-table__cell">
                         {{ offence.legislationText }}
                     </td>
-                    <td class="govuk-table__cell">
-                        {% if offence.maxPeriodIsLife %}
-                            Life
-                        {% elseif offence.maxPeriodOfIndictmentYears %}
-                            {{ offence.maxPeriodOfIndictmentYears }} Years
-                        {% else %}
-                            Not entered
-                        {% endif %}
-                    </td>
-                    <td class="govuk-table__cell">
-                        {{ offence.paragraphNumber }}
-                    </td>
+                    {% if attributes.showMaxPeriodAndParagraph %}
+                        <td class="govuk-table__cell">
+                            {% if offence.maxPeriodIsLife %}
+                                Life
+                            {% elseif offence.maxPeriodOfIndictmentYears %}
+                                {{ offence.maxPeriodOfIndictmentYears }} Years
+                            {% else %}
+                                Not entered
+                            {% endif %}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {{ offence.paragraphNumber }}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
