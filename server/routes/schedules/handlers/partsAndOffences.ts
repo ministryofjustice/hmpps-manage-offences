@@ -22,4 +22,12 @@ export default class PartsAndOffencesRoutes {
       scheduleId,
     })
   }
+
+  GET_SEXUAL_AND_VIOLENT_LISTS = async (req: Request, res: Response): Promise<void> => {
+    const sexualOrViolentLists = await this.offenceService.getSexualOrViolentLists(res.locals.user)
+
+    res.render('pages/schedules/sexualOrViolentLists', {
+      sexualOrViolentLists,
+    })
+  }
 }

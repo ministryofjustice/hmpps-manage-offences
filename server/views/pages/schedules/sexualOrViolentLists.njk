@@ -6,7 +6,7 @@
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
-{% set pageTitle = applicationName + " - SDS+ offences for PCSC" %}
+{% set pageTitle = applicationName + " - Sexual or Violent Offences" %}
 {% set pageId = "schedules" %}
 
 {% block navBar %}
@@ -14,67 +14,38 @@
 {% endblock %}
 
 {% block aside %}
-  {% if scheduleId %}
-    {% set items = [
-      {
-        text: "Schedules",
-        href: "/schedules"
-      },
-      {
-        text: "Schedule 15",
-        href: "/schedules/parts-and-offences/" + scheduleId
-      },
-      {
-        text: "SDS+ offences for PCSC"
-      }
-    ] %}
-  {% else %}
-    {% set items = [
+  {{ govukBreadcrumbs({
+    items: [
       {
         text: "Home",
         href: "/"
       },
       {
-        text: "SDS+ offences for PCSC"
+        text: "Sexual or Violent Offences"
       }
-    ] %}
-  {% endif %}
-  {{ govukBreadcrumbs({
-    items: items
+    ]
   }) }}
 {% endblock %}
 
       {% block content %}
         <h1 class="govuk-heading-l">
-          SDS+ offences for PCSC
+          Sexual or Violent Offences
         </h1>
 
         {{ govukTabs({
           classes: 'borderless-tabs',
           items: [
             {
-              label: "List A",
-              id: "list-a",
+              label: "Sexual",
+              id: "sexual",
               panel: {
-              html: pcscTab(pcscLists.listA, 'SDS >7 years between 01 April 2020 and 28 June 2022')
+              html: pcscTab(sexualOrViolentLists.sexual, 'Sexual Offences (Schedule 3 or Schedule 15 Part 2)')
             }
             },{
-              label: "List B",
-              id: "list-b",
+              label: "Violent",
+              id: "violent",
               panel: {
-                html: pcscTab(pcscLists.listB, 'SDS between 4 and 7 years after 28 June 2022')
-              }
-            },{
-              label: "List C",
-              id: "list-c",
-              panel: {
-                html: pcscTab(pcscLists.listC, 'Sec250 >7 years after 28 June 2022')
-              }
-            },{
-              label: "List D",
-              id: "list-d",
-              panel: {
-                html: pcscTab(pcscLists.listD, 'SDS >7 years after 28 June 2022')
+                html: pcscTab(sexualOrViolentLists.violent, 'Violent Offences (Schedule 15 Part 1)')
               }
             }
           ]
@@ -82,7 +53,7 @@
 
         {{ govukBackLink({
           text: "Back",
-          href: "/schedules/parts-and-offences/" + scheduleId
+          href: "/"
         }) }}
       {% endblock %}
 
@@ -90,7 +61,6 @@
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full govuk-!-text-align-left">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              <span class="govuk-caption-m">Applies to sentences of</span>
               {{ partDesc }}
             </h2>
           </div>
@@ -98,7 +68,7 @@
         {{ scheduleOffenceListTable(
           {
             offences: list,
-            showMaxPeriodAndParagraph: true
+            showMaxPeriodAndParagraph: false
           }
         ) }}
       {% endmacro %}

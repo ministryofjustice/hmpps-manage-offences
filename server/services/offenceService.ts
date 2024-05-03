@@ -5,6 +5,7 @@ import {
   OffenceToScheduleMapping,
   PcscLists,
   Schedule,
+  SexualOrViolentLists,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 
 type User = Express.User
@@ -64,6 +65,10 @@ export default class OffenceService {
 
   unlinkOffence(schedulePartId: number, offenceId: number, user: User): Promise<unknown> {
     return this.manageOffencesApi.unlinkOffence(schedulePartId, offenceId, user)
+  }
+
+  async getSexualOrViolentLists(user: User): Promise<SexualOrViolentLists> {
+    return this.manageOffencesApi.getSexualOrViolentLists(user)
   }
 
   async getPcscLists(user: User): Promise<PcscLists> {
