@@ -155,6 +155,7 @@ export interface components {
         | 'PUBLISH_EVENTS'
         | 'UNLINK_SCHEDULES_NOMIS'
         | 'LINK_SCHEDULES_NOMIS'
+        | 'SEXUAL_OFFENCES_FROM_CODES_AND_S15P2'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
@@ -185,7 +186,7 @@ export interface components {
       /** @description Schedule paragraph number that this offence is mapped to */
       paragraphNumber?: string
     }
-    /** @description A list of child offence ID's i.e. inchoate offences linked to this offence */
+    /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
     BasicOffence: {
       /**
        * Format: int64
@@ -262,14 +263,14 @@ export interface components {
       loadDate?: string
       /** @description The schedules linked to this offence */
       schedules?: components['schemas']['LinkedScheduleDetails'][]
-      /** @description If true then this is a inchoate offence i.e. a child of another offence */
+      /** @description If true then this is a inchoate offence; i.e. a child of another offence */
       isChild: boolean
       /**
        * Format: int64
        * @description The parent offence id of an inchoate offence
        */
       parentOffenceId?: number
-      /** @description A list of child offence ID's i.e. inchoate offences linked to this offence */
+      /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
       childOffences?: components['schemas']['BasicOffence'][]
       /** @description The legislation associated to this offence (from actsAndSections in the SDRS response) */
       legislation?: string
@@ -317,7 +318,7 @@ export interface components {
     }
     /** @description Contains the list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1) */
     SexualOrViolentLists: {
-      /** @description Offence is in Schedule 15, Part 2 or Schedule 3 */
+      /** @description Offence is in Schedule 3 or Schedule 15, Part 2 */
       sexual: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence is in Schedule 15, Part 1 */
       violent: components['schemas']['OffenceToScheduleMapping'][]
@@ -391,14 +392,14 @@ export interface components {
       loadDate?: string
       /** @description The schedules linked to this offence */
       schedules?: components['schemas']['LinkedScheduleDetails'][]
-      /** @description If true then this is a inchoate offence i.e. a child of another offence */
+      /** @description If true then this is a inchoate offence; i.e. a child of another offence */
       isChild: boolean
       /**
        * Format: int64
        * @description The parent offence id of an inchoate offence
        */
       parentOffenceId?: number
-      /** @description A list of child offence ID's i.e. inchoate offences linked to this offence */
+      /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
       childOffenceIds?: number[]
       /** @description The legislation associated to this offence (from actsAndSections in the SDRS response) */
       legislation?: string
@@ -467,7 +468,7 @@ export interface components {
       loadDate?: string
       /**
        * Format: date-time
-       * @description The date and time of the most recent successful load if the load was successful this is the same as the loadDate
+       * @description The date and time of the most recent successful load; if the load was successful this is the same as the loadDate
        */
       lastSuccessfulLoadDate?: string
     }

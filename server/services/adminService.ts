@@ -43,7 +43,11 @@ export default class AdminService {
     return toggles
       .sort((a, b) => a.feature.localeCompare(b.feature))
       .map(t => {
-        return { ...t, displayName: FeatureToggleType[t.feature].displayName } as FeatureToggleDisplay
+        return {
+          ...t,
+          displayName: FeatureToggleType[t.feature].displayName,
+          hintText: FeatureToggleType[t.feature].hintText,
+        } as FeatureToggleDisplay
       })
   }
 
