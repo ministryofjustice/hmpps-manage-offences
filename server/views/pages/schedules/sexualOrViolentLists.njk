@@ -10,65 +10,88 @@
 {% set pageId = "schedules" %}
 
 {% block navBar %}
-  {{ navBar("schedules") }}
+    {{ navBar("schedules") }}
 {% endblock %}
 
 {% block aside %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Home",
-        href: "/"
-      },
-      {
-        text: "Sexual or Violent Offences"
-      }
-    ]
-  }) }}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: "/"
+            },
+            {
+                text: "Sexual or Violent Offences"
+            }
+        ]
+    }) }}
 {% endblock %}
 
       {% block content %}
-        <h1 class="govuk-heading-l">
-          Sexual or Violent Offences
-        </h1>
+          <h1 class="govuk-heading-l">
+              Sexual or Violent Offences
+          </h1>
+          <h2 class="govuk-label">
+              The Manage Offences API currently identifies sexual offences by
+              {% if sexualFromCodesAndS15P2 %}
+                  offence codes that begin with SX03 or SX56 or inclusion in Schedule 15 Part 2
+              {% else %}
+                  inclusion in Schedule 3 or Schedule 15 Part 2
+              {% endif %}
+          </h2>
+          <p></p>
+          {{ govukTabs({
+              classes: 'borderless-tabs',
+              items: [
+                  {
+                      label: "Sexual",
+                      id: "sexual-codes-and-s15p2",
+                      panel: {
+                      html: pcscTab(sexualOrViolentLists.sexualCodesAndS15P2, 'Codes that begin with SX03 or SX56 or are in Schedule 15 Part 2',sexualFromCodesAndS15P2, true)
+                  }
+                  },
+                  {
+                      label: "Violent",
+                      id: "violent",
+                      panel: {
+                      html: pcscTab(sexualOrViolentLists.violent, 'Violent Offences (Schedule 15 Part 1)', false, false)
+                  }
+                  },
+                  {
+                      label: "Sexual - Schedule 3 and 15 Part 2",
+                      id: "sexual-s3-and-s15p2",
+                      panel: {
+                      html: pcscTab(sexualOrViolentLists.sexualS3AndS15P2, 'Codes that are in Schedule 3 or Schedule 15 Part 2)', sexualFromS3AndS15P2, true)
+                  }
+                  }
+              ]
+          }) }}
 
-        {{ govukTabs({
-          classes: 'borderless-tabs',
-          items: [
-            {
-              label: "Sexual",
-              id: "sexual",
-              panel: {
-              html: pcscTab(sexualOrViolentLists.sexual, 'Sexual Offences (Schedule 3 or Schedule 15 Part 2)')
-            }
-            },{
-              label: "Violent",
-              id: "violent",
-              panel: {
-                html: pcscTab(sexualOrViolentLists.violent, 'Violent Offences (Schedule 15 Part 1)')
-              }
-            }
-          ]
-        }) }}
-
-        {{ govukBackLink({
-          text: "Back",
-          href: "/"
-        }) }}
+          {{ govukBackLink({
+              text: "Back",
+              href: "/"
+          }) }}
       {% endblock %}
 
-      {% macro pcscTab(list, partDesc) %}
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full govuk-!-text-align-left">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ partDesc }}
-            </h2>
+      {% macro pcscTab(list, partDesc, active, hint) %}
+          <div class="govuk-grid-row">
+              <div class="govuk-grid-column-full govuk-!-text-align-left">
+                  {% if hint %}
+                      <span class="govuk-caption-m"> This table is
+                      {% if active %}
+                      {% else %}
+                          not
+                      {% endif %} currently used by the api to identify sexual offences</span>
+                  {% endif %}
+                  <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+                      {{ partDesc }}
+                  </h2>
+              </div>
           </div>
-        </div>
-        {{ scheduleOffenceListTable(
-          {
-            offences: list,
-            showMaxPeriodAndParagraph: false
-          }
-        ) }}
+          {{ scheduleOffenceListTable(
+              {
+                  offences: list,
+                  showMaxPeriodAndParagraph: false
+              }
+          ) }}
       {% endmacro %}

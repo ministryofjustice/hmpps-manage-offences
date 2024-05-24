@@ -4,6 +4,7 @@ import ScheduleRoutes from './handlers/schedules'
 import LinkOffenceRoutes from './handlers/linkOffence'
 import OffenceService from '../../services/offenceService'
 import PartsAndOffencesRoutes from './handlers/partsAndOffences'
+import AdminService from '../../services/adminService'
 
 export const schedulePaths = {
   LINK_OFFENCE_POST: '/schedules/link-offence', // TODO REMOVE
@@ -12,14 +13,14 @@ export const schedulePaths = {
   LINK_OFFENCE_CREATE: '/schedules/link-offence/create',
 }
 
-export default function Index(offenceService: OffenceService): Router {
+export default function Index(offenceService: OffenceService, adminService: AdminService): Router {
   const router = Router()
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   const scheduleHandler = new ScheduleRoutes(offenceService)
   const linkOffenceRoutes = new LinkOffenceRoutes(offenceService)
-  const partsAndOffencesHandler = new PartsAndOffencesRoutes(offenceService)
+  const partsAndOffencesHandler = new PartsAndOffencesRoutes(offenceService, adminService)
 
   get('/schedules', scheduleHandler.GET)
   get('/schedules/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)

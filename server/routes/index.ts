@@ -14,7 +14,7 @@ export default function Index(services: Services): Router {
   router.use(searchRoutes(services.offenceService, services.adminService))
   router.use(loadResultsRoutes(services.adminService))
   router.use(toggleJobs(services.adminService))
-  router.use(scheduleRoutes(services.offenceService))
+  router.use(scheduleRoutes(services.offenceService, services.adminService))
   router.use(changeHistory(services.adminService))
 
   return router
