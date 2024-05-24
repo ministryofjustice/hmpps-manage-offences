@@ -318,8 +318,10 @@ export interface components {
     }
     /** @description Contains the list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1) */
     SexualOrViolentLists: {
+      /** @description Offence code starts with SX03 or SX56 or is in Schedule 15, Part 2 */
+      sexualCodesAndS15P2: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence is in Schedule 3 or Schedule 15, Part 2 */
-      sexual: components['schemas']['OffenceToScheduleMapping'][]
+      sexualS3AndS15P2: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence is in Schedule 15, Part 1 */
       violent: components['schemas']['OffenceToScheduleMapping'][]
     }
