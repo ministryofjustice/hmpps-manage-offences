@@ -5,6 +5,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% from "partials/offenceDetailsSection.njk" import offenceDetailsSection %}
+{% from "partials/offenceMarkersSection.njk" import offenceMarkersSection %}
 {% from "partials/inchoateTable.njk" import inchoateTable %}
 {% from "partials/scheduleCards.njk" import scheduleCards %}
 
@@ -12,70 +13,70 @@
 {% set pageId = "view-offence" %}
 
 {% block navBar %}
-    {{ navBar('search') }}
+  {{ navBar('search') }}
 {% endblock %}
 
-{% if offenceCodeSearch !== undefined%}
-    {% set searchUrl = "/search/offence-code?offenceCode=" + offenceCodeSearch %}
+{% if offenceCodeSearch !== undefined %}
+  {% set searchUrl = "/search/offence-code?offenceCode=" + offenceCodeSearch %}
 {% else %}
-    {% set searchUrl = "/search/offence-code"%}
+  {% set searchUrl = "/search/offence-code" %}
 {% endif %}
 
 {% block aside %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Search " + (offenceCodeSearch or ''),
-                href: searchUrl
-            },
-            {
-                text: "View " + offence.code
-            }
-        ]
-    }) }}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Search " + (offenceCodeSearch or ''),
+        href: searchUrl
+      },
+      {
+        text: "View " + offence.code
+      }
+    ]
+  }) }}
 {% endblock %}
 
 {% block content %}
 
-    <h1 class="govuk-heading-l">
-        {{ offence.code }}: {{ offence.description }}
-    </h1>
+  <h1 class="govuk-heading-l">
+    {{ offence.code }}: {{ offence.description }}
+  </h1>
 
+  {{ offenceDetailsSection(offence, parentOffence, {nomisActivationFlags: nomisActivationFlags, offenceCodeSearch: offenceCodeSearch, csrfToken: csrfToken}) }}
+  {{ offenceMarkersSection(offenceMarkers) }}
 
-    {{ offenceDetailsSection(offence, parentOffence, {nomisActivationFlags: nomisActivationFlags, offenceCodeSearch: offenceCodeSearch, csrfToken: csrfToken}) }}
+  <div class="govuk-grid-row govuk-body">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m">Linked schedules</h2>
+      {% if offence.schedules.length == 0 %}
+        <p class="govuk-!-margin-bottom-0">None</p>
+      {% else %}
+        {{ scheduleCards(offence.schedules) }}
+      {% endif %}
 
-    <div class="govuk-grid-row govuk-body">
-        <div class="govuk-grid-column-full">
-            <h2 class="govuk-heading-m">Linked schedules</h2>
-            {% if offence.schedules.length == 0 %}
-                <p class="govuk-!-margin-bottom-0">None</p>
-            {% else %}
-                {{ scheduleCards(offence.schedules) }}
-            {% endif %}
-
-        </div>
     </div>
+  </div>
 
-    {% if not offence.isChild %}
-        <div class="govuk-grid-row govuk-body">
-            <div class="govuk-grid-column-full">
-                {% if not childOffences or childOffences.length == 0 %}
-                    <h1 class="govuk-heading-m">Associated inchoate offences</h1>
-                    <p class="govuk-!-margin-bottom-0">None</p>
-                {% else %}
-                    <h1 class="govuk-heading-m">Associated inchoate offences</h1>
-                    {{ inchoateTable(childOffences) }}
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
+  {% if not offence.isChild %}
+    <div class="govuk-grid-row govuk-body">
+      <div class="govuk-grid-column-full">
+        {% if not childOffences or childOffences.length == 0 %}
+          <h1 class="govuk-heading-m">Associated inchoate offences</h1>
+          <p class="govuk-!-margin-bottom-0">None</p>
+        {% else %}
+          <h1 class="govuk-heading-m">Associated inchoate offences</h1>
+          {{ inchoateTable(childOffences) }}
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
 
-    {{ govukButton({
-        classes: "govuk-button--secondary govuk-!-margin-right-2",
-        text: "Back",
-        preventDoubleClick: true,
-        href: searchUrl,
-        attributes: {  'data-qa': 'Back-view' }
-    }) }}
+  {{ govukButton({
+    classes: "govuk-button--secondary govuk-!-margin-right-2",
+    text: "Back",
+    preventDoubleClick: true,
+    href: searchUrl,
+    attributes: {  'data-qa': 'Back-view' }
+  }) }}
 
 {% endblock %}

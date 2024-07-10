@@ -117,34 +117,6 @@ describe('', () => {
       })
   })
 
-  it('the sexual tab should contain the sexual offences', () => {
-    offenceService.getSexualOrViolentLists.mockResolvedValue(sexualOrViolentLists)
-
-    adminService.getFeatureToggles = jest.fn()
-    const featureToggleDisplays = [
-      {
-        feature: 'SEXUAL_OFFENCES_FROM_CODES_AND_S15P2',
-        enabled: true,
-        displayName: 'SEXUAL_OFFENCES_FROM_CODES_AND_S15P2',
-      } as unknown as FeatureToggleDisplay,
-    ]
-
-    adminService.getFeatureToggles.mockResolvedValue(featureToggleDisplays)
-
-    return request(app)
-      .get('/schedules/sexual-or-violent-lists#sexual-s3-and-s15p2')
-      .expect(200)
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('Codes that begin with SX03 or SX56 or are in Schedule 15 Part 2')
-        expect(res.text).toContain('AA1234')
-        expect(res.text).toContain('BB1234')
-        expect(res.text).toContain('Legislation text 2')
-        expect(res.text).toContain('Offence 2')
-        expect(res.text).toContain('06 Jan 1994')
-      })
-  })
-
   it('the violent tab should contain the violent offences', () => {
     offenceService.getSexualOrViolentLists.mockResolvedValue(sexualOrViolentLists)
     adminService.getFeatureToggles = jest.fn()

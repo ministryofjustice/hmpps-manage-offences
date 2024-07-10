@@ -1,0 +1,32 @@
+{% macro offenceMarkersSection(offenceMarkers) %}
+  <div class="govuk-grid-row govuk-body">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m">Offence Markers: PCSC, Violent or Sexual</h2>
+      {% if offenceMarkers.markersExist %}
+        <ul class="govuk-list govuk-list--bullet" id="offence-markers">
+          {% if offenceMarkers.isSexual %}
+            <li>Sexual</li>
+          {% endif %}
+          {% if offenceMarkers.isViolent %}
+            <li>Violent</li>
+          {% endif %}
+          {% if offenceMarkers.inListA %}
+            <li>SDS >7 years between 01 April 2020 and 28 June 2022</li>
+          {% endif %}
+          {% if offenceMarkers.inListB %}
+            <li>SDS between 4 and 7 years after 28 June 2022</li>
+          {% endif %}
+          {% if offenceMarkers.inListC %}
+            <li>Sec250 >7 years after 28 June 2022</li>
+          {% endif %}
+          {% if offenceMarkers.inListD %}
+            <li>SDS >7 years after 28 June 2022</li>
+          {% endif %}
+        </ul>
+      {% else %}
+        <p id="no-offence-markers" class="govuk-!-margin-bottom-0">None</p>
+      {% endif %}
+    </div>
+  </div>
+
+{% endmacro %}
