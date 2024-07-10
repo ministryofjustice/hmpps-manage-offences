@@ -5,22 +5,22 @@
       {% if offenceMarkers.markersExist %}
         <ul class="govuk-list govuk-list--bullet" id="offence-markers">
           {% if offenceMarkers.isSexual %}
-            <li>Sexual</li>
+            <li>SDS Early Release Exclusion: Sexual</li>
           {% endif %}
           {% if offenceMarkers.isViolent %}
-            <li>Violent</li>
+            <li>SDS Early Release Exclusion: Violent</li>
           {% endif %}
           {% if offenceMarkers.inListA %}
-            <li>SDS >7 years between 01 April 2020 and 28 June 2022</li>
+            <li>SDS+: SDS >7 years between 01 April 2020 and 28 June 2022</li>
           {% endif %}
           {% if offenceMarkers.inListB %}
-            <li>SDS between 4 and 7 years after 28 June 2022</li>
+            <li>SDS+: SDS between 4 and 7 years after 28 June 2022</li>
           {% endif %}
           {% if offenceMarkers.inListC %}
-            <li>Sec250 >7 years after 28 June 2022</li>
+            <li>SDS+: Sec250 >7 years after 28 June 2022</li>
           {% endif %}
           {% if offenceMarkers.inListD %}
-            <li>SDS >7 years after 28 June 2022</li>
+            <li>SDS+: SDS >7 years after 28 June 2022</li>
           {% endif %}
         </ul>
       {% else %}
