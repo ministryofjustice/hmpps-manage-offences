@@ -2,6 +2,7 @@ import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import {
   LinkOffence,
   Offence,
+  OffenceMarkers,
   OffenceToScheduleMapping,
   PcscLists,
   Schedule,
@@ -73,5 +74,33 @@ export default class OffenceService {
 
   async getPcscLists(user: User): Promise<PcscLists> {
     return this.manageOffencesApi.getPcscLists(user)
+  }
+
+  async getOffenceMarkers(offence: Offence, user: User): Promise<OffenceMarkers> {
+    const [sexualOrViolentLists, pcscLists] = await Promise.all([
+      this.getSexualOrViolentLists(user),
+      this.getPcscLists(user),
+    ])
+
+    const isCodeInList = (list: { code: string }[], code: string) => list.some(item => item.code === code)
+
+    const isSexual = isCodeInList(sexualOrViolentLists.sexualCodesAndS15P2, offence.code)
+    const isViolent = isCodeInList(sexualOrViolentLists.violent, offence.code)
+    const inListA = isCodeInList(pcscLists.listA, offence.code)
+    const inListB = isCodeInList(pcscLists.listB, offence.code)
+    const inListC = isCodeInList(pcscLists.listC, offence.code)
+    const inListD = isCodeInList(pcscLists.listD, offence.code)
+
+    const markersExist = isSexual || isViolent || inListA || inListB || inListC || inListD
+
+    return {
+      isSexual,
+      isViolent,
+      inListA,
+      inListB,
+      inListC,
+      inListD,
+      markersExist,
+    }
   }
 }

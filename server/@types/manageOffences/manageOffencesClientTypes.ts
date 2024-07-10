@@ -19,3 +19,13 @@ export type NomisHistoryRecords = {
   updatedOffences: NomisChangeHistory[]
   statutes: NomisChangeHistory[]
 }
+
+export type OffenceMarkers = {
+  markersExist: boolean
+  isSexual: boolean
+  isViolent: boolean
+  inListA: boolean
+  inListB: boolean
+  inListC: boolean
+  inListD: boolean
+}
