@@ -43,8 +43,8 @@ describe('VIEW_OFFENCE /', () => {
 
     expect(offenceMarkers.length).toBe(1)
     expect(offenceMarkers.find('li').length).toBe(2)
-    expect(offenceMarkers.text()).toContain('Sexual')
-    expect(offenceMarkers.text()).toContain('SDS >7 years between 01 April 2020 and 28 June 2022')
+    expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: Sexual')
+    expect(offenceMarkers.text()).toContain('SDS+: SDS >7 years between 01 April 2020 and 28 June 2022')
     expect($('h1').text().trim()).toContain('AB: Offence 1')
   })
 })
