@@ -5,6 +5,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% from "partials/offenceDetailsSection.njk" import offenceDetailsSection %}
+{% from "partials/offenceMarkersSection.njk" import offenceMarkersSection %}
 {% from "partials/inchoateTable.njk" import inchoateTable %}
 {% from "partials/scheduleCards.njk" import scheduleCards %}
 
@@ -41,38 +42,8 @@
     {{ offence.code }}: {{ offence.description }}
   </h1>
 
-
   {{ offenceDetailsSection(offence, parentOffence, {nomisActivationFlags: nomisActivationFlags, offenceCodeSearch: offenceCodeSearch, csrfToken: csrfToken}) }}
-
-  <div class="govuk-grid-row govuk-body">
-    <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-m">Offence Markers: PCSC, Violent or Sexual</h2>
-      {% if offenceMarkers.markersExist %}
-        <ul class="govuk-list" id="offence-markers">
-          {% if offenceMarkers.isSexual %}
-            <li>Sexual</li>
-          {% endif %}
-          {% if offenceMarkers.isViolent %}
-            <li>Violent</li>
-          {% endif %}
-          {% if offenceMarkers.inListA %}
-            <li>SDS >7 years between 01 April 2020 and 28 June 2022</li>
-          {% endif %}
-          {% if offenceMarkers.inListB %}
-            <li>SDS between 4 and 7 years after 28 June 2022</li>
-          {% endif %}
-          {% if offenceMarkers.inListC %}
-            <li>Sec250 >7 years after 28 June 2022</li>
-          {% endif %}
-          {% if offenceMarkers.inListD %}
-            <li>SDS >7 years after 28 June 2022</li>
-          {% endif %}
-        </ul>
-      {% else %}
-        <p id="no-offence-markers" class="govuk-!-margin-bottom-0">None</p>
-      {% endif %}
-    </div>
-  </div>
+  {{ offenceMarkersSection(offenceMarkers) }}
 
   <div class="govuk-grid-row govuk-body">
     <div class="govuk-grid-column-full">
