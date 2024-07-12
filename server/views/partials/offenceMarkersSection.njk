@@ -7,6 +7,12 @@
           {% if offenceMarkers.isSexual %}
             <li>SDS Early Release Exclusion: Sexual</li>
           {% endif %}
+          {% if offenceMarkers.isDomesticAbuse %}
+            <li>SDS Early Release Exclusion: Domestic Abuse</li>
+          {% endif %}
+          {% if offenceMarkers.isNationalSecurity %}
+            <li>SDS Early Release Exclusion: National Security</li>
+          {% endif %}
           {% if offenceMarkers.isViolent %}
             <li>SDS Early Release Exclusion: Violent</li>
           {% endif %}

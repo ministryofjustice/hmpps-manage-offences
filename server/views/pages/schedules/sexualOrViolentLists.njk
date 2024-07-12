@@ -6,85 +6,83 @@
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
-{% set pageTitle = applicationName + " - Sexual or Violent Offences" %}
+{% set pageTitle = applicationName + " - SDS Early Release Exclusions" %}
 {% set pageId = "schedules" %}
 
 {% block navBar %}
-    {{ navBar("schedules") }}
+  {{ navBar("schedules") }}
 {% endblock %}
 
 {% block aside %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Home",
-                href: "/"
-            },
-            {
-                text: "Sexual or Violent Offences"
-            }
-        ]
-    }) }}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: "/"
+      },
+      {
+        text: "SDS Early Release Exclusions"
+      }
+    ]
+  }) }}
 {% endblock %}
 
       {% block content %}
-          <h1 class="govuk-heading-l">
-              Sexual or Violent Offences
-          </h1>
-          <h2 class="govuk-label">
-              The Manage Offences API currently identifies sexual offences by
-              {% if sexualFromCodesAndS15P2 %}
-                  offence codes that begin with SX03 or SX56 or inclusion in Schedule 15 Part 2
-              {% else %}
-                  inclusion in Schedule 3 or Schedule 15 Part 2
-              {% endif %}
-          </h2>
-          <p></p>
-          {{ govukTabs({
-              classes: 'borderless-tabs',
-              items: [
-                  {
-                      label: "Sexual",
-                      id: "sexual-codes-and-s15p2",
-                      panel: {
-                      html: pcscTab(sexualOrViolentLists.sexualCodesAndS15P2, 'Codes that begin with SX03 or SX56 or are in Schedule 15 Part 2',sexualFromCodesAndS15P2, true)
-                  }
-                  },
-                  {
-                      label: "Violent",
-                      id: "violent",
-                      panel: {
-                      html: pcscTab(sexualOrViolentLists.violent, 'Violent Offences (Schedule 15 Part 1)', false, false)
-                  }
-                  }
-              ]
-          }) }}
+        <h1 class="govuk-heading-l">
+          Offences that are excluded from SDS Early Release
+        </h1>
+        {{ govukTabs({
+          classes: 'borderless-tabs',
+          items: [
+            {
+              label: "Sexual",
+              id: "sexua",
+              panel: {
+              html: pcscTab(sexualOrViolentLists.sexual, 'Offences that relate to the Sexual Offences Act 2003 or where the code begins with SX03 or SX56 or the offence is in Schedule 15 Part 2')
+            }
+            },
+            {
+              label: "Domestic Abuse",
+              id: "domestic-abuse",
+              panel: {
+              html: pcscTab(sexualOrViolentLists.domesticAbuse, 'Offences that relate to Domestic Abuse')
+            }
+            },
+            {
+              label: "National security",
+              id: "national-security",
+              panel: {
+              html: pcscTab(sexualOrViolentLists.violent, 'Offences that relate to National Security legislation')
+            }
+            },
+            {
+              label: "Violent",
+              id: "violent",
+              panel: {
+              html: pcscTab(sexualOrViolentLists.violent, 'Violent Offences (Schedule 15 Part 1)')
+            }
+            }
+          ]
+        }) }}
 
-          {{ govukBackLink({
-              text: "Back",
-              href: "/"
-          }) }}
+        {{ govukBackLink({
+          text: "Back",
+          href: "/"
+        }) }}
       {% endblock %}
 
-      {% macro pcscTab(list, partDesc, active, hint) %}
-          <div class="govuk-grid-row">
-              <div class="govuk-grid-column-full govuk-!-text-align-left">
-                  {% if hint %}
-                      <span class="govuk-caption-m"> This table is
-                      {% if active %}
-                      {% else %}
-                          not
-                      {% endif %} currently used by the api to identify sexual offences</span>
-                  {% endif %}
-                  <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                      {{ partDesc }}
-                  </h2>
-              </div>
+      {% macro pcscTab(list, partDesc) %}
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full govuk-!-text-align-left">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              {{ partDesc }}
+            </h2>
           </div>
-          {{ scheduleOffenceListTable(
-              {
-                  offences: list,
-                  showMaxPeriodAndParagraph: false
-              }
-          ) }}
+        </div>
+        {{ scheduleOffenceListTable(
+          {
+            offences: list,
+            showMaxPeriodAndParagraph: false
+          }
+        ) }}
       {% endmacro %}

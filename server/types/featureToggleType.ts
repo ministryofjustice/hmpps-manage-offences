@@ -29,14 +29,6 @@ export default class FeatureToggleType {
     'Link schedules NOMIS (migration task)',
   )
 
-  public static readonly SEXUAL_OFFENCES_FROM_CODES_AND_S15P2 = new FeatureToggleType(
-    FeatureToggleEnum.SEXUAL_OFFENCES_FROM_CODES_AND_S15P2,
-    'Sexual Offences from Schedule 15 Part 2 and codes that begin with SX03 and SX56',
-    `When enabled this will use Schedule 15 Part 2 and offences with codes that begin with SX03 and SX56 
-    to determine if the offence is sexual. When disabled it will use offences that are on Schedule 3 and 
-    Schedule 15 Part 2 to make this determination.`,
-  )
-
   private constructor(
     public readonly featureName: FeatureToggleEnum,
     public readonly displayName: string,
