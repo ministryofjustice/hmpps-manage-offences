@@ -155,7 +155,6 @@ export interface components {
         | 'PUBLISH_EVENTS'
         | 'UNLINK_SCHEDULES_NOMIS'
         | 'LINK_SCHEDULES_NOMIS'
-        | 'SEXUAL_OFFENCES_FROM_CODES_AND_S15P2'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
@@ -314,15 +313,17 @@ export interface components {
        * @description Categories for the offence
        * @enum {string}
        */
-      schedulePart: 'SEXUAL' | 'VIOLENT' | 'NONE'
+      schedulePart: 'SEXUAL' | 'DOMESTIC_ABUSE' | 'VIOLENT' | 'NONE' | 'NATIONAL_SECURITY'
     }
-    /** @description Contains the list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1) */
+    /** @description Contains the list of all the offences that are sexual, domestic abuse, national security or violent */
     SexualOrViolentLists: {
-      /** @description Offence code starts with SX03 or SX56 or is in Schedule 15, Part 2 */
-      sexualCodesAndS15P2: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description Offence is in Schedule 3 or Schedule 15, Part 2 */
-      sexualS3AndS15P2: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description Offence is in Schedule 15, Part 1 */
+      /** @description Offence falls under the Sexual category */
+      sexual: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence falls under the Domestic Abuse category */
+      domesticAbuse: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence falls under the National Security category */
+      nationalSecurity: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence falls under the Violent category */
       violent: components['schemas']['OffenceToScheduleMapping'][]
     }
     PcscLists: {

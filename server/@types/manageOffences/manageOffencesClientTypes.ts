@@ -23,6 +23,8 @@ export type NomisHistoryRecords = {
 export type OffenceMarkers = {
   markersExist: boolean
   isSexual: boolean
+  isDomesticAbuse: boolean
+  isNationalSecurity: boolean
   isViolent: boolean
   inListA: boolean
   inListB: boolean

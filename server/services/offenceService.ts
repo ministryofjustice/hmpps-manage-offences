@@ -84,17 +84,22 @@ export default class OffenceService {
 
     const isCodeInList = (list: { code: string }[], code: string) => list.some(item => item.code === code)
 
-    const isSexual = isCodeInList(sexualOrViolentLists.sexualCodesAndS15P2, offence.code)
+    const isSexual = isCodeInList(sexualOrViolentLists.sexual, offence.code)
+    const isDomesticAbuse = isCodeInList(sexualOrViolentLists.domesticAbuse, offence.code)
+    const isNationalSecurity = isCodeInList(sexualOrViolentLists.nationalSecurity, offence.code)
     const isViolent = isCodeInList(sexualOrViolentLists.violent, offence.code)
     const inListA = isCodeInList(pcscLists.listA, offence.code)
     const inListB = isCodeInList(pcscLists.listB, offence.code)
     const inListC = isCodeInList(pcscLists.listC, offence.code)
     const inListD = isCodeInList(pcscLists.listD, offence.code)
 
-    const markersExist = isSexual || isViolent || inListA || inListB || inListC || inListD
+    const markersExist =
+      isSexual || isDomesticAbuse || isNationalSecurity || isViolent || inListA || inListB || inListC || inListD
 
     return {
       isSexual,
+      isDomesticAbuse,
+      isNationalSecurity,
       isViolent,
       inListA,
       inListB,
