@@ -36,7 +36,7 @@
                         {{ offence.endDate | dateFormat }}
                     </td>
                     <td class="govuk-table__cell">
-                        {{ offence.legislationText }}
+                        {{ offence.legislationText or offence.legislation }}
                     </td>
                     {% if attributes.showMaxPeriodAndParagraph %}
                         <td class="govuk-table__cell">
