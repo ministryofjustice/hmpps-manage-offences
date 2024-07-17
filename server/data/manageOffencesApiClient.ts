@@ -9,7 +9,7 @@ import {
   OffenceToScheduleMapping,
   PcscLists,
   Schedule,
-  SexualOrViolentLists,
+  SdsExclusionLists,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 import AuthTokenService from './authTokenService'
 
@@ -153,13 +153,13 @@ export default class ManageOffencesApiClient extends RestClient {
     )
   }
 
-  getSexualOrViolentLists(user: User): Promise<SexualOrViolentLists> {
+  getSdsExclusionLists(user: User): Promise<SdsExclusionLists> {
     return this.get(
       {
-        path: '/schedule/sexual-or-violent-lists',
+        path: '/schedule/sds-early-release-exclusion-lists',
       },
       { token: user.token },
-    ) as Promise<SexualOrViolentLists>
+    ) as Promise<SdsExclusionLists>
   }
 
   getPcscLists(user: User): Promise<PcscLists> {

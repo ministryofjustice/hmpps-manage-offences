@@ -8,7 +8,7 @@ export type FeatureToggle = components['schemas']['FeatureToggle']
 export type Schedule = components['schemas']['Schedule']
 export type NomisChangeHistory = components['schemas']['NomisChangeHistory']
 export type PcscLists = components['schemas']['PcscLists']
-export type SexualOrViolentLists = components['schemas']['SexualOrViolentLists']
+export type SdsExclusionLists = components['schemas']['SdsExclusionLists']
 export type DateInput = {
   day: number
   month: number
@@ -26,6 +26,7 @@ export type OffenceMarkers = {
   isDomesticAbuse: boolean
   isNationalSecurity: boolean
   isViolent: boolean
+  isTerrorism: boolean
   inListA: boolean
   inListB: boolean
   inListC: boolean
