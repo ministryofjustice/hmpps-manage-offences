@@ -34,19 +34,19 @@ export interface paths {
      */
     post: operations['deactivateNomisOffence']
   }
-  '/schedule/sexual-or-violent': {
+  '/schedule/sds-exclusions': {
     /**
      * Determine if the passed in offence codes are either sexual or violent offences
      * @description This endpoint will return a list of offences and whether they are violent or sexual offences
      */
-    get: operations['getSexualOrViolentInformation']
+    get: operations['getSdsExclusionInformation']
   }
-  '/schedule/sexual-or-violent-lists': {
+  '/schedule/sds-exclusion-lists': {
     /**
      * Retrieves the list of all the offences that are either sexual or violent
      * @description This endpoint will return a list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1)
      */
-    get: operations['getSexualOrViolentLists']
+    get: operations['getSdsExclusionLists']
   }
   '/schedule/pcsc-lists': {
     /**
@@ -307,16 +307,16 @@ export interface components {
       offences?: components['schemas']['OffenceToScheduleMapping'][]
     }
     /** @description Categorises the offence based on the schedule it appears in */
-    OffenceSexualOrViolent: {
+    OffenceSdsExclusion: {
       offenceCode: string
       /**
        * @description Categories for the offence
        * @enum {string}
        */
-      schedulePart: 'SEXUAL' | 'DOMESTIC_ABUSE' | 'VIOLENT' | 'NONE' | 'NATIONAL_SECURITY'
+      schedulePart: 'SEXUAL' | 'DOMESTIC_ABUSE' | 'VIOLENT' | 'NONE' | 'NATIONAL_SECURITY' | 'TERRORISM'
     }
-    /** @description Contains the list of all the offences that are sexual, domestic abuse, national security or violent */
-    SexualOrViolentLists: {
+    /** @description Contains the list of all the offences that are sexual, domestic abuse, national security, terrorism or violent */
+    SdsExclusionLists: {
       /** @description Offence falls under the Sexual category */
       sexual: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence falls under the Domestic Abuse category */
@@ -325,6 +325,8 @@ export interface components {
       nationalSecurity: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence falls under the Violent category */
       violent: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence falls under the Terrorism category */
+      terrorism: components['schemas']['OffenceToScheduleMapping'][]
     }
     PcscLists: {
       /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
@@ -606,7 +608,7 @@ export interface operations {
    * Determine if the passed in offence codes are either sexual or violent offences
    * @description This endpoint will return a list of offences and whether they are violent or sexual offences
    */
-  getSexualOrViolentInformation: {
+  getSdsExclusionInformation: {
     parameters: {
       query: {
         offenceCodes: string[]
@@ -616,7 +618,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['OffenceSexualOrViolent'][]
+          'application/json': components['schemas']['OffenceSdsExclusion'][]
         }
       }
     }
@@ -625,12 +627,12 @@ export interface operations {
    * Retrieves the list of all the offences that are either sexual or violent
    * @description This endpoint will return a list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1)
    */
-  getSexualOrViolentLists: {
+  getSdsExclusionLists: {
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SexualOrViolentLists']
+          'application/json': components['schemas']['SdsExclusionLists']
         }
       }
     }

@@ -27,11 +27,11 @@ export default class PartsAndOffencesRoutes {
     })
   }
 
-  GET_SEXUAL_AND_VIOLENT_LISTS = async (req: Request, res: Response): Promise<void> => {
-    const sexualOrViolentLists = await this.offenceService.getSexualOrViolentLists(res.locals.user)
+  GET_SDS_EXCLUSION_LISTS = async (req: Request, res: Response): Promise<void> => {
+    const sdsExclusionLists = await this.offenceService.getSdsExclusionLists(res.locals.user)
 
-    res.render('pages/schedules/sexualOrViolentLists', {
-      sexualOrViolentLists,
+    res.render('pages/schedules/sdsExclusionLists', {
+      sdsExclusionLists,
     })
   }
 }

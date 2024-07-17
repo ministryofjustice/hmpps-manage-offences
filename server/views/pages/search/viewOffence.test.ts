@@ -47,4 +47,23 @@ describe('VIEW_OFFENCE /', () => {
     expect(offenceMarkers.text()).toContain('SDS+: SDS >7 years between 01 April 2020 and 28 June 2022')
     expect($('h1').text().trim()).toContain('AB: Offence 1')
   })
+
+  it('violent marker should be rendered correctly', () => {
+    const context: Record<string, unknown> = {
+      user: { roles: [] },
+      offence: { code: 'AB', description: 'Offence 1' },
+      offenceMarkers: {
+        isViolent: true,
+        markersExist: true,
+      },
+    }
+    const $ = cheerio.load(compiledTemplate.render(context))
+    const offenceMarkers = $('#offence-markers')
+
+    expect(offenceMarkers.length).toBe(1)
+    expect(offenceMarkers.find('li').length).toBe(1)
+    expect(offenceMarkers.text()).toContain(
+      'SDS Early Release Exclusion: Violent (for sentences of four years and over)',
+    )
+  })
 })

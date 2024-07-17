@@ -36,30 +36,37 @@
           items: [
             {
               label: "Sexual",
-              id: "sexua",
+              id: "sexual",
               panel: {
-              html: pcscTab(sexualOrViolentLists.sexual, 'Offences that relate to the Sexual Offences Act 2003 or where the code begins with SX03 or SX56 or the offence is in Schedule 15 Part 2')
+              html: pcscTab(sdsExclusionLists.sexual, 'Offences that relate to the Sexual Offences Act 2003 or where the code begins with SX03 or SX56 or the offence is in Schedule 15 Part 2')
             }
             },
             {
               label: "Domestic Abuse",
               id: "domestic-abuse",
               panel: {
-              html: pcscTab(sexualOrViolentLists.domesticAbuse, 'Offences that relate to Domestic Abuse')
+              html: pcscTab(sdsExclusionLists.domesticAbuse, 'Offences that relate to Domestic Abuse')
             }
             },
             {
               label: "National security",
               id: "national-security",
               panel: {
-              html: pcscTab(sexualOrViolentLists.nationalSecurity, 'Offences that relate to National Security legislation')
+              html: pcscTab(sdsExclusionLists.nationalSecurity, 'Offences that relate to National Security legislation')
+            }
+            },
+            {
+              label: "Terrorism",
+              id: "terrorism",
+              panel: {
+              html: pcscTab(sdsExclusionLists.terrorism, 'Offences that relate to Terrorism legislation')
             }
             },
             {
               label: "Violent",
               id: "violent",
               panel: {
-              html: pcscTab(sexualOrViolentLists.violent, 'Violent Offences (Schedule 15 Part 1)')
+              html: pcscTab(sdsExclusionLists.violent, 'Violent Offences (Schedule 15 Part 1)', 'Violent offences are only excluded for sentences of four years and over.')
             }
             }
           ]
@@ -71,12 +78,13 @@
         }) }}
       {% endblock %}
 
-      {% macro pcscTab(list, partDesc) %}
+      {% macro pcscTab(list, partDesc, partExtraText) %}
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full govuk-!-text-align-left">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
               {{ partDesc }}
             </h2>
+            <p> {{ partExtraText }} </p>
           </div>
         </div>
         {{ scheduleOffenceListTable(

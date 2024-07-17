@@ -6,7 +6,7 @@ import {
   OffenceToScheduleMapping,
   PcscLists,
   Schedule,
-  SexualOrViolentLists,
+  SdsExclusionLists,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 
 type User = Express.User
@@ -68,8 +68,8 @@ export default class OffenceService {
     return this.manageOffencesApi.unlinkOffence(schedulePartId, offenceId, user)
   }
 
-  async getSexualOrViolentLists(user: User): Promise<SexualOrViolentLists> {
-    return this.manageOffencesApi.getSexualOrViolentLists(user)
+  async getSdsExclusionLists(user: User): Promise<SdsExclusionLists> {
+    return this.manageOffencesApi.getSdsExclusionLists(user)
   }
 
   async getPcscLists(user: User): Promise<PcscLists> {
@@ -77,30 +77,37 @@ export default class OffenceService {
   }
 
   async getOffenceMarkers(offence: Offence, user: User): Promise<OffenceMarkers> {
-    const [sexualOrViolentLists, pcscLists] = await Promise.all([
-      this.getSexualOrViolentLists(user),
-      this.getPcscLists(user),
-    ])
+    const [sdsExclusionLists, pcscLists] = await Promise.all([this.getSdsExclusionLists(user), this.getPcscLists(user)])
 
     const isCodeInList = (list: { code: string }[], code: string) => list.some(item => item.code === code)
 
-    const isSexual = isCodeInList(sexualOrViolentLists.sexual, offence.code)
-    const isDomesticAbuse = isCodeInList(sexualOrViolentLists.domesticAbuse, offence.code)
-    const isNationalSecurity = isCodeInList(sexualOrViolentLists.nationalSecurity, offence.code)
-    const isViolent = isCodeInList(sexualOrViolentLists.violent, offence.code)
+    const isSexual = isCodeInList(sdsExclusionLists.sexual, offence.code)
+    const isDomesticAbuse = isCodeInList(sdsExclusionLists.domesticAbuse, offence.code)
+    const isNationalSecurity = isCodeInList(sdsExclusionLists.nationalSecurity, offence.code)
+    const isViolent = isCodeInList(sdsExclusionLists.violent, offence.code)
+    const isTerrorism = isCodeInList(sdsExclusionLists.violent, offence.code)
     const inListA = isCodeInList(pcscLists.listA, offence.code)
     const inListB = isCodeInList(pcscLists.listB, offence.code)
     const inListC = isCodeInList(pcscLists.listC, offence.code)
     const inListD = isCodeInList(pcscLists.listD, offence.code)
 
     const markersExist =
-      isSexual || isDomesticAbuse || isNationalSecurity || isViolent || inListA || inListB || inListC || inListD
+      isSexual ||
+      isDomesticAbuse ||
+      isNationalSecurity ||
+      isViolent ||
+      isTerrorism ||
+      inListA ||
+      inListB ||
+      inListC ||
+      inListD
 
     return {
       isSexual,
       isDomesticAbuse,
       isNationalSecurity,
       isViolent,
+      isTerrorism,
       inListA,
       inListB,
       inListC,
