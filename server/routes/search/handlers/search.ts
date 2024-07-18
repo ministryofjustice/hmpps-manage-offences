@@ -25,10 +25,15 @@ export default class SearchRoutes {
       res.locals.user,
       res.locals.user.roles,
     )
+
     const childOffences =
       !offence.isChild && (await this.offenceService.getOffencesByIds(offence.childOffenceIds, res.locals.user))
-    const parentOffence =
-      offence.isChild && (await this.offenceService.getOffenceById(offence.parentOffenceId, res.locals.user))
+
+    let parentOffence
+    if (offence.parentOffenceId != null) {
+      parentOffence =
+        offence.isChild && (await this.offenceService.getOffenceById(offence.parentOffenceId, res.locals.user))
+    }
     const offenceMarkers = await this.offenceService.getOffenceMarkers(offence, res.locals.user)
     res.render('pages/search/viewOffence', {
       offence,

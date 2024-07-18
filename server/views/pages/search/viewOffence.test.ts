@@ -117,4 +117,45 @@ describe('VIEW_OFFENCE /', () => {
     expect(offenceMarkers.find('li').length).toBe(1)
     expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: National Security')
   })
+
+  it('orphaned inchoate offences should display a warning banner', () => {
+    const context: Record<string, unknown> = {
+      user: { roles: [] },
+      offence: { code: 'AB', description: 'Offence 1', isChild: true },
+      offenceMarkers: {
+        isNationalSecurity: true,
+        markersExist: false,
+      },
+    }
+    const $ = cheerio.load(compiledTemplate.render(context))
+    const inchoateBanner = $('#inchoate-banner')
+
+    expect(inchoateBanner.text()).toContain(
+      'This is an Inchoate Offence that does not have a Parent Offence associated with it.',
+    )
+
+    const parentOffenceLabel = $('#parent-offence-warning')
+
+    expect(parentOffenceLabel.text()).toContain('No parent offence specified!')
+  })
+
+  it('warning banner should not be present if there is a parent offence', () => {
+    const context: Record<string, unknown> = {
+      user: { roles: [] },
+      offence: { code: 'AB', description: 'Offence 1', isChild: true, parentOffenceId: 1241 },
+      parentOffence: { id: 1241, code: 'AB', description: 'Parent 1' },
+      offenceMarkers: {
+        isNationalSecurity: true,
+        markersExist: false,
+      },
+    }
+    const $ = cheerio.load(compiledTemplate.render(context))
+    const inchoateBanner = $('#inchoate-banner')
+
+    expect(inchoateBanner.text()).not.toContain(
+      'This is an Inchoate Offence that does not have a Parent Offence associated with it.',
+    )
+    const parentOffenceLabel = $('#parent-offence-link')
+    expect(parentOffenceLabel.text()).toContain('AB: Parent 1')
+  })
 })

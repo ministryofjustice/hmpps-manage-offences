@@ -42,6 +42,20 @@
     {{ offence.code }}: {{ offence.description }}
   </h1>
 
+  {%- from "moj/components/banner/macro.njk" import mojBanner -%}
+
+  {% if offence.isChild and not offence.parentOffenceId %}
+    {% set parentOffenceNotPresent %}
+      <h2 class="govuk-heading-m">Important</h2>
+      <p class="govuk-body" id="inchoate-banner">This is an Inchoate Offence that does not have a Parent Offence associated with it.</p>
+    {% endset %}
+    {{ mojBanner({
+      type: ' ',
+      html: parentOffenceNotPresent
+    }) }}
+
+  {% endif %}
+
   {{ offenceDetailsSection(offence, parentOffence, {nomisActivationFlags: nomisActivationFlags, offenceCodeSearch: offenceCodeSearch, csrfToken: csrfToken}) }}
   {{ offenceMarkersSection(offenceMarkers) }}
 
