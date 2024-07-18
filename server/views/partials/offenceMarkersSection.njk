@@ -13,6 +13,9 @@
           {% if offenceMarkers.isNationalSecurity %}
             <li>SDS Early Release Exclusion: National Security</li>
           {% endif %}
+          {% if offenceMarkers.isTerrorism %}
+            <li>SDS Early Release Exclusion: Terrorism</li>
+          {% endif %}
           {% if offenceMarkers.isViolent %}
             <li>SDS Early Release Exclusion: Violent (for sentences of four years and over)</li>
           {% endif %}

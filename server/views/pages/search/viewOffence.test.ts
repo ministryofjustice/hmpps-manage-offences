@@ -66,4 +66,55 @@ describe('VIEW_OFFENCE /', () => {
       'SDS Early Release Exclusion: Violent (for sentences of four years and over)',
     )
   })
+
+  it('terrorism marker should be rendered correctly', () => {
+    const context: Record<string, unknown> = {
+      user: { roles: [] },
+      offence: { code: 'AB', description: 'Offence 1' },
+      offenceMarkers: {
+        isTerrorism: true,
+        markersExist: true,
+      },
+    }
+    const $ = cheerio.load(compiledTemplate.render(context))
+    const offenceMarkers = $('#offence-markers')
+
+    expect(offenceMarkers.length).toBe(1)
+    expect(offenceMarkers.find('li').length).toBe(1)
+    expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: Terrorism')
+  })
+
+  it('domestic abuse marker should be rendered correctly', () => {
+    const context: Record<string, unknown> = {
+      user: { roles: [] },
+      offence: { code: 'AB', description: 'Offence 1' },
+      offenceMarkers: {
+        isDomesticAbuse: true,
+        markersExist: true,
+      },
+    }
+    const $ = cheerio.load(compiledTemplate.render(context))
+    const offenceMarkers = $('#offence-markers')
+
+    expect(offenceMarkers.length).toBe(1)
+    expect(offenceMarkers.find('li').length).toBe(1)
+    expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: Domestic Abuse')
+  })
+
+  it('domestic abuse marker should be rendered correctly', () => {
+    const context: Record<string, unknown> = {
+      user: { roles: [] },
+      offence: { code: 'AB', description: 'Offence 1' },
+      offenceMarkers: {
+        isNationalSecurity: true,
+        markersExist: true,
+      },
+    }
+    const $ = cheerio.load(compiledTemplate.render(context))
+    const offenceMarkers = $('#offence-markers')
+
+    expect(offenceMarkers.length).toBe(1)
+    expect(offenceMarkers.find('li').length).toBe(1)
+    expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: National Security')
+  })
 })
