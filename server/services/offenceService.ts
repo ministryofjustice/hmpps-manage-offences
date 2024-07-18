@@ -85,7 +85,7 @@ export default class OffenceService {
     const isDomesticAbuse = isCodeInList(sdsExclusionLists.domesticAbuse, offence.code)
     const isNationalSecurity = isCodeInList(sdsExclusionLists.nationalSecurity, offence.code)
     const isViolent = isCodeInList(sdsExclusionLists.violent, offence.code)
-    const isTerrorism = isCodeInList(sdsExclusionLists.violent, offence.code)
+    const isTerrorism = isCodeInList(sdsExclusionLists.terrorism, offence.code)
     const inListA = isCodeInList(pcscLists.listA, offence.code)
     const inListB = isCodeInList(pcscLists.listB, offence.code)
     const inListC = isCodeInList(pcscLists.listC, offence.code)
