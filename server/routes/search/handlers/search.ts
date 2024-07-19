@@ -29,11 +29,11 @@ export default class SearchRoutes {
     const childOffences =
       !offence.isChild && (await this.offenceService.getOffencesByIds(offence.childOffenceIds, res.locals.user))
 
-    let parentOffence
-    if (offence.parentOffenceId != null) {
-      parentOffence =
-        offence.isChild && (await this.offenceService.getOffenceById(offence.parentOffenceId, res.locals.user))
-    }
+    const parentOffence =
+      offence?.parentOffenceId && offence.isChild
+        ? await this.offenceService.getOffenceById(offence.parentOffenceId, res.locals.user)
+        : undefined
+
     const offenceMarkers = await this.offenceService.getOffenceMarkers(offence, res.locals.user)
     res.render('pages/search/viewOffence', {
       offence,
