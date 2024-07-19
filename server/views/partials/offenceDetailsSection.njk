@@ -99,9 +99,13 @@
                         <p>
                             <span class="govuk-!-font-weight-bold">Parent offence</span>
                             <span data-qa="parent-offence">
-                                <a class="govuk-link" href="/search/offence/{{ parentOffence.id }}/view">
+                                {% if offence.parentOffenceId != null %}
+                                <a class="govuk-link" href="/search/offence/{{ parentOffence.id }}/view" id="parent-offence-link">
                                     {{ parentOffence.code }}: {{ parentOffence.description }}
                                 </a>
+                                {% else %}
+                                    <p id="parent-offence-warning">No parent offence specified!</p>
+                                {% endif %}
                             </span>
                         </p>
                     {% endif %}
