@@ -5,139 +5,423 @@
 
 export interface paths {
   '/admin/toggle-feature': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /** Enable / disable a feature */
     put: operations['toggleFeature']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/schedule/unlink-offences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /** Unlink offences from schedules - will also unlink any associated inchoate offences (i.e. if any of the passed in offences have children they will also be unlinked) */
     post: operations['unlinkOffences']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/schedule/link-offence': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if  passed in offence has children they will also be linked) */
     post: operations['linkOffences']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/schedule/create': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /** Create a schedule */
     post: operations['createSchedule']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/admin/nomis/offences/reactivate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Reactivate offences in NOMIS
      * @description Reactivate offences in NOMIS, only to be used for offences that are end dated but NOMIS need them to be reactivated
      */
     post: operations['reactivateNomisOffence']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/admin/nomis/offences/deactivate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Deactivate offences in NOMIS
      * @description Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS
      */
     post: operations['deactivateNomisOffence']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
-  '/schedule/sds-exclusions': {
+  '/schedule/sds-early-release-exclusions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Determine if the passed in offence codes are either sexual or violent offences
-     * @description This endpoint will return a list of offences and whether they are violent or sexual offences
+     * Determine if the passed in offence codes are to be excluded from early release due to being Sexual, Violent, Domestic Abuse, National Security or Terrorism.
+     * @description This endpoint will return a list of offences and the exclusion category if applicable.
      */
     get: operations['getSdsExclusionInformation']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
-  '/schedule/sds-exclusion-lists': {
+  '/schedule/sds-early-release-exclusion-lists': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Retrieves the list of all the offences that are either sexual or violent
-     * @description This endpoint will return a list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1)
+     * Retrieves the lists of all the offences that are to be excluded from early release.
+     * @description This returns five lists for Sexual, Violent, Domestic Abuse, National Security or Terrorism offences.
      */
     get: operations['getSdsExclusionLists']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/schedule/pcsc-lists': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Retrieve all PCSC lists
      * @description This endpoint will return all four PCSC lists
      */
     get: operations['getPcscLists']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/schedule/pcsc-indicators': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Determine if the passed in offence codes are related to any of the PCSC lists
      * @description This endpoint will return a list of offences and whether they are im any of the PCSC lists
      */
     get: operations['getPcscInformation']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/schedule/offence-mapping/id/{offenceId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get offence matching the passed ID - with schedule related data
      * @description This endpoint will return the offence that matches the unique ID passed in
      */
     get: operations['getOffenceToScheduleMapping']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/schedule/by-id/{scheduleId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /** Get schedule by ID - includes all scheduled parts and mapped offences */
     get: operations['findScheduleById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/schedule/all': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /** Find all schedules - does not include mapped offences */
     get: operations['findAllSchedules']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offences/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get all offences matching the passed offence code, does a start with match
      * @description This endpoint will return the offences that start with the passed offence code
      */
     get: operations['searchOffences']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offences/load-results': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get the results of the most recent load
      * @description Get the results of the most recent load
      */
     get: operations['findLoadResults']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offences/id/{offenceId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get offence matching the passed ID
      * @description This endpoint will return the offence that matches the unique ID passed in
      */
     get: operations['getOffenceById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offences/ho-code/{offenceCode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get the HO Code associated with an offence code
      * @description This endpoint will return the HO Code associated with an offence code, could return null
      */
     get: operations['getHoCodeByOffenceCode']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offences/code/{offenceCode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get all offences matching the passed offence code, does a start with match
      * @description This endpoint will return the offences that start with the passed offence code
      */
     get: operations['getOffencesByOffenceCode']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offences/code/unique/{offenceCode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get the unique offence matching the passed offence code
      * @description This endpoint will return the offence that matches the unique code passed in
      */
     get: operations['getOffenceByCode']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offences/code/multiple': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a list of offences that match the passed in list of offence codes
      * @description This endpoint will return the offences that match the codes passed in
      */
     get: operations['getOffencesByCodes']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/change-history/nomis': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /** Fetch changes pushed to NOMIS between a from and to date range (to defaults to now) */
     get: operations['getOffencesByOffenceCode_1']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/admin/feature-toggles': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /** Get values of all feature toggles */
     get: operations['getAllToggles']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
 }
-
 export type webhooks = Record<string, never>
-
 export interface components {
   schemas: {
     /** @description Feature toggle details */
@@ -280,6 +564,21 @@ export interface components {
        * @description Set to the max period of indictment in years
        */
       maxPeriodOfIndictmentYears?: number
+      /**
+       * Format: int32
+       * @description Set to the max period of indictment in months
+       */
+      maxPeriodOfIndictmentMonths?: number
+      /**
+       * Format: int32
+       * @description Set to the max period of indictment in weeks
+       */
+      maxPeriodOfIndictmentWeeks?: number
+      /**
+       * Format: int32
+       * @description Set to the max period of indictment in days
+       */
+      maxPeriodOfIndictmentDays?: number
       /** @description The line reference for the associated schedule's legislation */
       lineReference?: string
       /** @description The legislation text for the associated schedule */
@@ -306,7 +605,7 @@ export interface components {
       partNumber: number
       offences?: components['schemas']['OffenceToScheduleMapping'][]
     }
-    /** @description Categorises the offence based on the schedule it appears in */
+    /** @description Categorises the offence based on the exclusion list it appears in */
     OffenceSdsExclusion: {
       offenceCode: string
       /**
@@ -416,6 +715,21 @@ export interface components {
        */
       maxPeriodOfIndictmentYears?: number
       /**
+       * Format: int32
+       * @description Set to the max period of indictment in months
+       */
+      maxPeriodOfIndictmentMonths?: number
+      /**
+       * Format: int32
+       * @description Set to the max period of indictment in weeks
+       */
+      maxPeriodOfIndictmentWeeks?: number
+      /**
+       * Format: int32
+       * @description Set to the max period of indictment in days
+       */
+      maxPeriodOfIndictmentDays?: number
+      /**
        * @description Yes if the offence caries a custodial sentence, Either if it does when tried as an indictment and No otherwise.
        * @enum {string}
        */
@@ -508,14 +822,15 @@ export interface components {
   headers: never
   pathItems: never
 }
-
 export type $defs = Record<string, never>
-
-export type external = Record<string, never>
-
 export interface operations {
-  /** Enable / disable a feature */
   toggleFeature: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['FeatureToggle'][]
@@ -524,12 +839,20 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /** Unlink offences from schedules - will also unlink any associated inchoate offences (i.e. if any of the passed in offences have children they will also be unlinked) */
   unlinkOffences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['SchedulePartIdAndOffenceId'][]
@@ -538,12 +861,20 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if  passed in offence has children they will also be linked) */
   linkOffences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['LinkOffence']
@@ -552,12 +883,20 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /** Create a schedule */
   createSchedule: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['Schedule']
@@ -566,15 +905,20 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /**
-   * Reactivate offences in NOMIS
-   * @description Reactivate offences in NOMIS, only to be used for offences that are end dated but NOMIS need them to be reactivated
-   */
   reactivateNomisOffence: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': number[]
@@ -583,15 +927,20 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /**
-   * Deactivate offences in NOMIS
-   * @description Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS
-   */
   deactivateNomisOffence: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': number[]
@@ -600,82 +949,101 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /**
-   * Determine if the passed in offence codes are either sexual or violent offences
-   * @description This endpoint will return a list of offences and whether they are violent or sexual offences
-   */
   getSdsExclusionInformation: {
     parameters: {
       query: {
         offenceCodes: string[]
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['OffenceSdsExclusion'][]
         }
       }
     }
   }
-  /**
-   * Retrieves the list of all the offences that are either sexual or violent
-   * @description This endpoint will return a list of all the offences that are sexual (Schedule 3 or 15 Part 2) or violent (Schedule 15 Part 1)
-   */
   getSdsExclusionLists: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['SdsExclusionLists']
         }
       }
     }
   }
-  /**
-   * Retrieve all PCSC lists
-   * @description This endpoint will return all four PCSC lists
-   */
   getPcscLists: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['PcscLists']
         }
       }
     }
   }
-  /**
-   * Determine if the passed in offence codes are related to any of the PCSC lists
-   * @description This endpoint will return a list of offences and whether they are im any of the PCSC lists
-   */
   getPcscInformation: {
     parameters: {
       query: {
         offenceCodes: string[]
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['OffencePcscMarkers'][]
         }
       }
     }
   }
-  /**
-   * Get offence matching the passed ID - with schedule related data
-   * @description This endpoint will return the offence that matches the unique ID passed in
-   */
   getOffenceToScheduleMapping: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The offence ID
@@ -683,19 +1051,25 @@ export interface operations {
          */
         offenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['OffenceToScheduleMapping']
         }
       }
     }
   }
-  /** Get schedule by ID - includes all scheduled parts and mapped offences */
   findScheduleById: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The schedule ID
@@ -703,67 +1077,88 @@ export interface operations {
          */
         scheduleId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Schedule']
         }
       }
     }
   }
-  /** Find all schedules - does not include mapped offences */
   findAllSchedules: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Schedule'][]
         }
       }
     }
   }
-  /**
-   * Get all offences matching the passed offence code, does a start with match
-   * @description This endpoint will return the offences that start with the passed offence code
-   */
   searchOffences: {
     parameters: {
       query: {
         searchString: string
         excludeLegislation?: boolean
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Offence'][]
         }
       }
     }
   }
-  /**
-   * Get the results of the most recent load
-   * @description Get the results of the most recent load
-   */
   findLoadResults: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['MostRecentLoadResult'][]
         }
       }
     }
   }
-  /**
-   * Get offence matching the passed ID
-   * @description This endpoint will return the offence that matches the unique ID passed in
-   */
   getOffenceById: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The offence ID
@@ -771,22 +1166,25 @@ export interface operations {
          */
         offenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Offence']
         }
       }
     }
   }
-  /**
-   * Get the HO Code associated with an offence code
-   * @description This endpoint will return the HO Code associated with an offence code, could return null
-   */
   getHoCodeByOffenceCode: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The offence code
@@ -794,28 +1192,34 @@ export interface operations {
          */
         offenceCode: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Offence code exists and associated hoCode returned (could be null/empty) */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': string
         }
       }
       /** @description No offence exists for the passed in offence code */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': string
         }
       }
     }
   }
-  /**
-   * Get all offences matching the passed offence code, does a start with match
-   * @description This endpoint will return the offences that start with the passed offence code
-   */
   getOffencesByOffenceCode: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The offence code
@@ -823,22 +1227,25 @@ export interface operations {
          */
         offenceCode: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Offence'][]
         }
       }
     }
   }
-  /**
-   * Get the unique offence matching the passed offence code
-   * @description This endpoint will return the offence that matches the unique code passed in
-   */
   getOffenceByCode: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The offence Code
@@ -846,57 +1253,80 @@ export interface operations {
          */
         offenceCode: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Offence']
         }
       }
     }
   }
-  /**
-   * Get a list of offences that match the passed in list of offence codes
-   * @description This endpoint will return the offences that match the codes passed in
-   */
   getOffencesByCodes: {
     parameters: {
       query: {
         offenceCodes: string[]
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Offence'][]
         }
       }
     }
   }
-  /** Fetch changes pushed to NOMIS between a from and to date range (to defaults to now) */
   getOffencesByOffenceCode_1: {
     parameters: {
       query: {
         from: string
         to?: string
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['NomisChangeHistory'][]
         }
       }
     }
   }
-  /** Get values of all feature toggles */
   getAllToggles: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['FeatureToggle'][]
         }
