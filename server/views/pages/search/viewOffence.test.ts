@@ -158,4 +158,15 @@ describe('VIEW_OFFENCE /', () => {
     const parentOffenceLabel = $('#parent-offence-link')
     expect(parentOffenceLabel.text()).toContain('AB: Parent 1')
   })
+
+  it('should render offence page with indictment column populated correctly ', () => {
+    const context: Record<string, unknown> = {
+      user: { roles: [] },
+      offence: { code: 'AB', description: 'Offence 1', maxPeriodOfIndictmentWeeks: '5' },
+    }
+    const $ = cheerio.load(compiledTemplate.render(context))
+    const indictment = $('[data-qa="max-period-indictment-weeks"]')
+
+    expect(indictment.text()).toContain('5 Weeks')
+  })
 })

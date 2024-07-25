@@ -44,6 +44,12 @@
                                 Life
                             {% elseif offence.maxPeriodOfIndictmentYears %}
                                 {{ offence.maxPeriodOfIndictmentYears }} Years
+                            {% elseif offence.maxPeriodOfIndictmentMonths %}
+                                {{ offence.maxPeriodOfIndictmentMonths }} Months
+                            {% elseif offence.maxPeriodOfIndictmentWeeks %}
+                                {{ offence.maxPeriodOfIndictmentWeeks }} Weeks
+                            {% elseif offence.maxPeriodOfIndictmentDays %}
+                                {{ offence.maxPeriodOfIndictmentDays }} Days
                             {% else %}
                                 Not entered
                             {% endif %}

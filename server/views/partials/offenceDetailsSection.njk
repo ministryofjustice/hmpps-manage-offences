@@ -7,24 +7,30 @@
                 <div>
                     <p>
                         <span class="govuk-!-font-weight-bold">Code</span>
-                        <span data-qa="-start-date">{{ offence.code }}</span>
+                        <span data-qa="offence-code">{{ offence.code }}</span>
                     </p>
                     <p>
                         <span class="govuk-!-font-weight-bold">Start date</span>
-                        <span data-qa="-start-date">{{ offence.startDate | dateFormat }}</span>
+                        <span data-qa="offence-start-date">{{ offence.startDate | dateFormat }}</span>
                     </p>
                     <p>
                         <span class="govuk-!-font-weight-bold">Offence type</span>
-                        <span data-qa="start-date">{{ offence.offenceType or 'None' }}</span>
+                        <span data-qa="offence-type">{{ offence.offenceType or 'None' }}</span>
                     </p>
                     <p>
                         <span class="govuk-!-font-weight-bold">Maximum indictment</span>
                         {% if offence.maxPeriodIsLife %}
-                            <span data-qa="start-date">Life</span>
+                            <span data-qa="max-period-indictment-life">Life</span>
                         {% elseif offence.maxPeriodOfIndictmentYears %}
-                            <span data-qa="start-date">{{ offence.maxPeriodOfIndictmentYears }} Years</span>
+                            <span data-qa="max-period-indictment-years">{{ offence.maxPeriodOfIndictmentYears }} Years</span>
+                        {% elseif offence.maxPeriodOfIndictmentMonths %}
+                            <span data-qa="max-period-indictment-months">{{ offence.maxPeriodOfIndictmentMonths }} Months</span>
+                        {% elseif offence.maxPeriodOfIndictmentWeeks %}
+                            <span data-qa="max-period-indictment-weeks">{{ offence.maxPeriodOfIndictmentWeeks }} Weeks</span>
+                        {% elseif offence.maxPeriodOfIndictmentDays %}
+                            <span data-qa="max-period-indictment-days">{{ offence.maxPeriodOfIndictmentDays }} Days</span>
                         {% else %}
-                            <span data-qa="start-date">Not entered</span>
+                            <span data-qa="max-period-indictment">Not entered</span>
                         {% endif %}
                     </p>
                     {% if offence.custodialIndicator %}
@@ -81,19 +87,19 @@
                 <div>
                     <p>
                         <span class="govuk-!-font-weight-bold">Description</span>
-                        <span data-qa="-start-date">{{ offence.description }}</span>
+                        <span data-qa="offence-description">{{ offence.description }}</span>
                     </p>
                     <p>
                         <span class="govuk-!-font-weight-bold">End date</span>
-                        <span data-qa="-start-date">{{ (offence.endDate | dateFormat) or 'None' }}</span>
+                        <span data-qa="offence-end-date">{{ (offence.endDate | dateFormat) or 'None' }}</span>
                     </p>
                     <p>
                         <span class="govuk-!-font-weight-bold">Home Office code</span>
-                        <span data-qa="-start-date">{{ offence.homeOfficeStatsCode or 'None' }}</span>
+                        <span data-qa="ho-code">{{ offence.homeOfficeStatsCode or 'None' }}</span>
                     </p>
                     <p>
                         <span class="govuk-!-font-weight-bold">Legislation</span>
-                        <span data-qa="start-date">{{ offence.legislation or 'Not entered' }}</span>
+                        <span data-qa="legislation">{{ offence.legislation or 'Not entered' }}</span>
                     </p>
                     {% if offence.isChild %}
                         <p>
