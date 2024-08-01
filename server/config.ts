@@ -87,10 +87,10 @@ export default {
     manageOffences: {
       url: get('MANAGE_OFFENCES_API_URL', 'http://localhost:8089', requiredInProduction),
       timeout: {
-        response: Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 10000)),
-        deadline: Number(get('MANAGE_OFFENCES_API_TIMEOUT_DEADLINE', 10000)),
+        response: Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 20000)),
+        deadline: Number(get('MANAGE_OFFENCES_API_TIMEOUT_DEADLINE', 20000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 20000))),
     },
     prisonApi: {
       url: get('PRISON_API_URL', 'http://localhost:8080', requiredInProduction),
@@ -98,7 +98,7 @@ export default {
         response: get('PRISON_API_TIMEOUT_RESPONSE', 10000),
         deadline: get('PRISON_API_TIMEOUT_DEADLINE', 10000),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('PRISON_API_TIMEOUT_RESPONSE', 10000))),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
