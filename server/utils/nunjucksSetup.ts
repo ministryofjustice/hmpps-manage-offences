@@ -24,7 +24,9 @@ const months = {
   9: { short: 'Oct', full: 'October' },
   10: { short: 'Nov', full: 'November' },
   11: { short: 'Dec', full: 'December' },
-}
+} as const
+
+type MonthKey = keyof typeof months
 
 export default function nunjucksSetup(app: express.Express, applicationInfo: ApplicationInfo): void {
   app.set('view engine', 'njk')
@@ -65,17 +67,17 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('initialiseName', initialiseName)
 
   // monthLength can be 'short' (default) or 'full'
-  njkEnv.addFilter('dateFormat', (dateString: string, monthLength = 'short') => {
+  njkEnv.addFilter('dateFormat', (dateString: string, monthLength: 'short' | 'full' = 'short') => {
     if (!dateString) return null
     const date = new Date(dateString)
-    return `${toTwoDigits(date.getDate())} ${months[date.getMonth()][monthLength]} ${date.getFullYear()}`
+    return `${toTwoDigits(date.getDate())} ${months[date.getMonth() as MonthKey][monthLength]} ${date.getFullYear()}`
   })
 
-  njkEnv.addFilter('dateTimeFormat', (dateString: string, monthLength = 'short') => {
+  njkEnv.addFilter('dateTimeFormat', (dateString: string, monthLength: 'short' | 'full' = 'short') => {
     if (!dateString) return null
     const date = new Date(dateString)
     if (!date || Number.isNaN(date.getTime())) return null
-    return `${toTwoDigits(date.getDate())} ${months[date.getMonth()][monthLength]} ${date.getFullYear()} ${toTwoDigits(
+    return `${toTwoDigits(date.getDate())} ${months[date.getMonth() as MonthKey][monthLength]} ${date.getFullYear()} ${toTwoDigits(
       date.getHours(),
     )}:${toTwoDigits(date.getMinutes())}`
   })
