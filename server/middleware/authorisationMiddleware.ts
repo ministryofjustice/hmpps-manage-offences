@@ -20,7 +20,8 @@ export default function authorisationMiddleware(authorisedRoles: string[] = []):
       }
 
       const urlMapping = Object.values(urlToRoleMapping).find(value => value.matchPath(req.path))
-      const authorised = !urlMapping || roles.some(r => urlMapping.roles.includes(AuthorisedRoles[r]))
+      const authorised =
+        !urlMapping || roles.some(r => urlMapping.roles.includes(AuthorisedRoles[r as keyof typeof AuthorisedRoles]))
       if (!authorised) {
         logger.error('User is not authorised to access this resource')
         return res.redirect('/authError')
