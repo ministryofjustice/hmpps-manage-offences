@@ -87,8 +87,8 @@ export default {
     manageOffences: {
       url: get('MANAGE_OFFENCES_API_URL', 'http://localhost:8089', requiredInProduction),
       timeout: {
-        response: Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 10000)),
-        deadline: Number(get('MANAGE_OFFENCES_API_TIMEOUT_DEADLINE', 10000)),
+        response: Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 20000)),
+        deadline: Number(get('MANAGE_OFFENCES_API_TIMEOUT_DEADLINE', 20000)),
       },
       agent: new AgentConfig(Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 20000))),
     },
