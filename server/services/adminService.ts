@@ -66,6 +66,11 @@ export default class AdminService {
     }
     const offences = await this.prisonApi.getOffencesByCodeStartsWith(offenceCode, user)
     const nomisOffence = offences.content.find(o => o.code === offenceCode)
+
+    if (!nomisOffence) {
+      // Handle the case where the offence is not found
+      return { canActivate: false, canDeactivate: false }
+    }
     const today = new Date()
     const endDate = offence.endDate && new Date(offence.endDate)
     const canActivate = nomisOffence.activeFlag === 'N'
