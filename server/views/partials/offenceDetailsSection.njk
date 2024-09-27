@@ -66,11 +66,12 @@
                             }) }}
                         </form>
                     {% endif %}
+
                     {% if attributes.nomisActivationFlags.canDeactivate %}
                         <form method="post" action="/admin/nomis/offence/deactivate">
-                            <input type="hidden" name="_csrf" value="{{ attributes.csrfToken }}"/>
-                            <input type="hidden" name="offenceId" value="{{ offence.id }}"/>
-                            <input type="hidden" name="offenceCodeSearch" value="{{ attributes.offenceCodeSearch }}"/>
+                            <input type="hidden" name="_csrf" value="{{ attributes.csrfToken }}" />
+                            <input type="hidden" name="offenceId" value="{{ offence.id }}" />
+                            <input type="hidden" name="offenceCodeSearch" value="{{ attributes.offenceCodeSearch }}" />
                             {{ govukButton({
                                 classes: "govuk-button--secondary govuk-!-margin-right-2 govuk-!-margin-top-1 govuk-!-margin-bottom-1",
                                 text: "Deactivate in NOMIS",
@@ -79,6 +80,21 @@
                             }) }}
                         </form>
                     {% endif %}
+
+                    {% if attributes.isEligibleForEncouragementOffence %}
+                        <form method="post" action="/admin/nomis/offence/encouragement">
+                            <input type="hidden" name="_csrf" value="{{ attributes.csrfToken }}" />
+                            <input type="hidden" name="offenceId" value="{{ offence.id }}" />
+                            <input type="hidden" name="offenceCodeSearch" value="{{ attributes.offenceCodeSearch }}" />
+                            {{ govukButton({
+                                classes: "govuk-button--secondary govuk-!-margin-right-2",
+                                text: "Add Enforcement Offence",
+                                preventDoubleClick: true,
+                                attributes: {  'data-qa': 'add-enforcement-offence' }
+                            }) }}
+                        </form>
+                    {% endif %}
+
                 </div>
             </div>
         </div>

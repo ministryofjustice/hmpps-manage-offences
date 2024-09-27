@@ -28,7 +28,8 @@ Create a `.env` file in the root of the project with the following content - Not
 HMPPS_AUTH_URL="https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
 TOKEN_VERIFICATION_API_URL="https://token-verification-api-dev.prison.service.justice.gov.uk"
 MANAGE_OFFENCES_API_URL="https://manage-offences-api-dev.hmpps.service.justice.gov.uk"
-PRISON_API_URL="https://api-dev.prison.service.justice.gov.uk"
+PRISON_API_URL="https://prison-api-dev.prison.service.justice.gov.uk"
+MANAGE_USERS_API_URL="https://manage-users-api-dev.hmpps.service.justice.gov.uk"
 API_CLIENT_SECRET=FILL THIS IN WITH SECRET FROM DEV!!
 SYSTEM_CLIENT_SECRET=FILL THIS IN WITH SECRET FROM DEV!!
 ```

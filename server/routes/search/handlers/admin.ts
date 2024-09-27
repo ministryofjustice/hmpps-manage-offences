@@ -15,4 +15,10 @@ export default class AdminRoutes {
     await this.adminService.deactivateOffence(offenceId, res.locals.user)
     res.redirect(`/search/offence/${offenceId}/view?offenceCodeSearch=${offenceCodeSearch}`)
   }
+
+  ADD_ENCOURAGEMENT_OFFENCE = async (req: Request, res: Response): Promise<void> => {
+    const { offenceId, offenceCodeSearch } = req.body
+    await this.adminService.addEncouragementOffence(offenceId, res.locals.user)
+    res.redirect(`/search/offence/${offenceId}/view?offenceCodeSearch=${offenceCodeSearch}`)
+  }
 }

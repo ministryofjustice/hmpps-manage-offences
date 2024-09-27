@@ -56,7 +56,7 @@
 
   {% endif %}
 
-  {{ offenceDetailsSection(offence, parentOffence, {nomisActivationFlags: nomisActivationFlags, offenceCodeSearch: offenceCodeSearch, csrfToken: csrfToken}) }}
+  {{ offenceDetailsSection(offence, parentOffence, {nomisActivationFlags: nomisActivationFlags, isEligibleForEncouragementOffence:isEligibleForEncouragementOffence, offenceCodeSearch: offenceCodeSearch, csrfToken: csrfToken}) }}
   {{ offenceMarkersSection(offenceMarkers) }}
 
   <div class="govuk-grid-row govuk-body">

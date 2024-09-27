@@ -35,6 +35,12 @@ export default class SearchRoutes {
         : undefined
 
     const offenceMarkers = await this.offenceService.getOffenceMarkers(offence, res.locals.user)
+
+    const isEligibleForEncouragementOffence = this.offenceService.isEligibleForEncouragementOffence(
+      offence,
+      childOffences,
+    )
+
     res.render('pages/search/viewOffence', {
       offence,
       offenceCodeSearch,
@@ -42,6 +48,7 @@ export default class SearchRoutes {
       parentOffence,
       nomisActivationFlags,
       offenceMarkers,
+      isEligibleForEncouragementOffence,
     })
   }
 }
