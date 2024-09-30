@@ -1,6 +1,21 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% macro offenceDetailsSection(offence, parentOffence, attributes) %}
+    {% if attributes.encouragementOffenceConfirmation %}
+        {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+        {% set html %}
+            <h3 class="govuk-notification-banner__heading">
+                Encouragement offence has been successfully added
+            </h3>
+            <p class="govuk-body">New offence will be present within NOMIS</p>
+        {% endset %}
+
+        {{ govukNotificationBanner({
+            html: html,
+            type: "success"
+        }) }}
+    {% endif %}
     <div class="govuk-grid-row govuk-body basic-details">
         <div class="govuk-grid-column-one-quarter">
             <div id="basic-details-content">

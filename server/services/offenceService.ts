@@ -8,6 +8,7 @@ import {
   Schedule,
   SdsExclusionLists,
 } from '../@types/manageOffences/manageOffencesClientTypes'
+import AuthorisedRoles from '../enums/authorisedRoles'
 
 type User = Express.User
 
@@ -119,8 +120,9 @@ export default class OffenceService {
     }
   }
 
-  isEligibleForEncouragementOffence(parentOffence: Offence, childOffences: Array<Offence>): boolean {
+  isEligibleForEncouragementOffence(parentOffence: Offence, childOffences: Array<Offence>, roles: string[]): boolean {
     return (
+      roles.includes(AuthorisedRoles.NOMIS_OFFENCE_ACTIVATOR) &&
       !parentOffence.isChild &&
       childOffences.some(o => o.code === `${parentOffence.code}E`) === false &&
       (!parentOffence.endDate || new Date(parentOffence.endDate) > OffenceService.INCHOATE_SENTENCE_END_DATED)
