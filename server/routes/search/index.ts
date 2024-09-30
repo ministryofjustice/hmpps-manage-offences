@@ -8,6 +8,7 @@ import AdminRoutes from './handlers/admin'
 export const adminPaths = {
   REACTIVATE_NOMIS_OFFENCE: '/admin/nomis/offence/reactivate',
   DEACTIVATE_NOMIS_OFFENCE: '/admin/nomis/offence/deactivate',
+  ADD_ENCOURAGEMENT_OFFENCE: '/admin/nomis/offence/encouragement',
 }
 
 export default function Index(offenceService: OffenceService, adminService: AdminService): Router {
@@ -22,6 +23,7 @@ export default function Index(offenceService: OffenceService, adminService: Admi
   get('/search/offence/:offenceId/view', searchRoutes.VIEW_OFFENCE)
   post(adminPaths.REACTIVATE_NOMIS_OFFENCE, adminRoutes.REACTIVATE_NOMIS_OFFENCE)
   post(adminPaths.DEACTIVATE_NOMIS_OFFENCE, adminRoutes.DEACTIVATE_NOMIS_OFFENCE)
+  post(adminPaths.ADD_ENCOURAGEMENT_OFFENCE, adminRoutes.ADD_ENCOURAGEMENT_OFFENCE)
 
   return router
 }

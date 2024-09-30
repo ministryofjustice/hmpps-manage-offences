@@ -17,6 +17,7 @@ export default class SearchRoutes {
   VIEW_OFFENCE = async (req: Request, res: Response): Promise<void> => {
     const { offenceId } = req.params
     const { offenceCodeSearch } = req.query as Record<string, string>
+    const encouragementOffenceConfirmation = !!req.query.encouragementOffenceConfirmation
     const offence = await this.offenceService.getOffenceById(offenceId as unknown as number, res.locals.user)
 
     const nomisActivationFlags = await this.adminService.getNomisActivationFlags(
@@ -35,6 +36,13 @@ export default class SearchRoutes {
         : undefined
 
     const offenceMarkers = await this.offenceService.getOffenceMarkers(offence, res.locals.user)
+
+    const isEligibleForEncouragementOffence = this.offenceService.isEligibleForEncouragementOffence(
+      offence,
+      childOffences,
+      res.locals.user.roles,
+    )
+
     res.render('pages/search/viewOffence', {
       offence,
       offenceCodeSearch,
@@ -42,6 +50,8 @@ export default class SearchRoutes {
       parentOffence,
       nomisActivationFlags,
       offenceMarkers,
+      isEligibleForEncouragementOffence,
+      encouragementOffenceConfirmation,
     })
   }
 }

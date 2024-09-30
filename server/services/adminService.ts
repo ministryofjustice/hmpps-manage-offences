@@ -34,6 +34,10 @@ export default class AdminService {
     return this.manageOffencesApi.deactivateOffenceInNomis(offenceId, user)
   }
 
+  async addEncouragementOffence(offenceId: number, user: User): Promise<unknown> {
+    return this.manageOffencesApi.addEncouragementOffence(offenceId, user)
+  }
+
   async getMostRecentLoadResult(user: User): Promise<[MostRecentLoadResult]> {
     return this.manageOffencesApi.getMostRecentLoadResult(user)
   }

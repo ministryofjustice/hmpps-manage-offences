@@ -153,6 +153,16 @@ export default class ManageOffencesApiClient extends RestClient {
     )
   }
 
+  addEncouragementOffence(offenceId: number, user: User): Promise<unknown> {
+    return this.post(
+      {
+        path: `/admin/nomis/offences/encouragement/${offenceId}`,
+        data: [],
+      },
+      { token: user.token },
+    )
+  }
+
   getSdsExclusionLists(user: User): Promise<SdsExclusionLists> {
     return this.get(
       {
