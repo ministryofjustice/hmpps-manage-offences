@@ -20,7 +20,7 @@ export default class AdminRoutes {
     const { offenceId, offenceCodeSearch } = req.body
     await this.adminService.addEncouragementOffence(offenceId, res.locals.user)
     res.redirect(
-      `/search/offence/${offenceId}/view?offenceCodeSearch=${offenceCodeSearch}&encouragementOffenceConfirmation`,
+      `/search/offence/${offenceId}/view?offenceCodeSearch=${offenceCodeSearch}&encouragementOffenceConfirmation=true`,
     )
   }
 }
