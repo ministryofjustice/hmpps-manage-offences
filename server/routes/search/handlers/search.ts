@@ -17,7 +17,7 @@ export default class SearchRoutes {
   VIEW_OFFENCE = async (req: Request, res: Response): Promise<void> => {
     const { offenceId } = req.params
     const { offenceCodeSearch } = req.query as Record<string, string>
-    const encouragementOffenceConfirmation = !!req.query.encouragementOffenceConfirmation
+    const encouragementOffenceConfirmation = req.query.encouragementOffenceConfirmation === 'true'
     const offence = await this.offenceService.getOffenceById(offenceId as unknown as number, res.locals.user)
 
     const nomisActivationFlags = await this.adminService.getNomisActivationFlags(
