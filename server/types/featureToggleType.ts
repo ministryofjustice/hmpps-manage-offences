@@ -29,6 +29,11 @@ export default class FeatureToggleType {
     'Link schedules NOMIS (migration task)',
   )
 
+  public static readonly T3_OFFENCE_EXCLUSIONS = new FeatureToggleType(
+    FeatureToggleEnum.T3_OFFENCE_EXCLUSIONS,
+    'Tranche Three Excluded Offences',
+  )
+
   private constructor(
     public readonly featureName: FeatureToggleEnum,
     public readonly displayName: string,

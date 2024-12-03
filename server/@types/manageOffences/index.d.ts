@@ -47,7 +47,7 @@ export interface paths {
     }
     get?: never
     put?: never
-    /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if  passed in offence has children they will also be linked) */
+    /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if passed in offence has children they will also be linked) */
     post: operations['linkOffences']
     delete?: never
     options?: never
@@ -92,6 +92,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/admin/nomis/offences/encouragement/{parentOffenceId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create encouragement offence for parent offence
+     * @description Encouragement offence creates a new record with existing parent offence value, but with 'E' suffix to the offence code
+     */
+    post: operations['createEncouragementOffence']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/nomis/offences/deactivate': {
     parameters: {
       query?: never
@@ -106,6 +126,22 @@ export interface paths {
      * @description Deactivate offences in NOMIS, only to be used for offences that are end dated but are active in NOMIS
      */
     post: operations['deactivateNomisOffence']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/schedule/torera-offence-codes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getToreraOffenceCodes']
+    put?: never
+    post?: never
     delete?: never
     options?: never
     head?: never
@@ -183,7 +219,7 @@ export interface paths {
      * Determine if the passed in offence codes are related to any of the PCSC lists
      * @description This endpoint will return a list of offences and whether they are im any of the PCSC lists
      */
-    get: operations['getPcscInformation']
+    get: operations['getPcscMarkers']
     put?: never
     post?: never
     delete?: never
@@ -439,6 +475,7 @@ export interface components {
         | 'PUBLISH_EVENTS'
         | 'UNLINK_SCHEDULES_NOMIS'
         | 'LINK_SCHEDULES_NOMIS'
+        | 'T3_OFFENCE_EXCLUSIONS'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
@@ -605,53 +642,6 @@ export interface components {
       partNumber: number
       offences?: components['schemas']['OffenceToScheduleMapping'][]
     }
-    /** @description Categorises the offence based on the exclusion list it appears in */
-    OffenceSdsExclusion: {
-      offenceCode: string
-      /**
-       * @description Categories for the offence
-       * @enum {string}
-       */
-      schedulePart: 'SEXUAL' | 'DOMESTIC_ABUSE' | 'VIOLENT' | 'NONE' | 'NATIONAL_SECURITY' | 'TERRORISM'
-    }
-    /** @description Contains the list of all the offences that are sexual, domestic abuse, national security, terrorism or violent */
-    SdsExclusionLists: {
-      /** @description Offence falls under the Sexual category */
-      sexual: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description Offence falls under the Domestic Abuse category */
-      domesticAbuse: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description Offence falls under the National Security category */
-      nationalSecurity: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description Offence falls under the Violent category */
-      violent: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description Offence falls under the Terrorism category */
-      terrorism: components['schemas']['OffenceToScheduleMapping'][]
-    }
-    PcscLists: {
-      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
-      listA: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description SDS between 4 and 7 years : Schedule 15 Part 2 that attract life + serious violent offences */
-      listB: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description Sec250 >7 years = List C: Schedule 15 Part 2 that attract life + serious violent offences (same as List B) */
-      listC: components['schemas']['OffenceToScheduleMapping'][]
-      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
-      listD: components['schemas']['OffenceToScheduleMapping'][]
-    }
-    /** @description Shows which (if any) PCSC Marker the offence relates to */
-    OffencePcscMarkers: {
-      offenceCode: string
-      pcscMarkers: components['schemas']['PcscMarkers']
-    }
-    PcscMarkers: {
-      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
-      inListA: boolean
-      /** @description SDS between 4 and 7 years : Schedule 15 Part 2 that attract life + serious violent offences */
-      inListB: boolean
-      /** @description Sec250 >7 years = List C: Schedule 15 Part 2 that attract life + serious violent offences (same as List B) */
-      inListC: boolean
-      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
-      inListD: boolean
-    }
     /** @description Offence details */
     Offence: {
       /**
@@ -734,6 +724,62 @@ export interface components {
        * @enum {string}
        */
       custodialIndicator?: 'Y' | 'N' | 'E'
+    }
+    /** @description Categorises the offence based on the exclusion list it appears in */
+    OffenceSdsExclusion: {
+      offenceCode: string
+      /**
+       * @description Categories for the offence
+       * @enum {string}
+       */
+      schedulePart:
+        | 'SEXUAL'
+        | 'SEXUAL_T3'
+        | 'DOMESTIC_ABUSE'
+        | 'DOMESTIC_ABUSE_T3'
+        | 'VIOLENT'
+        | 'NONE'
+        | 'NATIONAL_SECURITY'
+        | 'TERRORISM'
+        | 'MURDER_T3'
+    }
+    /** @description Contains the list of all the offences that are sexual, domestic abuse, national security, terrorism or violent */
+    SdsExclusionLists: {
+      /** @description Offence falls under the Sexual category */
+      sexual: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence falls under the Domestic Abuse category */
+      domesticAbuse: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence falls under the National Security category */
+      nationalSecurity: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence falls under the Violent category */
+      violent: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Offence falls under the Terrorism category */
+      terrorism: components['schemas']['OffenceToScheduleMapping'][]
+    }
+    PcscLists: {
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
+      listA: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description SDS between 4 and 7 years : Schedule 15 Part 2 that attract life + serious violent offences */
+      listB: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Sec250 >7 years = List C: Schedule 15 Part 2 that attract life + serious violent offences (same as List B) */
+      listC: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
+      listD: components['schemas']['OffenceToScheduleMapping'][]
+    }
+    /** @description Shows which (if any) PCSC Marker the offence relates to */
+    OffencePcscMarkers: {
+      offenceCode: string
+      pcscMarkers: components['schemas']['PcscMarkers']
+    }
+    PcscMarkers: {
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
+      inListA: boolean
+      /** @description SDS between 4 and 7 years : Schedule 15 Part 2 that attract life + serious violent offences */
+      inListB: boolean
+      /** @description Sec250 >7 years = List C: Schedule 15 Part 2 that attract life + serious violent offences (same as List B) */
+      inListC: boolean
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
+      inListD: boolean
     }
     /** @description Details of the load by SDRS Cache */
     MostRecentLoadResult: {
@@ -934,6 +980,28 @@ export interface operations {
       }
     }
   }
+  createEncouragementOffence: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        parentOffenceId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Offence']
+        }
+      }
+    }
+  }
   deactivateNomisOffence: {
     parameters: {
       query?: never
@@ -953,6 +1021,26 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  getToreraOffenceCodes: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string[]
+        }
       }
     }
   }
@@ -1018,7 +1106,7 @@ export interface operations {
       }
     }
   }
-  getPcscInformation: {
+  getPcscMarkers: {
     parameters: {
       query: {
         offenceCodes: string[]
