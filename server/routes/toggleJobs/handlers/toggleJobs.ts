@@ -45,6 +45,10 @@ export default class ToggleJobsRoutes {
         feature: FeatureToggleEnum.LINK_SCHEDULES_NOMIS,
         enabled: req.body[FeatureToggleEnum.LINK_SCHEDULES_NOMIS],
       },
+      {
+        feature: FeatureToggleEnum.T3_OFFENCE_EXCLUSIONS,
+        enabled: req.body[FeatureToggleEnum.T3_OFFENCE_EXCLUSIONS],
+      },
     ]
 
     await this.adminService.toggleFeatures(featureToggles, res.locals.user)
