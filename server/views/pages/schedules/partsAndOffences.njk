@@ -53,6 +53,10 @@
   {% set tabRows = [] %}
   {% for part in fullSchedule.scheduleParts %}
     {% set labelDesc = "Part " + part.partNumber + partDesc if partDesc else "Part " + part.partNumber %}
+    {% if ['DVEO', 'SEO'].includes(fullSchedule.code) and part.partNumber == 2 %}
+    {% set labelDesc = labelDesc + ' T3'  %}
+    {% endif %}
+
     {% set tabRows = (tabRows.push(
       {
         label: labelDesc,

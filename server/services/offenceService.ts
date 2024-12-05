@@ -84,16 +84,22 @@ export default class OffenceService {
 
     const isCodeInList = (list: { code: string }[], code: string) => list.some(item => item.code === code)
 
-    const isSexual = isCodeInList(sdsExclusionLists.sexual, offence.code)
-    const isDomesticAbuse = isCodeInList(sdsExclusionLists.domesticAbuse, offence.code)
-    const isNationalSecurity = isCodeInList(sdsExclusionLists.nationalSecurity, offence.code)
-    const isViolent = isCodeInList(sdsExclusionLists.violent, offence.code)
-    const isTerrorism = isCodeInList(sdsExclusionLists.terrorism, offence.code)
+    const { code } = offence
 
-    const inListA = isCodeInList(pcscLists.listA, offence.code)
-    const inListB = isCodeInList(pcscLists.listB, offence.code)
-    const inListC = isCodeInList(pcscLists.listC, offence.code)
-    const inListD = isCodeInList(pcscLists.listD, offence.code)
+    const isSexual = isCodeInList(sdsExclusionLists.sexual, code)
+    const isDomesticAbuse = isCodeInList(sdsExclusionLists.domesticAbuse, code)
+    const isNationalSecurity = isCodeInList(sdsExclusionLists.nationalSecurity, code)
+    const isViolent = isCodeInList(sdsExclusionLists.violent, code)
+    const isTerrorism = isCodeInList(sdsExclusionLists.terrorism, code)
+
+    const isSexualTrancheThree = isCodeInList(sdsExclusionLists.sexualTrancheThree, code)
+    const isDomesticAbuseTrancheThree = isCodeInList(sdsExclusionLists.domesticAbuseTrancheThree, code)
+    const isMurderTrancheThree = isCodeInList(sdsExclusionLists.murderTrancheThree, code)
+
+    const inListA = isCodeInList(pcscLists.listA, code)
+    const inListB = isCodeInList(pcscLists.listB, code)
+    const inListC = isCodeInList(pcscLists.listC, code)
+    const inListD = isCodeInList(pcscLists.listD, code)
 
     const markersExist =
       isSexual ||
@@ -101,6 +107,9 @@ export default class OffenceService {
       isNationalSecurity ||
       isViolent ||
       isTerrorism ||
+      isSexualTrancheThree ||
+      isDomesticAbuseTrancheThree ||
+      isMurderTrancheThree ||
       inListA ||
       inListB ||
       inListC ||
@@ -108,10 +117,13 @@ export default class OffenceService {
 
     return {
       isSexual,
+      isSexualTrancheThree,
       isDomesticAbuse,
+      isDomesticAbuseTrancheThree,
       isNationalSecurity,
       isViolent,
       isTerrorism,
+      isMurderTrancheThree,
       inListA,
       inListB,
       inListC,
