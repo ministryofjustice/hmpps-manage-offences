@@ -47,7 +47,7 @@ export interface paths {
     }
     get?: never
     put?: never
-    /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if passed in offence has children they will also be linked) */
+    /** Link offence to a schedule part - will also link any associated inchoate offences (i.e. if  passed in offence has children they will also be linked) */
     post: operations['linkOffences']
     delete?: never
     options?: never
@@ -747,14 +747,20 @@ export interface components {
     SdsExclusionLists: {
       /** @description Offence falls under the Sexual category */
       sexual: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Tranche Three Offence falls under the Sexual category */
+      sexualTrancheThree: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence falls under the Domestic Abuse category */
       domesticAbuse: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Tranche Three Offence falls under the Domestic Abuse category */
+      domesticAbuseTrancheThree: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence falls under the National Security category */
       nationalSecurity: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence falls under the Violent category */
       violent: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Offence falls under the Terrorism category */
       terrorism: components['schemas']['OffenceToScheduleMapping'][]
+      /** @description Tranche Three Offence falls under the Murder category */
+      murderTrancheThree: components['schemas']['OffenceToScheduleMapping'][]
     }
     PcscLists: {
       /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */

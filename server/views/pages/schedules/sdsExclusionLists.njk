@@ -42,10 +42,24 @@
             }
             },
             {
+              label: "T3 Sexual",
+              id: "tranche-three-sexual",
+              panel: {
+              html: pcscTab(sdsExclusionLists.sexualTrancheThree, 'Tranche Three Offences that relate to the Sexual Offences Act 2003 or where the code begins with SX03 or SX56 or the offence is in Schedule 15 Part 2')
+            }
+            },
+            {
               label: "Domestic Abuse",
               id: "domestic-abuse",
               panel: {
               html: pcscTab(sdsExclusionLists.domesticAbuse, 'Offences that relate to Domestic Abuse')
+            }
+            },
+            {
+              label: "T3 Domestic Abuse",
+              id: "tranche-three-domestic-abuse",
+              panel: {
+              html: pcscTab(sdsExclusionLists.domesticAbuseTrancheThree, 'Tranche Three Offences that relate to Tranche Three Domestic Abuse')
             }
             },
             {
@@ -67,6 +81,13 @@
               id: "violent",
               panel: {
               html: pcscTab(sdsExclusionLists.violent, 'Violent Offences (Schedule 15 Part 1)', 'Violent offences are only excluded for sentences of four years and over.')
+            }
+            },
+            {
+              label: "T3 Murder",
+              id: "tranche3-murder",
+              panel: {
+              html: pcscTab(sdsExclusionLists.murderTrancheThree, 'Tranche Three Murder Offences', 'Murder offences Contrary to Common Law.')
             }
             }
           ]

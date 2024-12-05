@@ -23,10 +23,36 @@ const sexualOffence: OffenceToScheduleMapping = {
   legislationText: 'Legislation text 2',
 }
 
+const sexualOffenceTrancheThree: OffenceToScheduleMapping = {
+  id: 22,
+  code: 'BB12345',
+  description: 'Tranche Three Sexual Offence',
+  startDate: '1994-01-06',
+  endDate: null,
+  childOffences: null,
+  isChild: false,
+  revisionId: 1,
+  changedDate: '2003-07-26',
+  legislationText: 'Legislation text 2',
+}
+
 const domesticAbuseOffence: OffenceToScheduleMapping = {
   id: 3,
   code: 'CC1234',
   description: 'Domestic Abuse Offence',
+  startDate: '1994-01-06',
+  endDate: null,
+  childOffences: null,
+  isChild: false,
+  revisionId: 1,
+  changedDate: '2003-07-26',
+  legislationText: 'Legislation text 3',
+}
+
+const domesticAbuseOffenceTrancheThree: OffenceToScheduleMapping = {
+  id: 33,
+  code: 'CC12345',
+  description: 'Tranche Three Domestic Abuse Offence',
   startDate: '1994-01-06',
   endDate: null,
   childOffences: null,
@@ -75,12 +101,28 @@ const terrorismOffence: OffenceToScheduleMapping = {
   legislationText: 'Legislation text 3',
 }
 
+const trancheThreeMurderOffence: OffenceToScheduleMapping = {
+  id: 4,
+  code: 'MM1234',
+  description: 'Tranche Three Murder Offence',
+  startDate: '1994-01-06',
+  endDate: null,
+  childOffences: null,
+  isChild: false,
+  revisionId: 1,
+  changedDate: '2003-07-26',
+  legislationText: 'Legislation text 3',
+}
+
 const sdsExclusionLists: SdsExclusionLists = {
   sexual: [sexualOffence],
+  sexualTrancheThree: [sexualOffenceTrancheThree],
   domesticAbuse: [domesticAbuseOffence],
+  domesticAbuseTrancheThree: [domesticAbuseOffenceTrancheThree],
   nationalSecurity: [nationalSecurityOffence],
   violent: [violentOffence],
   terrorism: [terrorismOffence],
+  murderTrancheThree: [trancheThreeMurderOffence],
 }
 
 let app: Express
@@ -161,14 +203,17 @@ describe('', () => {
       .expect(res => {
         expect(res.text).toContain('BB1234')
         expect(res.text).toContain('Sexual Offence')
+        expect(res.text).toContain('Tranche Three Sexual Offence')
         expect(res.text).toContain('CC1234')
         expect(res.text).toContain('Domestic Abuse Offence')
+        expect(res.text).toContain('Tranche Three Domestic Abuse Offence')
         expect(res.text).toContain('DD1234')
         expect(res.text).toContain('National Security Offence')
         expect(res.text).toContain('EE1234')
         expect(res.text).toContain('Violent Offence')
         expect(res.text).toContain('FF1234')
         expect(res.text).toContain('Terror Offence')
+        expect(res.text).toContain('Tranche Three Murder Offence')
       })
   })
 })
