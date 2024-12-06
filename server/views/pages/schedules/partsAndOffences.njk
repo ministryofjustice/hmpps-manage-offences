@@ -54,7 +54,7 @@
   {% for part in fullSchedule.scheduleParts %}
     {% set labelDesc = "Part " + part.partNumber + partDesc if partDesc else "Part " + part.partNumber %}
     {% if ['DVEO', 'SEO'].includes(fullSchedule.code) and part.partNumber == 2 %}
-    {% set labelDesc = labelDesc + ' T3'  %}
+    {% set labelDesc = labelDesc + ' (Additional Excluded Offences)'  %}
     {% endif %}
 
     {% set tabRows = (tabRows.push(
@@ -102,7 +102,6 @@
     {% else %}
       {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
         <div class="govuk-grid-column-full text-align-right">
-
           {{ govukButton({
             classes: "govuk-button--tertiary",
             text: "Link offences",
@@ -112,6 +111,11 @@
           }) }}
         </div>
       {% endif %}
+    {% endif %}
+    {% if ['DVEO', 'SEO'].includes(fullSchedule.code) and part.partNumber == 2 %}
+    <h2 class="govuk-heading-m govuk-!-margin-left-3">
+      From 16 December, offences in part 1 will be excluded from early release and must be calculated at 50%
+    </h2>
     {% endif %}
   </div>
 
