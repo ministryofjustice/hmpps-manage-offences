@@ -38,28 +38,14 @@
               label: "Sexual",
               id: "sexual",
               panel: {
-              html: pcscTab(sdsExclusionLists.sexual, 'Offences that relate to the Sexual Offences Act 2003 or where the code begins with SX03 or SX56 or the offence is in Schedule 15 Part 2')
-            }
-            },
-            {
-              label: "T3 Sexual",
-              id: "tranche-three-sexual",
-              panel: {
-              html: pcscTab(sdsExclusionLists.sexualTrancheThree, 'Tranche Three Offences that relate to the Sexual Offences Act 2003 or where the code begins with SX03 or SX56 or the offence is in Schedule 15 Part 2')
+              html: pcscTab(sdsExclusionLists.sexual, 'Offences that relate to the Sexual Offences Act 2003 or where the code begins with SX03 or SX56 or the offence is in Schedule 15 Part 2', null, sdsExclusionLists.sexualTrancheThree)
             }
             },
             {
               label: "Domestic Abuse",
               id: "domestic-abuse",
               panel: {
-              html: pcscTab(sdsExclusionLists.domesticAbuse, 'Offences that relate to Domestic Abuse')
-            }
-            },
-            {
-              label: "T3 Domestic Abuse",
-              id: "tranche-three-domestic-abuse",
-              panel: {
-              html: pcscTab(sdsExclusionLists.domesticAbuseTrancheThree, 'Tranche Three Offences that relate to Tranche Three Domestic Abuse')
+              html: pcscTab(sdsExclusionLists.domesticAbuse, 'Offences that relate to Domestic Abuse', null, sdsExclusionLists.domesticAbuseTrancheThree)
             }
             },
             {
@@ -84,10 +70,10 @@
             }
             },
             {
-              label: "T3 Murder",
+              label: "Murder",
               id: "tranche3-murder",
               panel: {
-              html: pcscTab(sdsExclusionLists.murderTrancheThree, 'Tranche Three Murder Offences', 'Murder offences Contrary to Common Law.')
+              html: pcscTab(sdsExclusionLists.murderTrancheThree, 'Murder Offences for prisoners in custody on or after the 16th Dec 2024', 'Murder offences Contrary to Common Law.')
             }
             }
           ]
@@ -99,7 +85,7 @@
         }) }}
       {% endblock %}
 
-      {% macro pcscTab(list, partDesc, partExtraText) %}
+      {% macro pcscTab(list, partDesc, partExtraText, excludedFromList=[]) %}
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full govuk-!-text-align-left">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
@@ -108,6 +94,20 @@
             <p> {{ partExtraText }} </p>
           </div>
         </div>
+        {% if excludedFromList.length > 0 %}
+          <h2 class="govuk-heading-s">
+            Offences for prisoners in custody on or after the 16th Dec 2024
+          </h2>
+          {{ scheduleOffenceListTable(
+            {
+              offences: excludedFromList,
+              showMaxPeriodAndParagraph: false
+            }
+          ) }}
+          <h2 class="govuk-heading-s">
+            All other Offences
+          </h2>
+        {% endif %}
         {{ scheduleOffenceListTable(
           {
             offences: list,
