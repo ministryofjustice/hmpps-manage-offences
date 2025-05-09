@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   hmpps: ministryofjustice/hmpps@8
-  slack: circleci/slack@4.12.5
+  slack: circleci/slack@4.13.1
 
 parameters:
   alerts-slack-channel:
@@ -15,7 +15,7 @@ parameters:
 
   node-version:
     type: string
-    default: 20.11-browsers
+    default: 22.15-browsers
 
 jobs:
   build:
