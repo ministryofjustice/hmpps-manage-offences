@@ -1,0 +1,42 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+    {% set pageTitle = applicationName + " - Import Offences Summary" %}
+        {% set pageId = "schedules" %}
+
+        {% block navBar %}
+            {{ navBar("schedules") }}
+        {% endblock %}
+
+    {% block aside %}
+        {{ govukBreadcrumbs({
+            items: [
+                {
+                    text: "Schedules / Offences / Import"
+                }
+            ]
+        }) }}
+    {% endblock %}
+
+    {% block content %}
+        <h1 class='govuk-heading-l'>Link offences summary</h1>
+
+        <h3 class="govuk-heading-s">
+            {{ message }}
+        </h3>
+
+        {{ govukButton({
+            classes: "govuk-button--secondary govuk-!-margin-right-2",
+            text: "Back",
+            preventDoubleClick: true,
+            href: "/",
+            attributes: {  'data-qa': 'link-offences-summary' }
+        }) }}
+
+    {% endblock %}

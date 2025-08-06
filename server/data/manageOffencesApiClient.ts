@@ -9,6 +9,7 @@ import {
   OffenceToScheduleMapping,
   PcscLists,
   Schedule,
+  SchedulePart,
   SdsExclusionLists,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 import AuthTokenService from './authTokenService'
@@ -179,5 +180,17 @@ export default class ManageOffencesApiClient extends RestClient {
       },
       { token: user.token },
     ) as Promise<PcscLists>
+  }
+
+  createSchedule(schedule: Schedule, user: User): Promise<Schedule> {
+    return this.post({ path: '/schedule/create', data: schedule }, { token: user.token })
+  }
+
+  createSchedulePart(schedule: SchedulePart, scheduleId: number, user: User): Promise<Schedule> {
+    return this.post({ path: `/schedule/${scheduleId}/part/create`, data: schedule }, { token: user.token })
+  }
+
+  linkOffences(user: User, scheduleId: number, schedulePartId: number, file: Express.Multer.File) {
+    return this.postFile(`/schedule/${scheduleId}/part/${schedulePartId}/offences/import`, file, { token: user.token })
   }
 }

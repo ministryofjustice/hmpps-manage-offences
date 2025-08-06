@@ -1,7 +1,6 @@
 import { Readable } from 'stream'
 import Agent, { HttpsAgent } from 'agentkeepalive'
 import superagent, { Response as SuperAgentResponse } from 'superagent'
-
 import logger from '../../logger'
 import sanitiseError from '../sanitisedError'
 import type { ApiConfig } from '../config'
@@ -122,6 +121,26 @@ export default class RestClient {
 
   async post<Response = unknown>(request: RequestWithBody, signedWithMethod?: SignedWithMethod): Promise<Response> {
     return this.requestWithBody('post', request, signedWithMethod)
+  }
+
+  async postFile(path: string, file: Express.Multer.File, signedWithMethod?: SignedWithMethod) {
+    const signedWith =
+      signedWithMethod?.token || (await this.authTokenService.getSystemClientToken(signedWithMethod?.username))
+    try {
+      const result = await superagent
+        .post(`${this.apiUrl()}${path}`)
+        .auth(signedWith, { type: 'bearer' })
+        .attach('file', file.buffer, {
+          filename: file.originalname,
+          contentType: file.mimetype,
+        })
+
+      return result.body
+    } catch (error) {
+      const sanitisedError = sanitiseError(error)
+      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
+      throw sanitisedError
+    }
   }
 
   async put<Response = unknown>(request: RequestWithBody, signedWithMethod?: SignedWithMethod): Promise<Response> {

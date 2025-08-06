@@ -10,7 +10,7 @@
 {% set pageId = "schedules" %}
 
 {% block navBar %}
-  {{ navBar("schedules") }}
+    {{ navBar("schedules") }}
 {% endblock %}
 
 {% block aside %}
@@ -27,105 +27,113 @@
   }) }}
 {% endblock %}
 
-{% block content %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-1">
-    <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
-    Schedule {{ fullSchedule.code }}
-  </h1>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-      <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">Review <a
-            href={{ fullSchedule.url }} class="govuk-link" rel="noreferrer noopener"
-            target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk
-      </p>
-    </div>
+{% macro linkOffencesButton(scheduleId, partId) %}
+    {{ govukButton({
+        classes: "govuk-button--tertiary",
+        text: "Link offences",
+        preventDoubleClick: true,
+        href: '/schedules/link-offences/' + scheduleId + '/' + partId,
+        attributes: { 'data-qa': 'link-offences' }
+    }) }}
+{% endmacro %}
 
-    {% if fullSchedule.code === '15' %}
-      <div class="govuk-grid-column-one-half govuk-!-text-align-right">
-        <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">
-          <a href="/schedules/pcsc-lists?scheduleId={{ fullSchedule.id }}" class="govuk-link" rel="noreferrer noopener">SDS+
-            Offences for PCSC</a>
-        </p>
-      </div>
-    {% endif %}
-  </div>
-
-  {% set tabRows = [] %}
-  {% for part in fullSchedule.scheduleParts %}
-    {% set labelDesc = "Part " + part.partNumber + partDesc if partDesc else "Part " + part.partNumber %}
-    {% if ['DVEO', 'SEO'].includes(fullSchedule.code) and part.partNumber == 2 %}
-    {% set labelDesc = labelDesc + ' (Additional Excluded Offences)'  %}
-    {% endif %}
-
-    {% set tabRows = (tabRows.push(
-      {
-        label: labelDesc,
-        id: "part-" + part.id,
-        panel: {
-        html: partTab(part, fullSchedule, csrfToken)
-      }
-      }
-    ), tabRows) %}
-  {% endfor %}
-
-  {{ govukTabs({
-    classes: 'borderless-tabs',
-    items: tabRows
-  }) }}
-
-  {{ govukBackLink({
-    text: "Back",
-    href: '/schedules'
-  }) }}
-{% endblock %}
+{% macro linkOffencesByCsvButton(scheduleId, partId) %}
+    {{ govukButton({
+        classes: "govuk-button--tertiary",
+        text: "Link offences using CSV",
+        preventDoubleClick: true,
+        href: '/schedules/parts-and-offences/' + scheduleId + '/part/' + partId + '/link',
+        attributes: { 'data-qa': 'link-offences-by-csv' }
+    }) }}
+{% endmacro %}
 
 {% macro partTab(part, fullSchedule, csrfToken) %}
-  <div class="govuk-grid-row">
-    {% if partDesc %}
-      <div class="govuk-grid-column-one-half govuk-!-text-align-left">
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          {{ partDesc }}
-        </h2>
-      </div>
-      {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
-        <div class="govuk-grid-column-one-half text-align-right">
+    <div class="govuk-grid-row">
+        {% set showExtraHeading = ['DVEO', 'SEO'].includes(fullSchedule.code) and part.partNumber == 2 %}
+        {% if partDesc %}
+            <div class="govuk-grid-column-one-half govuk-!-text-align-left">
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-0">{{ partDesc }}</h2>
+            </div>
+        {% endif %}
 
-          {{ govukButton({
-            classes: "govuk-button--tertiary",
-            text: "Link offences",
-            preventDoubleClick: true,
-            href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
-            attributes: {  'data-qa': 'link-offences' }
-          }) }}
-        </div>
-      {% endif %}
-    {% else %}
-      {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
-        <div class="govuk-grid-column-full text-align-right">
-          {{ govukButton({
-            classes: "govuk-button--tertiary",
-            text: "Link offences",
-            preventDoubleClick: true,
-            href: '/schedules/link-offences/' + fullSchedule.id + '/' + part.id,
-            attributes: {  'data-qa': 'link-offences' }
-          }) }}
-        </div>
-      {% endif %}
-    {% endif %}
-    {% if ['DVEO', 'SEO'].includes(fullSchedule.code) and part.partNumber == 2 %}
-    <h2 class="govuk-heading-m govuk-!-margin-left-3">
-      From 16 December, offences in part 1 will be excluded from early release and must be calculated at 50%
-    </h2>
-    {% endif %}
-  </div>
+        {% if 'UPDATE_OFFENCE_SCHEDULES' in user.roles %}
+             <div class="govuk-grid-column-full text-align-right">
+                 {{ linkOffencesButton(fullSchedule.id, part.id) }}
+                 {{ linkOffencesByCsvButton(fullSchedule.id, part.id) }}
+                 {{ govukButton({
+                     classes: "govuk-button",
+                     text: "Create new part",
+                     preventDoubleClick: true,
+                     href: '/schedules/parts-and-offences/' + fullSchedule.id + '/part/create',
+                     attributes: { 'data-qa': 'link-create-new-schedule-part' }
+                 }) }}
+             </div>
+        {% endif %}
 
-  {{ linkedOffenceTable(
-    {
-      offences: part.offences,
-      scheduleId: fullSchedule.id,
-      schedulePartId: part.id,
-      csrfToken: csrfToken,
-      user: user
-    }
-  ) }}
+        {% if showExtraHeading %}
+            <h2 class="govuk-heading-m govuk-!-margin-left-3">
+                From 16 December, offences in part 1 will be excluded from early release and must be calculated at 50%
+            </h2>
+        {% endif %}
+    </div>
+
+    {{ linkedOffenceTable({
+        offences: part.offences,
+        scheduleId: fullSchedule.id,
+        schedulePartId: part.id,
+        csrfToken: csrfToken,
+        user: user
+    }) }}
 {% endmacro %}
+
+{% block content %}
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-1">
+        <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
+        Schedule {{ fullSchedule.code }}
+    </h1>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">
+                Review <a href="{{ fullSchedule.url }}" class="govuk-link" rel="noreferrer noopener" target="_blank">
+                    Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}
+                </a> on legislation.gov.uk
+            </p>
+        </div>
+
+        {% if fullSchedule.code === '15' %}
+            <div class="govuk-grid-column-one-half govuk-!-text-align-right">
+                <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">
+                    <a href="/schedules/pcsc-lists?scheduleId={{ fullSchedule.id }}" class="govuk-link"
+                       rel="noreferrer noopener">SDS+
+                        Offences for PCSC</a>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+    {% set tabRows = [] %}
+    {% for part in fullSchedule.scheduleParts %}
+        {% set labelDesc = "Part " + part.partNumber + (partDesc if partDesc else "") %}
+        {% if ['DVEO', 'SEO'].includes(fullSchedule.code) and part.partNumber == 2 %}
+            {% set labelDesc = labelDesc + ' (Additional Excluded Offences)' %}
+        {% endif %}
+        {% set tabRows = (tabRows.push({
+            label: labelDesc,
+            id: "part-" + part.id,
+            panel: {
+                html: partTab(part, fullSchedule, csrfToken)
+            }
+        }), tabRows) %}
+    {% endfor %}
+
+    {{ govukTabs({
+        classes: 'borderless-tabs',
+        items: tabRows
+    }) }}
+
+    {{ govukBackLink({
+        text: "Back",
+        href: '/schedules'
+    }) }}
+{% endblock %}

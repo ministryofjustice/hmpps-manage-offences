@@ -34,4 +34,5 @@ export const dataAccess = () => ({
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { RestClientBuilder, ManageUsersApiClient }
+export { ManageUsersApiClient }
+export type { RestClientBuilder }

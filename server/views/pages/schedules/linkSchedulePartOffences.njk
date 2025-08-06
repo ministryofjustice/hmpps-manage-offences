@@ -1,0 +1,80 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+    {% set pageTitle = applicationName + " -Schedule part link offences by CSV" %}
+        {% set pageId = "schedule-part-link-offences-csv" %}
+
+        {% block navBar %}
+            {{ navBar("schedules") }}
+        {% endblock %}
+
+    {% block aside %}
+        {{ govukBreadcrumbs({
+            items: [
+                {
+                    text: "Schedules",
+                    href: "/schedules"
+                },
+                {
+                    text: "Schedule " + fullSchedule.code,
+                    href: "/schedules/parts-and-offences/" + fullSchedule.id
+                },
+                {
+                    text: "Link"
+                }
+            ]
+        }) }}
+    {% endblock %}
+
+    {% block content %}
+        <h1 class='govuk-heading-l'>Link offences</h1>
+
+        {% if errors.length  %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors
+        }) }}
+        {% endif %}
+
+        <h3 class="govuk-heading-s">
+            Use the CSV file provided here to link offences to the schedule part. Offence code must be valid, or will be ignored.
+        </h3>
+
+        <p>
+            Please ensure each row has a valid offence code. Invalid codes will be ignored.
+        </p>
+
+        <form method='POST' enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+            {{ govukFileUpload({
+                id: "offences-file",
+                name: "file",
+                label: {
+                    text: "Link offences CSV"
+                }
+            }) }}
+
+            {{ govukButton({
+                classes: "govuk-button--primary govuk-!-margin-right-2",
+                text: "Import",
+                preventDoubleClick: true,
+                type: submit,
+                attributes: {  'data-qa': 'link-offences' }
+            }) }}
+
+            {{ govukButton({
+                classes: "govuk-button--secondary govuk-!-margin-right-2",
+                text: "Cancel",
+                preventDoubleClick: true,
+                href: "/schedules/parts-and-offences/" + fullSchedule.id,
+                attributes: {  'data-qa': 'link-offences' }
+            }) }}
+        </form>
+    {% endblock %}

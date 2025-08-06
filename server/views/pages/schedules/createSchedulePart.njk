@@ -1,0 +1,56 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+    {% set pageTitle = applicationName + " - Create Schedule Part" %}
+        {% set pageId = "schedules" %}
+
+        {% block navBar %}
+            {{ navBar("schedules") }}
+        {% endblock %}
+
+    {% block aside %}
+        {{ govukBreadcrumbs({
+            items: [
+                {
+                    text: "Schedules",
+                    href: "/schedules"
+                },
+                {
+                    text: "Schedule " + fullSchedule.code,
+                    href: "/schedules/parts-and-offences/" + fullSchedule.id
+                },
+                {
+                    text: "Create part"
+                }
+            ]
+        }) }}
+    {% endblock %}
+
+    {% block content %}
+        <h1 class='govuk-heading-l'>Create new Schedule Part</h1>
+        <h2 class="govuk-heading-s">Click Create for Schedule Part {{ newPartNumber }}</h2>
+        <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            <input type="hidden" name="newPartNumber" value="{{ newPartNumber }}" />
+            {{ govukButton({
+                classes: "govuk-button--primary govuk-!-margin-right-2",
+                text: "Create",
+                preventDoubleClick: true,
+                type: submit,
+                attributes: {  'data-qa': 'create-schedule' }
+            }) }}
+
+            {{ govukButton({
+                classes: "govuk-button--secondary govuk-!-margin-right-2",
+                text: "Cancel",
+                preventDoubleClick: true,
+                href: "/schedules/parts-and-offences/" + fullSchedule.id,
+                attributes: {  'data-qa': 'create-schedule-cancel' }
+            }) }}
+        </form>
+    {% endblock %}

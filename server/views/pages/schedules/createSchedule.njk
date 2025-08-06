@@ -1,0 +1,109 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+    {% set pageTitle = applicationName + " - Create Schedule" %}
+        {% set pageId = "schedules" %}
+
+        {% block navBar %}
+            {{ navBar("schedules") }}
+        {% endblock %}
+
+    {% block aside %}
+        {{ govukBreadcrumbs({
+            items: [
+                {
+                    text: "Schedules",
+                    href: "/schedules"
+                },
+                {
+                    text: "Create"
+                }
+            ]
+        }) }}
+    {% endblock %}
+
+    {% block content %}
+        {% if "existingSchedule" in errors %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: [
+                {
+                    text: "An existing Schedule with the same Act and Code already exists",
+                    href: "#"
+                }
+            ]
+        }) }}
+        {% endif %}
+
+        {% if "act" in errors %}
+            {% set actError = { text: "Please provide the Act name"} %}
+        {% endif %}
+        {% if "code" in errors %}
+            {% set codeError = { text: "Please provide the code"} %}
+        {% endif %}
+        {% if "parts" in errors %}
+            {% set partsError = { text: "Please provide the number of parts for the new schedule"} %}
+        {% endif %}
+        <h1 class='govuk-heading-l'>Create new Schedule</h1>
+
+        <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+            {{ govukInput({
+                label: {
+                    text: "Act"
+                },
+                id: "schedule-act",
+                name: "scheduleAct",
+                classes: "govuk-input--width-30",
+                errorMessage: actError
+            }) }}
+            {{ govukInput({
+                label: {
+                    text: "Code"
+                },
+                id: "schedule-code",
+                name: "scheduleCode",
+                classes: "govuk-input--width-30",
+                errorMessage: codeError
+            }) }}
+            {{ govukInput({
+                label: {
+                    text: "Number of schedule parts"
+                },
+                id: "schedule-parts",
+                name: "scheduleParts",
+                classes: "govuk-input--width-30",
+                errorMessage: partsError
+            }) }}
+            {{ govukInput({
+                label: {
+                    text: "Url (Optional)"
+                },
+                id: "schedule-url",
+                name: "scheduleUrl",
+                classes: "govuk-input--width-30"
+            }) }}
+
+            {{ govukButton({
+                classes: "govuk-button--primary govuk-!-margin-right-2",
+                text: "Create",
+                preventDoubleClick: true,
+                type: submit,
+                attributes: {  'data-qa': 'create-schedule-cancel' }
+            }) }}
+
+            {{ govukButton({
+                classes: "govuk-button--secondary govuk-!-margin-right-2",
+                text: "Cancel",
+                preventDoubleClick: true,
+                href: "/",
+                attributes: {  'data-qa': 'create-schedule' }
+            }) }}
+        </form>
+    {% endblock %}

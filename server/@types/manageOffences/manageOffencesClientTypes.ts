@@ -6,9 +6,11 @@ export type LinkOffence = components['schemas']['LinkOffence']
 export type MostRecentLoadResult = components['schemas']['MostRecentLoadResult']
 export type FeatureToggle = components['schemas']['FeatureToggle']
 export type Schedule = components['schemas']['Schedule']
+export type SchedulePart = components['schemas']['SchedulePart']
 export type NomisChangeHistory = components['schemas']['NomisChangeHistory']
 export type PcscLists = components['schemas']['PcscLists']
 export type SdsExclusionLists = components['schemas']['SdsExclusionLists']
+export type ImportCsvResult = components['schemas']['ImportCsvResult']
 export type DateInput = {
   day: number
   month: number

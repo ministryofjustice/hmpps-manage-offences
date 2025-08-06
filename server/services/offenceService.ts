@@ -6,6 +6,7 @@ import {
   OffenceToScheduleMapping,
   PcscLists,
   Schedule,
+  SchedulePart,
   SdsExclusionLists,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 import AuthorisedRoles from '../enums/authorisedRoles'
@@ -139,5 +140,22 @@ export default class OffenceService {
       childOffences.some(o => o.code === `${parentOffence.code}E`) === false &&
       (!parentOffence.endDate || new Date(parentOffence.endDate) > OffenceService.INCHOATE_SENTENCE_END_DATED)
     )
+  }
+
+  async createSchedule(user: User, act: string, code: string, scheduleParts: number, url?: string) {
+    const parts: SchedulePart[] = Array.from({ length: scheduleParts }, (_, index) => ({
+      id: -1,
+      partNumber: index + 1,
+    }))
+    await this.manageOffencesApi.createSchedule({ id: -1, act, code, url, scheduleParts: parts }, user)
+  }
+
+  async createSchedulePart(user: User, scheduleId: number, partNumber: number) {
+    const schedulePart: SchedulePart = { id: -1, partNumber }
+    await this.manageOffencesApi.createSchedulePart(schedulePart, scheduleId, user)
+  }
+
+  async linkSchedulePartOffences(user: User, scheduleId: number, schedulePartId: number, file: Express.Multer.File) {
+    return this.manageOffencesApi.linkOffences(user, scheduleId, schedulePartId, file)
   }
 }

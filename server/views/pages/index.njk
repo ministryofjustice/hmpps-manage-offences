@@ -51,8 +51,14 @@
                                     <a class="govuk-link" href="/schedules/pcsc-lists">SDS+ offences for PCSC</a>
                                 </li>
                                 <li>
-                                    <a class="govuk-link" href="/schedules/sds-exclusion-lists">SDS Early Release Exclusions</a>
+                                    <a class="govuk-link" href="/schedules/sds-exclusion-lists">SDS Early Release
+                                        Exclusions</a>
                                 </li>
+                                {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+                                    <li>
+                                        <a class="govuk-link" href="/schedules/create">Create Schedule</a>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </div>
 

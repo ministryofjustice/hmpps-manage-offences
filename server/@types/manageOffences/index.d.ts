@@ -21,6 +21,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/schedule/{scheduleId}/part/create': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Create a schedule part */
+    post: operations['createSchedulePart']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/schedule/unlink-offences': {
     parameters: {
       query?: never
@@ -66,6 +83,26 @@ export interface paths {
     put?: never
     /** Create a schedule */
     post: operations['createSchedule']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/offences/import': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getImportCsv']
+    put?: never
+    /**
+     * Upload multiple offences using CSV file
+     * @description Use formatted CSV file to upload multiple offences. Offence code must not already be in use.
+     */
+    post: operations['importCSVFile']
     delete?: never
     options?: never
     head?: never
@@ -140,6 +177,26 @@ export interface paths {
       cookie?: never
     }
     get: operations['getToreraOffenceCodes']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/schedule/torera-offence-codes-by-schedule-part': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve all schedule 19ZA offence codes by part number
+     * @description Returns list of offence codes broken down by schedule part, commonly used for TORERA offences
+     */
+    get: operations['getToreraScheduleParts']
     put?: never
     post?: never
     delete?: never
@@ -479,34 +536,6 @@ export interface components {
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
-    /** @description Schedule part ID and Offence ID - used for unlinking offences from schedules */
-    SchedulePartIdAndOffenceId: {
-      /** Format: int64 */
-      schedulePartId: number
-      /** Format: int64 */
-      offenceId: number
-    }
-    LinkOffence: {
-      /**
-       * Format: int64
-       * @description Unique ID of the offence
-       */
-      offenceId: number
-      /**
-       * Format: int64
-       * @description The offence code
-       */
-      schedulePartId: number
-      /** @description The line reference for the associated schedule's legislation */
-      lineReference?: string
-      /** @description The legislation text for the associated schedule */
-      legislationText?: string
-      /** @description Schedule paragraph title that this offence is mapped to */
-      paragraphTitle?: string
-      /** @description Schedule paragraph number that this offence is mapped to */
-      paragraphNumber?: string
-    }
-    /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
     BasicOffence: {
       /**
        * Format: int64
@@ -612,10 +641,44 @@ export interface components {
        */
       maxPeriodOfIndictmentWeeks?: number
       /**
-       * Format: int32
-       * @description Set to the max period of indictment in days
+             * Format: int32
+             * @description Set to the max period of indictment in days
+             * /
+            maxPeriodOfIndictmentDays?: number;
+            /** @description The line reference for the associated schedule's legislation */
+      lineReference?: string
+      /** @description The legislation text for the associated schedule */
+      legislationText?: string
+      /** @description Schedule paragraph title that this offence is mapped to */
+      paragraphTitle?: string
+      /** @description Schedule paragraph number that this offence is mapped to */
+      paragraphNumber?: string
+    }
+    /** @description Schedule part details and associated offences */
+    SchedulePart: {
+      /** Format: int32 */
+      id: number
+      partNumber: number
+      offences?: components['schemas']['OffenceToScheduleMapping'][]
+    }
+    /** @description Schedule part ID and Offence ID - used for unlinking offences from schedules */
+    SchedulePartIdAndOffenceId: {
+      /** Format: int64 */
+      schedulePartId: number
+      /** Format: int64 */
+      offenceId: number
+    }
+    LinkOffence: {
+      /**
+       * Format: int64
+       * @description Unique ID of the offence
        */
-      maxPeriodOfIndictmentDays?: number
+      offenceId: number
+      /**
+       * Format: int64
+       * @description The offence code
+       */
+      schedulePartId: number
       /** @description The line reference for the associated schedule's legislation */
       lineReference?: string
       /** @description The legislation text for the associated schedule */
@@ -634,13 +697,10 @@ export interface components {
       url?: string
       scheduleParts?: components['schemas']['SchedulePart'][]
     }
-    /** @description Schedule part details and associated offences */
-    SchedulePart: {
-      /** Format: int64 */
-      id: number
-      /** Format: int32 */
-      partNumber: number
-      offences?: components['schemas']['OffenceToScheduleMapping'][]
+    ImportCsvResult: {
+      success: boolean
+      message: string
+      errors: string[]
     }
     /** @description Offence details */
     Offence: {
@@ -724,6 +784,11 @@ export interface components {
        * @enum {string}
        */
       custodialIndicator?: 'Y' | 'N' | 'E'
+    }
+    ToreraSchedulePartCodes: {
+      parts: {
+        [key: string]: string[]
+      }
     }
     /** @description Categorises the offence based on the exclusion list it appears in */
     OffenceSdsExclusion: {
@@ -898,6 +963,30 @@ export interface operations {
       }
     }
   }
+  createSchedulePart: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        scheduleId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SchedulePart']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   unlinkOffences: {
     parameters: {
       query?: never
@@ -961,6 +1050,55 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  getImportCsv: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+    }
+  }
+  importCSVFile: {
+    parameters: {
+      query?: {
+        schedulePartId?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': {
+          /** Format: binary */
+          file: string
+        }
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ImportCsvResult']
+        }
       }
     }
   }
@@ -1046,6 +1184,26 @@ export interface operations {
         }
         content: {
           'application/json': string[]
+        }
+      }
+    }
+  }
+  getToreraScheduleParts: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ToreraSchedulePartCodes']
         }
       }
     }

@@ -34,10 +34,7 @@
   "jest": {
     "transform": {
       "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "isolatedModules": true
-        }
+        "ts-jest"
       ]
     },
     "collectCoverageFrom": [
@@ -92,6 +89,7 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^3.7.2",
+    "@types/multer": "^2.0.0",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.7",
     "body-parser": "^2.2.0",
@@ -108,6 +106,7 @@
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
     "jwt-decode": "^4.0.0",
+    "multer": "^2.0.2",
     "nocache": "^4.0.0",
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",

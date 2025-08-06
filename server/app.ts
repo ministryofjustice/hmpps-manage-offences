@@ -1,4 +1,5 @@
 import express from 'express'
+import multer from 'multer'
 
 import createError from 'http-errors'
 
@@ -27,6 +28,8 @@ export default function createApp(services: Services): express.Application {
   app.set('port', process.env.PORT || 3000)
 
   app.use(metricsMiddleware)
+  app.use(express.urlencoded({ extended: true }))
+  app.use(multer({ storage: multer.memoryStorage() }).any())
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
@@ -40,7 +43,7 @@ export default function createApp(services: Services): express.Application {
 
   app.use(routes(services))
 
-  app.use((req, res, next) => next(createError(404, 'Not found')))
+  app.use((_req, _res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
 
   return app
