@@ -12,4 +12,6 @@ export default class IndexPage extends Page {
   loadMonitorLink = (): PageElement => cy.get('[href="/load-results"]')
 
   toggleJobsLink = (): PageElement => cy.get('[href="/toggle-jobs"]')
+
+  createScheduleLink = (): PageElement => cy.get('[href="/schedules/create"]')
 }

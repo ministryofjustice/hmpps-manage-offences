@@ -21,6 +21,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/schedule/{scheduleId}/part/{schedulePartId}/offences/import': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getImportCsv']
+    put?: never
+    /**
+     * Upload multiple offences using CSV file
+     * @description Use formatted CSV file to upload multiple offences.
+     */
+    post: operations['importCSVFile']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/schedule/{scheduleId}/part/create': {
     parameters: {
       query?: never
@@ -83,26 +103,6 @@ export interface paths {
     put?: never
     /** Create a schedule */
     post: operations['createSchedule']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/offences/import': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['getImportCsv']
-    put?: never
-    /**
-     * Upload multiple offences using CSV file
-     * @description Use formatted CSV file to upload multiple offences. Offence code must not already be in use.
-     */
-    post: operations['importCSVFile']
     delete?: never
     options?: never
     head?: never
@@ -536,6 +536,11 @@ export interface components {
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
     }
+    ImportCsvResult: {
+      success: boolean
+      message: string
+      errors: string[]
+    }
     BasicOffence: {
       /**
        * Format: int64
@@ -641,11 +646,11 @@ export interface components {
        */
       maxPeriodOfIndictmentWeeks?: number
       /**
-             * Format: int32
-             * @description Set to the max period of indictment in days
-             * /
-            maxPeriodOfIndictmentDays?: number;
-            /** @description The line reference for the associated schedule's legislation */
+       * Format: int32
+       * @description Set to the max period of indictment in days
+       */
+      maxPeriodOfIndictmentDays?: number
+      /** @description The line reference for the associated schedule's legislation */
       lineReference?: string
       /** @description The legislation text for the associated schedule */
       legislationText?: string
@@ -656,8 +661,9 @@ export interface components {
     }
     /** @description Schedule part details and associated offences */
     SchedulePart: {
-      /** Format: int32 */
+      /** Format: int64 */
       id: number
+      /** Format: int32 */
       partNumber: number
       offences?: components['schemas']['OffenceToScheduleMapping'][]
     }
@@ -696,11 +702,6 @@ export interface components {
       code: string
       url?: string
       scheduleParts?: components['schemas']['SchedulePart'][]
-    }
-    ImportCsvResult: {
-      success: boolean
-      message: string
-      errors: string[]
     }
     /** @description Offence details */
     Offence: {
@@ -963,6 +964,55 @@ export interface operations {
       }
     }
   }
+  getImportCsv: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': string
+        }
+      }
+    }
+  }
+  importCSVFile: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        schedulePartId: number
+      }
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': {
+          /** Format: binary */
+          file: string
+        }
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ImportCsvResult']
+        }
+      }
+    }
+  }
   createSchedulePart: {
     parameters: {
       query?: never
@@ -1050,55 +1100,6 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
-      }
-    }
-  }
-  getImportCsv: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': string
-        }
-      }
-    }
-  }
-  importCSVFile: {
-    parameters: {
-      query?: {
-        schedulePartId?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'application/json': {
-          /** Format: binary */
-          file: string
-        }
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ImportCsvResult']
-        }
       }
     }
   }

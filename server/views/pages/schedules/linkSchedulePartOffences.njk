@@ -35,35 +35,50 @@
     {% block content %}
         <h1 class='govuk-heading-l'>Link offences</h1>
 
-        {% if errors.length  %}
-        {{ govukErrorSummary({
-            titleText: "There is a problem",
-            errorList: errors
-        }) }}
+        {% if errors.length %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errors
+            }) }}
         {% endif %}
 
-        <h3 class="govuk-heading-s">
-            Use the CSV file provided here to link offences to the schedule part. Offence code must be valid, or will be ignored.
-        </h3>
-
         <p>
-            Please ensure each row has a valid offence code. Invalid codes will be ignored.
+            Use the CSV template provided <a href="{{ "/schedules/parts-and-offences/" + fullSchedule.id + "/part/link/csv" }}">here</a>
+            to link offences to the schedule part.
         </p>
+        <p>
+            File <strong>must</strong> be 1Mb or less in size
+        </p>
+        <p>
+            Please review the following point before submitting the CSV.
+        </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li>
+                Ensure each row has a valid offence code.
+            </li>
+            <li>
+                Offence codes not found within Manage Offences will be ignored.
+            </li>
+            <li>
+                Offence codes greater than 7 characters will be excluded (only child offences are greater).
+            </li>
+            <li>
+                Any child offences relating to a submitted offence will be included in the schedule.
+            </li>
+        </ul>
 
         <form method='POST' enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
             {{ govukFileUpload({
                 id: "offences-file",
-                name: "file",
-                label: {
-                    text: "Link offences CSV"
-                }
+                name: "file"
             }) }}
 
             {{ govukButton({
                 classes: "govuk-button--primary govuk-!-margin-right-2",
-                text: "Import",
+                text: "Submit",
                 preventDoubleClick: true,
                 type: submit,
                 attributes: {  'data-qa': 'link-offences' }

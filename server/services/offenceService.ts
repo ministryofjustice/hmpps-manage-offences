@@ -158,4 +158,8 @@ export default class OffenceService {
   async linkSchedulePartOffences(user: User, scheduleId: number, schedulePartId: number, file: Express.Multer.File) {
     return this.manageOffencesApi.linkOffences(user, scheduleId, schedulePartId, file)
   }
+
+  getScheduleLinkOffencesCsv(user: User, scheduleId: number) {
+    return this.manageOffencesApi.getScheduleLinkOffencesCsv(user, scheduleId)
+  }
 }

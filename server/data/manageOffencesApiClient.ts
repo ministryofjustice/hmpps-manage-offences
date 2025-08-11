@@ -193,4 +193,11 @@ export default class ManageOffencesApiClient extends RestClient {
   linkOffences(user: User, scheduleId: number, schedulePartId: number, file: Express.Multer.File) {
     return this.postFile(`/schedule/${scheduleId}/part/${schedulePartId}/offences/import`, file, { token: user.token })
   }
+
+  getScheduleLinkOffencesCsv(user: User, scheduleId: number) {
+    return this.get(
+      { path: `/schedule/${scheduleId}/part/offences/import`, responseType: 'text/csv' },
+      { token: user.token },
+    ) as Promise<Buffer>
+  }
 }

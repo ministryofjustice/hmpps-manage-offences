@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import ToggleJobsRoutes from './handlers/toggleJobs'
 import AdminService from '../../services/adminService'
 
@@ -8,8 +7,8 @@ export const toggleJobsPaths = {
 }
 export default function Index(adminService: AdminService): Router {
   const router = Router()
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   const toggleJobsHandler = new ToggleJobsRoutes(adminService)
 

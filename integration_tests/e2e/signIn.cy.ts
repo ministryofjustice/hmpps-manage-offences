@@ -74,4 +74,18 @@ context('Sign In', () => {
     indexPage.loadMonitorLink().should('exist')
     indexPage.toggleJobsLink().should('exist')
   })
+
+  it('user with offence schedules role can see create new Schedule Link', () => {
+    cy.task('stubSignIn', ['UPDATE_OFFENCE_SCHEDULES'])
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.createScheduleLink().should('exist')
+  })
+
+  it('user without offence schedules role should not see create new Schedule Link', () => {
+    cy.task('stubSignIn', [])
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.createScheduleLink().should('not.exist')
+  })
 })

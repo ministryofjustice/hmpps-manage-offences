@@ -26,6 +26,7 @@ export default function Index(offenceService: OffenceService): Router {
   get('/schedules/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
   get('/schedules/parts-and-offences/:scheduleId/part/create', partsAndOffencesHandler.GET_PART_CREATE)
   post('/schedules/parts-and-offences/:scheduleId/part/create', partsAndOffencesHandler.POST_PART_CREATE)
+  get('/schedules/parts-and-offences/:scheduleId/part/link/csv', partsAndOffencesHandler.GET_PART_LINK_OFFENCES_CSV)
   get(
     '/schedules/parts-and-offences/:scheduleId/part/:schedulePartId/link',
     partsAndOffencesHandler.GET_PART_LINK_OFFENCES,

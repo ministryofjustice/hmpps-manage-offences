@@ -1,0 +1,12 @@
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Error" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+
+    <h1>Invalid file upload</h1>
+    <h2>{{ error }}</h2>
+    <a href="{{ returnUrl }}">Back</a>
+
+{% endblock %}

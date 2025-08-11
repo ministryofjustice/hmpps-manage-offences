@@ -6,8 +6,9 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-    {% set pageTitle = applicationName + " - Import Offences Summary" %}
+    {% set pageTitle = applicationName + " - Link Schedule Offences Summary" %}
         {% set pageId = "schedules" %}
 
         {% block navBar %}
@@ -25,18 +26,20 @@
     {% endblock %}
 
     {% block content %}
-        <h1 class='govuk-heading-l'>Link offences summary</h1>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {{ govukPanel({
+                    titleText: "Linked offences summary",
+                    html: message
+                }) }}
 
-        <h3 class="govuk-heading-s">
-            {{ message }}
-        </h3>
-
-        {{ govukButton({
-            classes: "govuk-button--secondary govuk-!-margin-right-2",
-            text: "Back",
-            preventDoubleClick: true,
-            href: "/",
-            attributes: {  'data-qa': 'link-offences-summary' }
-        }) }}
-
+                {{ govukButton({
+                    classes: "govuk-button--secondary govuk-!-margin-right-2",
+                    text: "Back",
+                    preventDoubleClick: true,
+                    href: "/schedules/parts-and-offences/" + scheduleId,
+                    attributes: {  'data-qa': 'link-offences-summary' }
+                }) }}
+            </div>
+        </div>
     {% endblock %}
