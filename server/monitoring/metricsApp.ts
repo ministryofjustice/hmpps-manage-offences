@@ -20,7 +20,7 @@ function metricsPort(): number {
 
 function createMetricsApp(): express.Application {
   const metricsApp = express()
-  metricsApp.use(metricsMiddleware.metricsMiddleware)
+  metricsApp.use('/', metricsMiddleware.metricsMiddleware as unknown as express.RequestHandler)
   metricsApp.set('port', metricsPort())
   return metricsApp
 }
