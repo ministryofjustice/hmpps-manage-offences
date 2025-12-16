@@ -26,7 +26,7 @@ export default function createApp(services: Services): express.Application {
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
-  app.use('/', metricsMiddleware)
+  app.use('/', metricsMiddleware as unknown as express.RequestHandler)
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
