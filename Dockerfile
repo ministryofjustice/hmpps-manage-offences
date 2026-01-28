@@ -10,9 +10,6 @@ LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 ENV TZ=Europe/London
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
-RUN addgroup --gid 2000 --system appgroup && \
-        adduser --uid 2000 --system appuser --gid 2000
-
 WORKDIR /app
 
 # Cache breaking and ensure required build / git args defined
@@ -31,7 +28,7 @@ RUN apt-get update && \
         rm -rf /var/lib/apt/lists/*
 
 # Stage: build assets
-FROM base as build
+FROM base AS build
 
 ARG BUILD_NUMBER
 ARG GIT_REF
