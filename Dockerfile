@@ -22,10 +22,8 @@ ENV BUILD_NUMBER=${BUILD_NUMBER}
 ENV GIT_REF=${GIT_REF}
 ENV GIT_BRANCH=${GIT_BRANCH}
 
-RUN apt-get update && \
-        apt-get upgrade -y && \
-        apt-get autoremove -y && \
-        rm -rf /var/lib/apt/lists/*
+RUN apk --no-cache update && \
+    apk --no-cache upgrade
 
 # Stage: build assets
 FROM base AS build
