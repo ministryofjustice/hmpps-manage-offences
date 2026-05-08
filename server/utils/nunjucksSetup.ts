@@ -29,7 +29,7 @@ const months = {
 
 type MonthKey = keyof typeof months
 
-export default function nunjucksSetup(app: express.Express): void {
+export default function nunjucksSetup(app: express.Express): Environment {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
@@ -102,5 +102,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('checkRadioIfIncludes', (array, itemToCheck) => {
     return array.map((item: any) => (String(item.value) === String(itemToCheck) ? { ...item, checked: true } : item))
   })
-
+  return njkEnv
 }

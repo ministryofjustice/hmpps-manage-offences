@@ -1,13 +1,14 @@
+import express from 'express'
 import nunjucks, { Template } from 'nunjucks'
 import * as cheerio from 'cheerio'
 import fs from 'fs'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
+import nunjucksSetup from '../../../utils/nunjucksSetup'
 
 const snippet = fs.readFileSync('server/views/pages/schedules/pcscLists.njk')
 
 describe('scheduleOffenceListTable rendering /', () => {
   let compiledTemplate: Template
-  const njkEnv = registerNunjucks()
+  const njkEnv = nunjucksSetup(express())
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
