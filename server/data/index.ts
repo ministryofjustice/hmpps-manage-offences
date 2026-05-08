@@ -15,7 +15,6 @@ import { createRedisClient } from './redisClient'
 import config from '../config'
 import HmppsAuditClient from './hmppsAuditClient'
 import logger from '../../logger'
-import ManageUsersApiClient from './manageUsersApiClient'
 import ManageOffencesApiClient from './manageOffencesApiClient'
 import PrisonApiClient from './prisonApiClient'
 
@@ -30,7 +29,6 @@ export const dataAccess = () => {
   return {
     applicationInfo,
     hmppsAuthClient,
-    manageUsersApiClient: new ManageUsersApiClient(hmppsAuthClient),
     manageOffencesApiClient: new ManageOffencesApiClient(hmppsAuthClient),
     prisonApiClient: new PrisonApiClient(hmppsAuthClient),
     hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),

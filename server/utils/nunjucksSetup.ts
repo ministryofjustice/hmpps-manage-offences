@@ -47,10 +47,6 @@ export default function nunjucksSetup(app: express.Express): void {
     }
   }
 
-  registerNunjucks(app)
-}
-
-export function registerNunjucks(app?: express.Express): Environment {
   const njkEnv = nunjucks.configure(
     [
       path.join(__dirname, '../../server/views'),
@@ -107,5 +103,4 @@ export function registerNunjucks(app?: express.Express): Environment {
     return array.map((item: any) => (String(item.value) === String(itemToCheck) ? { ...item, checked: true } : item))
   })
 
-  return njkEnv
 }

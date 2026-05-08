@@ -24,7 +24,7 @@ export default class SearchRoutes {
       offence.code,
       offence,
       res.locals.user,
-      res.locals.user.roles,
+      res.locals.user.userRoles,
     )
 
     const childOffences =
@@ -40,7 +40,7 @@ export default class SearchRoutes {
     const isEligibleForEncouragementOffence = this.offenceService.isEligibleForEncouragementOffence(
       offence,
       childOffences,
-      res.locals.user.roles,
+      res.locals.user.userRoles,
     )
 
     res.render('pages/search/viewOffence', {
