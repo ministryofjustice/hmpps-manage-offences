@@ -87,7 +87,7 @@
           {{ partDesc }}
         </h2>
       </div>
-      {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+      {% if ('UPDATE_OFFENCE_SCHEDULES' in user.userRoles) %}
         <div class="govuk-grid-column-one-half text-align-right">
 
           {{ govukButton({
@@ -100,7 +100,7 @@
         </div>
       {% endif %}
     {% else %}
-      {% if ('UPDATE_OFFENCE_SCHEDULES' in user.roles) %}
+      {% if ('UPDATE_OFFENCE_SCHEDULES' in user.userRoles) %}
         <div class="govuk-grid-column-full text-align-right">
           {{ govukButton({
             classes: "govuk-button--tertiary",

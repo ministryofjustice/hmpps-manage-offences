@@ -1,18 +1,16 @@
-import type { UserDetails } from '../../services/userService'
+import { HmppsUser } from '../../interfaces/hmppsUser'
 
-export default {}
-
-declare module 'express-session' {
+export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
   interface SessionData {
     returnTo: string
-    nowInMinutes: number
   }
 }
 
 export declare global {
   namespace Express {
-    interface User extends Partial<UserDetails> {
+    interface User {
+      username: string
       token: string
       authSource: string
     }
@@ -24,7 +22,16 @@ export declare global {
     }
 
     interface Locals {
-      user: Express.User
+      user: HmppsUser
+      cspNonce: string
+      csrfToken: string
+      asset_path: string
+      applicationName: string
+      environmentName: string
+      environmentNameColour: string
+      appInsightsConnectionString?: string
+      appInsightsApplicationName?: string
+      buildNumber?: string
     }
   }
 }

@@ -17,7 +17,7 @@ function createToken(authorities: string[]) {
 }
 
 describe('authorisationMiddleware', () => {
-  const req: Request = { path: '/some-url-path' } as unknown as Request
+  const req: Request = {} as jest.Mocked<Request>
   const next = jest.fn()
 
   function createResWithToken({ authorities }: { authorities: string[] }): Response {

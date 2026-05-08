@@ -1,71 +1,61 @@
 # Manage offences
-[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-template-typescript)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#hmpps-template-typescript "Link to report")
-[![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-template-typescript/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-template-typescript)
-
+[![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/hmpps-manage-offences/badge?style=flat)](https://github-community.service.justice.gov.uk/repository-standards/hmpps-manage-offences)
+[![Docker Repository on ghcr](https://img.shields.io/badge/ghcr.io-repository-2496ED.svg?logo=docker)](https://ghcr.io/ministryofjustice/hmpps-manage-offences)
 
 
 This is the user interface service for managing offences
 
 ## Running the app
-The easiest way to run the app is to use docker compose to create the service and all dependencies. 
+The easiest way to run the app is to use docker compose to create the service and all dependencies.
+
+The production image now uses the `hmpps-node:24-alpine-runtime` base image and starts with `node dist/server.js` directly, so npm is not present in the final runtime stage.
 
 `docker compose pull`
 
 `docker compose up`
 
-### Dependencies
-The app requires: 
-* hmpps-auth - for authentication
-* redis - session store and token caching
-
 ### Running the app for development
 
-Ensure that you have env var`NODE_OPTIONS` set to `-r dotenv/config`, else the `.env` file will not be read
-
-Create a `.env` file in the root of the project with the following content - Note - you will need to get the secret values from DEV:
-
-```   
-HMPPS_AUTH_URL="https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
-TOKEN_VERIFICATION_API_URL="https://token-verification-api-dev.prison.service.justice.gov.uk"
-MANAGE_OFFENCES_API_URL="https://manage-offences-api-dev.hmpps.service.justice.gov.uk"
-PRISON_API_URL="https://prison-api-dev.prison.service.justice.gov.uk"
-MANAGE_USERS_API_URL="https://manage-users-api-dev.hmpps.service.justice.gov.uk"
-API_CLIENT_SECRET=FILL THIS IN WITH SECRET FROM DEV!!
-SYSTEM_CLIENT_SECRET=FILL THIS IN WITH SECRET FROM DEV!!
-```
+Copy the `.env.example` and create a new file called `.env.` replace all of the `FILL THIS IN WITH SECRET FROM DEV!!` with the correct values from the secrets in dev.
 
 Install dependencies using `npm install`, ensuring you are using >= `Node v24.x`
 
-Note: Using `nvm` (or [fnm](https://github.com/Schniz/fnm)), run `nvm install --latest-npm` within the repository folder to use the correct version of node, and the latest version of npm. This matches the `engines` config in `package.json` and the CircleCI build config.
+Note: Using `nvm` (or [fnm](https://github.com/Schniz/fnm)), run `nvm install --latest-npm` within the repository folder
+to use the correct version of node, and the latest version of npm. This matches the `engines` config in `package.json`
+and the github pipeline build config.
 
-
-And then, to build the assets and start the app with nodemon:
+And then, to build the assets and start the app with esbuild:
 
 `npm run start:dev`
 
 ### Run linter
 
-`npm run lint`
+- `npm run lint` runs `eslint`.
+- `npm run typecheck` runs the TypeScript compiler `tsc`.
 
-### Run tests
+### Run unit tests
 
 `npm run test`
 
 ### Running integration tests
 
-For local running, start a test db and wiremock instance by:
+For local running, start a wiremock instance by:
 
 `docker compose -f docker-compose-test.yml up`
 
 Then run the server in test mode by:
 
-`npm run start-feature` (or `npm run start-feature:dev` to run with nodemon)
+`npm run start-feature` (or `npm run start-feature:dev` to run with auto-restart on changes)
+
+After first install ensure playwright is initialised:
+
+`npm run int-test-init:ci`
 
 And then either, run tests in headless mode with:
 
 `npm run int-test`
- 
-Or run tests with the cypress UI:
+
+Or run tests with the UI:
 
 `npm run int-test-ui`
 
@@ -73,6 +63,27 @@ Or run tests with the cypress UI:
 1. Run `cd scripts`
 2. Run `./generate-manage-offences-api-types.sh` and open the generated file `index.d.ts`
 3. Resolve any lint errors, and remove the last line `export interface external {}`
+## Keeping your app up-to-date
+
+While there are multiple ways to keep your project up-to-date this [method](https://mojdt.slack.com/archives/C69NWE339/p1694009011413449) doesn't require you to keep cherry picking the changes, however if that works for you there is no reason to stop.
+
+In your service, add the template as a remote:
+
+`git remote add template https://github.com/ministryofjustice/hmpps-template-typescript`
+
+Create a branch and switch to it, eg:
+
+`git checkout -b template-changes-2309`
+
+Fetch all remotes:
+
+`git fetch --all`
+
+Merge the changes from the template into your service source:
+
+`git merge template/main --allow-unrelated-histories`
+
+You'll need to manually handle the merge of the changes, but if you do it early, carefully, and regularly, it won't be too much of a hassle.
 
 ### Usage of the application
 #### Access and roles
