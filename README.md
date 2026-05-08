@@ -16,19 +16,7 @@ The production image now uses the `hmpps-node:24-alpine-runtime` base image and 
 
 ### Running the app for development
 
-Ensure that you have env var`NODE_OPTIONS` set to `-r dotenv/config`, else the `.env` file will not be read
-
-Create a `.env` file in the root of the project with the following content - Note - you will need to get the secret values from DEV:
-
-```
-HMPPS_AUTH_URL="https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
-TOKEN_VERIFICATION_API_URL="https://token-verification-api-dev.prison.service.justice.gov.uk"
-MANAGE_OFFENCES_API_URL="https://manage-offences-api-dev.hmpps.service.justice.gov.uk"
-PRISON_API_URL="https://prison-api-dev.prison.service.justice.gov.uk"
-MANAGE_USERS_API_URL="https://manage-users-api-dev.hmpps.service.justice.gov.uk"
-API_CLIENT_SECRET=FILL THIS IN WITH SECRET FROM DEV!!
-SYSTEM_CLIENT_SECRET=FILL THIS IN WITH SECRET FROM DEV!!
-```
+Copy the `.env.example` and create a new file called `.env.` replace all of the `FILL THIS IN WITH SECRET FROM DEV!!` with the correct values from the secrets in dev.
 
 Install dependencies using `npm install`, ensuring you are using >= `Node v24.x`
 
