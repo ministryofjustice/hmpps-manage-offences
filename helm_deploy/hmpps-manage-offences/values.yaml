@@ -2,6 +2,9 @@ generic-service:
   nameOverride: hmpps-manage-offences
   productId: "DPS074"
 
+  # the IRSA service account name for accessing AWS resources
+  # serviceAccountName: "hmpps-template-typescript"
+
   replicaCount: 4
 
   image:
@@ -22,19 +25,14 @@ generic-service:
     httpGet:
       path: /ping
 
-  custommetrics:
-    enabled: true
-    scrapeInterval: 15s
-    metricsPath: /metrics
-    metricsPort: 3001
-
   # Environment variables to load into the deployment
   env:
-    NODE_ENV: "production"
-    REDIS_ENABLED: "true"
-    REDIS_TLS_ENABLED: "true"
-    TOKEN_VERIFICATION_ENABLED: "true"
-    APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY);IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    NODE_ENV: 'production'
+    REDIS_ENABLED: 'true'
+    REDIS_TLS_ENABLED: 'true'
+    TOKEN_VERIFICATION_ENABLED: 'true'
+    AUDIT_SQS_REGION: 'eu-west-2'
+    AUDIT_SERVICE_NAME: 'UNASSIGNED' # Your audit service name
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -42,16 +40,24 @@ generic-service:
   #     [name of environment variable as seen by app]: [key of kubernetes secret to load]
 
   namespace_secrets:
-    hmpps-manage-offences:
-      APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
-      API_CLIENT_ID: "API_CLIENT_ID"
-      API_CLIENT_SECRET: "API_CLIENT_SECRET"
-      SESSION_SECRET: "SESSION_SECRET"
-      SYSTEM_CLIENT_ID: "SYSTEM_CLIENT_ID"
-      SYSTEM_CLIENT_SECRET: "SYSTEM_CLIENT_SECRET"
-    elasticache-redis:
-      REDIS_HOST: "primary_endpoint_address"
-      REDIS_AUTH_TOKEN: "auth_token"
+    # These secrets are created by terraform.
+    hmpps-manage-offences-client-creds:
+      CLIENT_CREDS_CLIENT_ID: 'CLIENT_CREDS_CLIENT_ID'
+      CLIENT_CREDS_CLIENT_SECRET: 'CLIENT_CREDS_CLIENT_SECRET'
+    hmpps-manage-offences-auth-code:
+      AUTH_CODE_CLIENT_ID: 'AUTH_CODE_CLIENT_ID'
+      AUTH_CODE_CLIENT_SECRET: 'AUTH_CODE_CLIENT_SECRET'
+    hmpps-manage-offences-session-secret:
+      SESSION_SECRET: 'SESSION_SECRET'
+    hmpps-manage-offences-elasticache-redis:
+      REDIS_HOST: 'primary_endpoint_address'
+      REDIS_AUTH_TOKEN: 'auth_token'
+    hmpps-manage-offences-application-insights:
+      APPLICATIONINSIGHTS_CONNECTION_STRING: "APPLICATIONINSIGHTS_CONNECTION_STRING"
+    # This secret will need to be created in your namespace (note it isn't in hmpps-templates-dev)
+    # IRSA configuration in your namespace will also be required, and then uncomment serviceAccountName above.
+    # sqs-hmpps-audit-secret:
+    #   AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
 
   allowlist:
     ark-dom1-farnborough: 194.33.192.0/24

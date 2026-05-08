@@ -1,13 +1,14 @@
-import config, { ApiConfig } from '../config'
-import RestClient from './restClient'
+import { RestClient, asSystem, asUser } from '@ministryofjustice/hmpps-rest-client'
+import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
+import config from '../config'
+import logger from '../../logger'
 import { PageOffenceDto } from '../@types/prisonApi/prisonApiTypes'
-import AuthTokenService from './authTokenService'
 
 type User = Express.User
 
 export default class PrisonApiClient extends RestClient {
-  constructor(authTokenService: AuthTokenService) {
-    super('Prison API', config.apis.prisonApi as ApiConfig, authTokenService)
+  constructor(authenticationClient: AuthenticationClient) {
+    super('Prison API', config.apis.prisonApi, logger, authenticationClient)
   }
 
   getOffencesByCodeStartsWith(offenceCode: string, user: User): Promise<PageOffenceDto> {
@@ -15,7 +16,7 @@ export default class PrisonApiClient extends RestClient {
       {
         path: `/api/offences/code/${offenceCode}?page=$pageNumber&size=1000&sort=code,ASC`,
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<PageOffenceDto>
   }
 }

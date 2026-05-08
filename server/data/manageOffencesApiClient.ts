@@ -1,5 +1,7 @@
-import config, { ApiConfig } from '../config'
-import RestClient from './restClient'
+import { RestClient, asSystem, asUser } from '@ministryofjustice/hmpps-rest-client'
+import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
+import config from '../config'
+import logger from '../../logger'
 import {
   FeatureToggle,
   LinkOffence,
@@ -11,13 +13,12 @@ import {
   Schedule,
   SdsExclusionLists,
 } from '../@types/manageOffences/manageOffencesClientTypes'
-import AuthTokenService from './authTokenService'
 
 type User = Express.User
 
 export default class ManageOffencesApiClient extends RestClient {
-  constructor(authTokenService: AuthTokenService) {
-    super('Manage offences API', config.apis.manageOffences as ApiConfig, authTokenService)
+  constructor(authenticationClient: AuthenticationClient) {
+    super('Manage offences API', config.apis.manageOffences, logger, authenticationClient)
   }
 
   getOffencesByCode(offenceCode: string, user: User): Promise<[Offence]> {
@@ -25,7 +26,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: `/offences/code/${offenceCode}`,
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<[Offence]>
   }
 
@@ -34,7 +35,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: `/offences/search?searchString=${searchString}`,
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<[Offence]>
   }
 
@@ -43,7 +44,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: `/offences/id/${offenceId}`,
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<Offence>
   }
 
@@ -52,7 +53,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: `/schedule/offence-mapping/id/${offenceId}`,
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<OffenceToScheduleMapping>
   }
 
@@ -61,7 +62,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/offences/load-results',
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<[MostRecentLoadResult]>
   }
 
@@ -70,7 +71,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/admin/feature-toggles',
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<[FeatureToggle]>
   }
 
@@ -80,7 +81,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: '/admin/toggle-feature',
         data: featureToggles,
       },
-      { token: user.token },
+      asUser(user.token),
     )
   }
 
@@ -89,7 +90,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/schedule/all',
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<[Schedule]>
   }
 
@@ -98,7 +99,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: `/schedule/by-id/${scheduleId}`,
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<Schedule>
   }
 
@@ -108,7 +109,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: '/schedule/link-offence',
         data: linkOffence,
       },
-      { token: user.token },
+      asUser(user.token),
     )
   }
 
@@ -118,7 +119,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: '/schedule/unlink-offences',
         data: [{ schedulePartId, offenceId }],
       },
-      { token: user.token },
+      asUser(user.token),
     )
   }
 
@@ -129,7 +130,7 @@ export default class ManageOffencesApiClient extends RestClient {
           toDate.toISOString().split('T')[0]
         }`,
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<[NomisChangeHistory]>
   }
 
@@ -139,7 +140,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: '/admin/nomis/offences/reactivate',
         data: [offenceId],
       },
-      { token: user.token },
+      asUser(user.token),
     )
   }
 
@@ -149,7 +150,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: '/admin/nomis/offences/deactivate',
         data: [offenceId],
       },
-      { token: user.token },
+      asUser(user.token),
     )
   }
 
@@ -159,7 +160,7 @@ export default class ManageOffencesApiClient extends RestClient {
         path: `/admin/nomis/offences/encouragement/${offenceId}`,
         data: [],
       },
-      { token: user.token },
+      asUser(user.token),
     )
   }
 
@@ -168,7 +169,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/schedule/sds-early-release-exclusion-lists',
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<SdsExclusionLists>
   }
 
@@ -177,7 +178,7 @@ export default class ManageOffencesApiClient extends RestClient {
       {
         path: '/schedule/pcsc-lists',
       },
-      { token: user.token },
+      asUser(user.token),
     ) as Promise<PcscLists>
   }
 }
