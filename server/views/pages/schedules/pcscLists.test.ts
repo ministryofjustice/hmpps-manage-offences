@@ -16,7 +16,7 @@ describe('scheduleOffenceListTable rendering /', () => {
 
   it('should render maxPeriodOfIndictment correctly', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       pcscLists: {
         listA: [
           {

@@ -16,7 +16,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('should render offence page when there are no markers', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offenceMarkers: {
         markersExist: false,
       },
@@ -31,7 +31,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('should render offence page with markers appropriately loaded', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offence: { code: 'AB', description: 'Offence 1' },
       offenceMarkers: {
         isSexual: true,
@@ -51,7 +51,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('violent marker should be rendered correctly', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offence: { code: 'AB', description: 'Offence 1' },
       offenceMarkers: {
         isViolent: true,
@@ -70,7 +70,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('terrorism marker should be rendered correctly', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offence: { code: 'AB', description: 'Offence 1' },
       offenceMarkers: {
         isTerrorism: true,
@@ -87,7 +87,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('domestic abuse marker should be rendered correctly', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offence: { code: 'AB', description: 'Offence 1' },
       offenceMarkers: {
         isDomesticAbuse: true,
@@ -104,7 +104,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('domestic abuse marker should be rendered correctly', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offence: { code: 'AB', description: 'Offence 1' },
       offenceMarkers: {
         isNationalSecurity: true,
@@ -121,7 +121,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('orphaned inchoate offences should display a warning banner', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offence: { code: 'AB', description: 'Offence 1', isChild: true },
       offenceMarkers: {
         isNationalSecurity: true,
@@ -142,7 +142,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('warning banner should not be present if there is a parent offence', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offence: { code: 'AB', description: 'Offence 1', isChild: true, parentOffenceId: 1241 },
       parentOffence: { id: 1241, code: 'AB', description: 'Parent 1' },
       offenceMarkers: {
@@ -162,7 +162,7 @@ describe('VIEW_OFFENCE /', () => {
 
   it('should render offence page with indictment column populated correctly ', () => {
     const context: Record<string, unknown> = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       offence: { code: 'AB', description: 'Offence 1', maxPeriodOfIndictmentWeeks: '5' },
     }
     const $ = cheerio.load(compiledTemplate.render(context))

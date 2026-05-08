@@ -13,7 +13,7 @@ describe('GET /', () => {
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
     viewContext = {
-      user: { roles: [] },
+      user: { userRoles: [] },
       fromDate: new Date(),
       toDate: new Date(),
     }

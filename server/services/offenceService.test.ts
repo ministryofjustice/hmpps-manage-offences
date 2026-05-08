@@ -4,7 +4,6 @@ import { Offence } from '../@types/manageOffences/manageOffencesClientTypes'
 import AuthorisedRoles from '../enums/authorisedRoles'
 
 jest.mock('../data/manageOffencesApiClient')
-jest.mock('../data/authTokenService')
 jest.mock('../data/prisonApiClient')
 
 describe('Offence service', () => {
