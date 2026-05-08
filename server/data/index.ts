@@ -18,7 +18,6 @@ import logger from '../../logger'
 import ManageOffencesApiClient from './manageOffencesApiClient'
 import PrisonApiClient from './prisonApiClient'
 
-
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
     config.apis.hmppsAuth,

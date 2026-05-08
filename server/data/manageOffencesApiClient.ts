@@ -1,4 +1,4 @@
-import { RestClient, asSystem, asUser } from '@ministryofjustice/hmpps-rest-client'
+import { RestClient, asUser } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import config from '../config'
 import logger from '../../logger'

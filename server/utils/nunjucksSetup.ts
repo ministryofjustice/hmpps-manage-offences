@@ -8,8 +8,6 @@ import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 
-const production = process.env.NODE_ENV === 'production'
-
 const toTwoDigits = (val: number) => `${`0${val}`.slice(-2)}`
 
 const months = {

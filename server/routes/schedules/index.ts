@@ -1,4 +1,4 @@
-import { type RequestHandler, Router } from 'express'
+import { Router } from 'express'
 import ScheduleRoutes from './handlers/schedules'
 import LinkOffenceRoutes from './handlers/linkOffence'
 import OffenceService from '../../services/offenceService'

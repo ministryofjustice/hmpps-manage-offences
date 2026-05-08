@@ -1,4 +1,4 @@
-import { RequestHandler, Router } from 'express'
+import { Router } from 'express'
 import ToggleJobsRoutes from './handlers/toggleJobs'
 import AdminService from '../../services/adminService'
 
