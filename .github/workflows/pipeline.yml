@@ -87,7 +87,7 @@ jobs:
       environment: 'dev'
       app_version: '${{ needs.build.outputs.app_version }}'
   deploy_preprod:
-    name: Deploy to pre-productionenvironment
+    name: Deploy to pre-production environment
     needs:
     - build
     - deploy_dev

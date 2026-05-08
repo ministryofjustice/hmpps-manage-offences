@@ -30,7 +30,7 @@
     "npm": "^11"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1036.0",
+    "@aws-sdk/client-sqs": "^3.1040.0",
     "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
     "@ministryofjustice/hmpps-monitoring": "^1.0.2",
@@ -81,7 +81,7 @@
     "@types/supertest": "^7.2.0",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
-    "cheerio": "^1.0.0",
+    "cheerio": "^1.2.0",
     "del": "8.0.1",
     "esbuild": "^0.28.0",
     "esbuild-plugin-copy": "^2.1.1",
@@ -93,8 +93,8 @@
     "jest-when": "^4.0.3",
     "jsonwebtoken": "^9.0.3",
     "lint-staged": "^16.4.0",
-    "nock": "^14.0.13",
-    "openapi-typescript": "^7.8.0",
+    "nock": "^14.0.14",
+    "openapi-typescript": "^7.13.0",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.9",
     "typescript": "^5.9.3"
