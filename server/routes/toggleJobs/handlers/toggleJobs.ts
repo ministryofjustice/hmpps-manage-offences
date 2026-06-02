@@ -38,14 +38,6 @@ export default class ToggleJobsRoutes {
         enabled: req.body[FeatureToggleEnum.PUBLISH_EVENTS],
       },
       {
-        feature: FeatureToggleEnum.UNLINK_SCHEDULES_NOMIS,
-        enabled: req.body[FeatureToggleEnum.UNLINK_SCHEDULES_NOMIS],
-      },
-      {
-        feature: FeatureToggleEnum.LINK_SCHEDULES_NOMIS,
-        enabled: req.body[FeatureToggleEnum.LINK_SCHEDULES_NOMIS],
-      },
-      {
         feature: FeatureToggleEnum.T3_OFFENCE_EXCLUSIONS,
         enabled: req.body[FeatureToggleEnum.T3_OFFENCE_EXCLUSIONS],
       },
