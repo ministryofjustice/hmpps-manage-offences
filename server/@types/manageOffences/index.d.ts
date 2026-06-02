@@ -473,8 +473,6 @@ export interface components {
         | 'DELTA_SYNC_SDRS'
         | 'SYNC_HOME_OFFICE_CODES'
         | 'PUBLISH_EVENTS'
-        | 'UNLINK_SCHEDULES_NOMIS'
-        | 'LINK_SCHEDULES_NOMIS'
         | 'T3_OFFENCE_EXCLUSIONS'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
