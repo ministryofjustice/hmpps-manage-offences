@@ -33,7 +33,7 @@
     "brace-expansion": "^5.0.6"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1064.0",
+    "@aws-sdk/client-sqs": "^3.1065.0",
     "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^2.0.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
