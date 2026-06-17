@@ -6,7 +6,7 @@
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
-{% set pageTitle = applicationName + " - SDS Early Release Exclusions" %}
+{% set pageTitle = applicationName + " - SDS40 Release Exclusions" %}
 {% set pageId = "schedules" %}
 
 {% block navBar %}
@@ -21,7 +21,7 @@
         href: "/"
       },
       {
-        text: "SDS Early Release Exclusions"
+        text: "SDS40 Release Exclusions"
       }
     ]
   }) }}
@@ -29,7 +29,7 @@
 
       {% block content %}
         <h1 class="govuk-heading-l">
-          Offences that are excluded from SDS Early Release
+          Offences that are excluded from SDS40 Release
         </h1>
         {{ govukTabs({
           classes: 'borderless-tabs',
