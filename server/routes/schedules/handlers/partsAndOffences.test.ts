@@ -145,7 +145,7 @@ describe('', () => {
       .expect(200)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('SDS Early Release Exclusions')
+        expect(res.text).toContain('SDS40 Release Exclusions')
         expect(res.text).toContain(
           'Offences that relate to the Sexual Offences Act 2003 or where the code begins with SX03 or SX56 or the offence is in Schedule 15 Part 2',
         )
