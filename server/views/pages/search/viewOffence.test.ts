@@ -63,9 +63,7 @@ describe('VIEW_OFFENCE /', () => {
 
     expect(offenceMarkers.length).toBe(1)
     expect(offenceMarkers.find('li').length).toBe(1)
-    expect(offenceMarkers.text()).toContain(
-      'SDS40 Release Exclusion: Violent (for sentences of four years and over)',
-    )
+    expect(offenceMarkers.text()).toContain('SDS40 Release Exclusion: Violent (for sentences of four years and over)')
   })
 
   it('terrorism marker should be rendered correctly', () => {
