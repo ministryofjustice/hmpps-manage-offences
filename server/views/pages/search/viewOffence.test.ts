@@ -44,7 +44,7 @@ describe('VIEW_OFFENCE /', () => {
 
     expect(offenceMarkers.length).toBe(1)
     expect(offenceMarkers.find('li').length).toBe(2)
-    expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: Sexual')
+    expect(offenceMarkers.text()).toContain('SDS40 Release Exclusion: Sexual')
     expect(offenceMarkers.text()).toContain('SDS+: SDS >7 years between 01 April 2020 and 28 June 2022')
     expect($('h1').text().trim()).toContain('AB: Offence 1')
   })
@@ -63,9 +63,7 @@ describe('VIEW_OFFENCE /', () => {
 
     expect(offenceMarkers.length).toBe(1)
     expect(offenceMarkers.find('li').length).toBe(1)
-    expect(offenceMarkers.text()).toContain(
-      'SDS Early Release Exclusion: Violent (for sentences of four years and over)',
-    )
+    expect(offenceMarkers.text()).toContain('SDS40 Release Exclusion: Violent (for sentences of four years and over)')
   })
 
   it('terrorism marker should be rendered correctly', () => {
@@ -82,7 +80,7 @@ describe('VIEW_OFFENCE /', () => {
 
     expect(offenceMarkers.length).toBe(1)
     expect(offenceMarkers.find('li').length).toBe(1)
-    expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: Terrorism')
+    expect(offenceMarkers.text()).toContain('SDS40 Release Exclusion: Terrorism')
   })
 
   it('domestic abuse marker should be rendered correctly', () => {
@@ -99,7 +97,7 @@ describe('VIEW_OFFENCE /', () => {
 
     expect(offenceMarkers.length).toBe(1)
     expect(offenceMarkers.find('li').length).toBe(1)
-    expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: Domestic Abuse')
+    expect(offenceMarkers.text()).toContain('SDS40 Release Exclusion: Domestic Abuse')
   })
 
   it('domestic abuse marker should be rendered correctly', () => {
@@ -116,7 +114,7 @@ describe('VIEW_OFFENCE /', () => {
 
     expect(offenceMarkers.length).toBe(1)
     expect(offenceMarkers.find('li').length).toBe(1)
-    expect(offenceMarkers.text()).toContain('SDS Early Release Exclusion: National Security')
+    expect(offenceMarkers.text()).toContain('SDS40 Release Exclusion: National Security')
   })
 
   it('orphaned inchoate offences should display a warning banner', () => {

@@ -1,32 +1,32 @@
 {% macro offenceMarkersSection(offenceMarkers) %}
   <div class="govuk-grid-row govuk-body">
     <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-m">Offence Markers: PCSC or SDS Early Release Exclusion</h2>
+      <h2 class="govuk-heading-m">Offence Markers: PCSC or SDS40 Release Exclusion</h2>
       {% if offenceMarkers.markersExist %}
         <ul class="govuk-list govuk-list--bullet" id="offence-markers">
           {% if offenceMarkers.isSexual %}
-            <li>SDS Early Release Exclusion: Sexual</li>
+            <li>SDS40 Release Exclusion: Sexual</li>
           {% endif %}
           {% if offenceMarkers.isSexualTrancheThree %}
-            <li>SDS Early Release Exclusion: Sexual (for prisoners in custody on or after the 16th December 2024)</li>
+            <li>SDS40 Release Exclusion: Sexual (for prisoners in custody on or after the 16th December 2024)</li>
           {% endif %}
           {% if offenceMarkers.isDomesticAbuse %}
-            <li>SDS Early Release Exclusion: Domestic Abuse</li>
+            <li>SDS40 Release Exclusion: Domestic Abuse</li>
           {% endif %}
           {% if offenceMarkers.isDomesticAbuseTrancheThree %}
-              <li>SDS Early Release Exclusion: Domestic Abuse (for prisoners in custody on or after the 16th December 2024)</li>
+              <li>SDS40 Release Exclusion: Domestic Abuse (for prisoners in custody on or after the 16th December 2024)</li>
           {% endif %}
           {% if offenceMarkers.isMurderTrancheThree %}
-              <li>SDS Early Release Exclusion: Murder (for prisoners in custody on or after the 16th December 2024)</li>
+              <li>SDS40 Release Exclusion: Murder (for prisoners in custody on or after the 16th December 2024)</li>
           {% endif %}
           {% if offenceMarkers.isNationalSecurity %}
-            <li>SDS Early Release Exclusion: National Security</li>
+            <li>SDS40 Release Exclusion: National Security</li>
           {% endif %}
           {% if offenceMarkers.isTerrorism %}
-            <li>SDS Early Release Exclusion: Terrorism</li>
+            <li>SDS40 Release Exclusion: Terrorism</li>
           {% endif %}
           {% if offenceMarkers.isViolent %}
-            <li>SDS Early Release Exclusion: Violent (for sentences of four years and over)</li>
+            <li>SDS40 Release Exclusion: Violent (for sentences of four years and over)</li>
           {% endif %}
           {% if offenceMarkers.inListA %}
             <li>SDS+: SDS >7 years between 01 April 2020 and 28 June 2022</li>
