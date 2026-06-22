@@ -47,7 +47,9 @@
     },
     {
       "matchManagers": ["github-actions"],
-      "matchFileNames": ["**/.github/workflows/**/*.ya?ml", "**/.github/actions/**/*.ya?ml"]
+      "matchFileNames": ["**/.github/workflows/**/*.ya?ml"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "enabled": false
     },
     {
       "matchManagers": ["pre-commit"],
@@ -56,5 +58,6 @@
   ],
   "vulnerabilityAlerts": {
     "stabilityDays": 0
-  }
+  },
+  "platformCommit": "enabled"
 }
