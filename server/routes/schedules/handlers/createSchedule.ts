@@ -37,19 +37,14 @@ export default class CreateScheduleRoutes {
   constructor(private readonly offenceService: OffenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    res.render('pages/schedules/createSchedule', {
-      errors: req.flash('errors'),
-      form: req.flash('form')[0] ?? {},
-    })
+    res.render('pages/schedules/createSchedule', { errors: [], form: {} })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const form = req.body as CreateScheduleForm
     const errors = validateCreateSchedule(form)
     if (errors.length) {
-      req.flash('errors', errors)
-      req.flash('form', form)
-      return res.redirect('/schedules/create')
+      return res.render('pages/schedules/createSchedule', { errors, form })
     }
 
     try {
@@ -66,9 +61,10 @@ export default class CreateScheduleRoutes {
       return res.redirect(`/schedules/parts-and-offences/${created.id}`)
     } catch (error) {
       if (error.status !== 409) throw error
-      req.flash('errors', [{ text: 'A schedule with that act and code already exists', href: '#code' }])
-      req.flash('form', form)
-      return res.redirect('/schedules/create')
+      return res.render('pages/schedules/createSchedule', {
+        errors: [{ text: 'A schedule with that act and code already exists', href: '#code' }],
+        form,
+      })
     }
   }
 }
