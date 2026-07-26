@@ -22,6 +22,18 @@ const urlToRoleMapping = {
     roles: [AuthorisedRoles.ROLE_UPDATE_OFFENCE_SCHEDULES],
     matchPath: getMatchPath(schedulePaths.LINK_OFFENCES),
   },
+  [schedulePaths.CREATE_SCHEDULE]: {
+    roles: [AuthorisedRoles.ROLE_UPDATE_OFFENCE_SCHEDULES],
+    matchPath: getMatchPath(schedulePaths.CREATE_SCHEDULE),
+  },
+  [schedulePaths.MANAGE_SCHEDULES]: {
+    roles: [AuthorisedRoles.ROLE_MANAGE_OFFENCES_ADMIN],
+    matchPath: getMatchPath(schedulePaths.MANAGE_SCHEDULES),
+  },
+  [schedulePaths.SCHEDULE_STATUS]: {
+    roles: [AuthorisedRoles.ROLE_MANAGE_OFFENCES_ADMIN],
+    matchPath: getMatchPath(schedulePaths.SCHEDULE_STATUS),
+  },
   [loadResultPaths.LOAD_RESULTS]: {
     roles: [AuthorisedRoles.ROLE_MANAGE_OFFENCES_ADMIN],
     matchPath: getMatchPath(loadResultPaths.LOAD_RESULTS),

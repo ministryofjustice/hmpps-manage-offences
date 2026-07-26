@@ -85,6 +85,26 @@ export default class ManageOffencesApiClient extends RestClient {
     )
   }
 
+  createSchedule(schedule: Schedule, user: User): Promise<Schedule> {
+    return this.post(
+      {
+        path: '/schedule/create',
+        data: schedule,
+      },
+      asUser(user.token),
+    ) as Promise<Schedule>
+  }
+
+  setScheduleStatus(scheduleId: number, status: 'DRAFT' | 'LIVE', user: User): Promise<unknown> {
+    return this.put(
+      {
+        path: `/admin/schedule/${scheduleId}/status`,
+        data: { status },
+      },
+      asUser(user.token),
+    )
+  }
+
   getAllSchedules(user: User): Promise<[Schedule]> {
     return this.get(
       {

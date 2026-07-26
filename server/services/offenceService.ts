@@ -37,6 +37,10 @@ export default class OffenceService {
     return this.manageOffencesApi.getOffenceToScheduleMapping(offenceId, user)
   }
 
+  async createSchedule(schedule: Schedule, user: User): Promise<Schedule> {
+    return this.manageOffencesApi.createSchedule(schedule, user)
+  }
+
   async getAllSchedules(user: User): Promise<[Schedule]> {
     return this.manageOffencesApi.getAllSchedules(user)
   }
