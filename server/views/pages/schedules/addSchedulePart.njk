@@ -1,0 +1,50 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% set pageTitle = applicationName + " - Add a part" %}
+{% set pageId = "add-schedule-part" %}
+
+{% block navBar %}
+    {{ navBar("schedules") }}
+{% endblock %}
+
+{% block aside %}
+    {{ govukBreadcrumbs({
+        items: [
+            { text: "Schedules", href: "/schedules" },
+            { text: "Schedule " + schedule.code, href: "/schedules/parts-and-offences/" + schedule.id },
+            { text: "Add a part" }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    {% if errors.length %}
+        {{ govukErrorSummary({ titleText: "There is a problem", errorList: errors, attributes: { "data-qa": "error-summary" } }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-1">
+        <span class="govuk-caption-l">Schedule {{ schedule.code }} of the {{ schedule.act }}</span>
+        Add a part
+    </h1>
+
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        {{ govukInput({
+            label: { text: "Part number", classes: "govuk-label--m" },
+            hint: { text: "Part numbers must be unique within the schedule. Offences are linked to the part once it exists." },
+            id: "partNumber",
+            name: "partNumber",
+            value: form.partNumber,
+            inputmode: "numeric",
+            classes: "govuk-input--width-3"
+        }) }}
+
+        {{ govukButton({ text: "Add part", preventDoubleClick: true, attributes: { "data-qa": "add-part" } }) }}
+    </form>
+{% endblock %}

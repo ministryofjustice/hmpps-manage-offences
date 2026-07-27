@@ -1,0 +1,23 @@
+.app-tabs__add {
+  margin-left: govuk-spacing(5);
+
+  &::before {
+    content: "\2014 ";
+    margin-left: govuk-spacing(-5);
+    padding-right: govuk-spacing(1);
+  }
+}
+
+.govuk-frontend-supported {
+  @include govuk-media-query($from: tablet) {
+    .app-tabs__add {
+      float: left;
+      margin-left: 0;
+      padding: govuk-spacing(2) govuk-spacing(4);
+
+      &::before {
+        content: none;
+      }
+    }
+  }
+}

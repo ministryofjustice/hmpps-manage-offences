@@ -1,0 +1,69 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% set pageTitle = applicationName + " - Change schedule details" %}
+{% set pageId = "edit-schedule" %}
+
+{% block navBar %}
+    {{ navBar("schedules") }}
+{% endblock %}
+
+{% block aside %}
+    {{ govukBreadcrumbs({
+        items: [
+            { text: "Schedules", href: "/schedules" },
+            { text: "Schedule " + schedule.code, href: "/schedules/parts-and-offences/" + schedule.id },
+            { text: "Change details" }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    {% if errors.length %}
+        {{ govukErrorSummary({ titleText: "There is a problem", errorList: errors, attributes: { "data-qa": "error-summary" } }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">Change schedule details</h1>
+
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        {% if schedule.status === "DRAFT" %}
+            {{ govukInput({
+                label: { text: "Act", classes: "govuk-label--m" },
+                id: "act", name: "act", value: form.act, classes: "govuk-!-width-two-thirds"
+            }) }}
+
+            {{ govukInput({
+                label: { text: "Schedule code", classes: "govuk-label--m" },
+                id: "code", name: "code", value: form.code, classes: "govuk-input--width-10"
+            }) }}
+        {% else %}
+            {{ govukInsetText({
+                text: "The act and code cannot be changed once a schedule is published, because other parts of the
+                service match schedules on those values."
+            }) }}
+
+            {{ govukSummaryList({
+                rows: [
+                    { key: { text: "Act" }, value: { text: schedule.act } },
+                    { key: { text: "Schedule code" }, value: { text: schedule.code } }
+                ]
+            }) }}
+        {% endif %}
+
+        {{ govukInput({
+            label: { text: "Link to the legislation (optional)", classes: "govuk-label--m" },
+            hint: { text: "Must be a legislation.gov.uk address" },
+            id: "url", name: "url", value: form.url, classes: "govuk-!-width-two-thirds"
+        }) }}
+
+        {{ govukButton({ text: "Save changes", preventDoubleClick: true, attributes: { "data-qa": "save-schedule" } }) }}
+    </form>
+{% endblock %}

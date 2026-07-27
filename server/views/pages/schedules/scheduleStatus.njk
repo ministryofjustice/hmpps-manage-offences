@@ -1,0 +1,55 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% set pageTitle = applicationName + " - Schedule status" %}
+{% set pageId = "schedule-status" %}
+
+{% block navBar %}
+    {{ navBar("schedules") }}
+{% endblock %}
+
+{% block aside %}
+    {{ govukBreadcrumbs({
+        items: [
+            { text: "Schedules", href: "/schedules" },
+            { text: "Schedule " + schedule.code, href: "/schedules/parts-and-offences/" + schedule.id },
+            { text: "Status" }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        {{ govukRadios({
+            name: "status",
+            fieldset: {
+                legend: {
+                    text: "Should Schedule " + schedule.code + " be published?",
+                    isPageHeading: true,
+                    classes: "govuk-fieldset__legend--l"
+                }
+            },
+            hint: { text: "A draft is only visible to users with the admin role. Publishing makes the schedule, and
+            any offences already linked to it, visible to everyone." },
+            items: [
+                {
+                    value: "LIVE",
+                    text: "Published",
+                    checked: schedule.status === "LIVE"
+                },
+                {
+                    value: "DRAFT",
+                    text: "Draft",
+                    checked: schedule.status === "DRAFT"
+                }
+            ]
+        }) }}
+
+        {{ govukButton({ text: "Save", preventDoubleClick: true, attributes: { "data-qa": "save-status" } }) }}
+    </form>
+{% endblock %}

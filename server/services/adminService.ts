@@ -55,6 +55,10 @@ export default class AdminService {
       })
   }
 
+  async setScheduleStatus(scheduleId: number, status: 'DRAFT' | 'LIVE', user: User): Promise<unknown> {
+    return this.manageOffencesApi.setScheduleStatus(scheduleId, status, user)
+  }
+
   async toggleFeatures(featureToggles: FeatureToggle[], user: User): Promise<unknown> {
     return this.manageOffencesApi.toggleFeatures(featureToggles, user)
   }

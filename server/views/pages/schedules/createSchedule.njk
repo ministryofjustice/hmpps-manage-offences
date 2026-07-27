@@ -1,0 +1,77 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% set pageTitle = applicationName + " - Create a schedule" %}
+{% set pageId = "create-schedule" %}
+
+{% block navBar %}
+    {{ navBar("schedules") }}
+{% endblock %}
+
+{% block aside %}
+    {{ govukBreadcrumbs({
+        items: [
+            { text: "Schedules", href: "/schedules" },
+            { text: "Create a schedule" }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    {% if errors.length %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { "data-qa": "error-summary" }
+        }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">Create a schedule</h1>
+
+    {{ govukInsetText({
+        text: "New schedules are created as drafts. Only users with the admin role can see a draft, and it will not appear
+        anywhere else in this service until an admin publishes it."
+    }) }}
+
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        {{ govukInput({
+            label: { text: "Act" },
+            hint: { text: "For example, Sentencing Act 2020" },
+            id: "act",
+            name: "act",
+            value: form.act,
+            classes: "govuk-!-width-two-thirds"
+        }) }}
+
+        {{ govukInput({
+            label: { text: "Schedule code" },
+            hint: { text: "For example, 15 or 19ZA" },
+            id: "code",
+            name: "code",
+            value: form.code,
+            classes: "govuk-input--width-10"
+        }) }}
+
+        {{ govukInput({
+            label: { text: "Link to the legislation (optional)" },
+            hint: { text: "Must be a legislation.gov.uk address" },
+            id: "url",
+            name: "url",
+            value: form.url,
+            classes: "govuk-!-width-two-thirds"
+        }) }}
+
+        {{ govukButton({
+            text: "Create draft schedule",
+            preventDoubleClick: true,
+            attributes: { "data-qa": "create-schedule" }
+        }) }}
+    </form>
+{% endblock %}

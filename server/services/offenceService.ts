@@ -6,7 +6,9 @@ import {
   OffenceToScheduleMapping,
   PcscLists,
   Schedule,
+  SchedulePart,
   SdsExclusionLists,
+  UpdateScheduleRequest,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 import AuthorisedRoles from '../enums/authorisedRoles'
 
@@ -35,6 +37,22 @@ export default class OffenceService {
 
   async getOffenceToScheduleMapping(offenceId: number, user: User): Promise<OffenceToScheduleMapping> {
     return this.manageOffencesApi.getOffenceToScheduleMapping(offenceId, user)
+  }
+
+  async createSchedule(schedule: Schedule, user: User): Promise<Schedule> {
+    return this.manageOffencesApi.createSchedule(schedule, user)
+  }
+
+  async updateSchedule(scheduleId: number, update: UpdateScheduleRequest, user: User): Promise<Schedule> {
+    return this.manageOffencesApi.updateSchedule(scheduleId, update, user)
+  }
+
+  async addSchedulePart(scheduleId: number, partNumber: number, user: User): Promise<SchedulePart> {
+    return this.manageOffencesApi.addSchedulePart(scheduleId, partNumber, user)
+  }
+
+  async deleteSchedulePart(schedulePartId: number, user: User): Promise<unknown> {
+    return this.manageOffencesApi.deleteSchedulePart(schedulePartId, user)
   }
 
   async getAllSchedules(user: User): Promise<[Schedule]> {
