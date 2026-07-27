@@ -34,6 +34,7 @@
     <span class="govuk-caption-l">{{ fullSchedule.act }}</span>
     Schedule {{ fullSchedule.code }}
   </h1>
+  {% set canManage = 'UPDATE_OFFENCE_SCHEDULES' in user.userRoles or 'MANAGE_OFFENCES_ADMIN' in user.userRoles %}
   {% set canEdit = 'UPDATE_OFFENCE_SCHEDULES' in user.userRoles %}
   {% set editHref = "/schedules/" + fullSchedule.id + "/edit" %}
   {% set actAction = { items: [ { href: editHref, text: "Change", visuallyHiddenText: "act" } ] } if canEdit and fullSchedule.status === "DRAFT" %}
@@ -41,31 +42,42 @@
   {% set legislationAction = { items: [ { href: editHref, text: "Change", visuallyHiddenText: "link to the legislation" } ] } if canEdit %}
   {% set statusAction = { items: [ { href: "/schedules/" + fullSchedule.id + "/status", text: "Change", visuallyHiddenText: "status" } ] } if 'MANAGE_OFFENCES_ADMIN' in user.userRoles %}
 
-  {{ govukSummaryList({
-    rows: [
-      {
-        key: { text: "Act" },
-        value: { text: fullSchedule.act },
-        actions: actAction
-      },
-      {
-        key: { text: "Schedule code" },
-        value: { text: fullSchedule.code },
-        actions: codeAction
-      },
-      {
-        key: { text: "Legislation" },
-        value: { html: '<a href="' + fullSchedule.url + '" class="govuk-link" rel="noreferrer noopener" target="_blank">View on legislation.gov.uk</a>' if fullSchedule.url else "Not recorded" },
-        actions: legislationAction
-      },
-      {
-        key: { text: "Status" },
-        value: { html: govukTag({ text: "Draft", classes: "govuk-tag--grey" }) if fullSchedule.status === "DRAFT" else govukTag({ text: "Published", classes: "govuk-tag--green" }) },
-        actions: statusAction
-      }
-    ],
-    attributes: { 'data-qa': 'schedule-details' }
-  }) }}
+  {% if canManage %}
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Act" },
+          value: { text: fullSchedule.act },
+          actions: actAction
+        },
+        {
+          key: { text: "Schedule code" },
+          value: { text: fullSchedule.code },
+          actions: codeAction
+        },
+        {
+          key: { text: "Legislation" },
+          value: { html: '<a href="' + fullSchedule.url + '" class="govuk-link" rel="noreferrer noopener" target="_blank">View on legislation.gov.uk</a>' if fullSchedule.url else "Not recorded" },
+          actions: legislationAction
+        },
+        {
+          key: { text: "Status" },
+          value: { html: govukTag({ text: "Draft", classes: "govuk-tag--grey" }) if fullSchedule.status === "DRAFT" else govukTag({ text: "Published", classes: "govuk-tag--green" }) },
+          actions: statusAction
+        }
+      ],
+      attributes: { 'data-qa': 'schedule-details' }
+    }) }}
+  {% else %}
+    <p class="govuk-body govuk-!-font-size-16 govuk-!-padding-top-0">
+      {% if fullSchedule.url %}
+        Review <a href="{{ fullSchedule.url }}" class="govuk-link" rel="noreferrer noopener"
+                  target="_blank">Schedule {{ fullSchedule.code }} of the {{ fullSchedule.act }}</a> on legislation.gov.uk
+      {% else %}
+        No link to the legislation has been recorded for this schedule.
+      {% endif %}
+    </p>
+  {% endif %}
 
   {% if fullSchedule.code === '15' %}
     <p class="govuk-body">
