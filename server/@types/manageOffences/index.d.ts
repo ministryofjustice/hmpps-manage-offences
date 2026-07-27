@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+  '/schedule/{scheduleId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update a schedule
+     * @description The act and code may only be changed while the schedule is a DRAFT
+     */
+    put: operations['updateSchedule']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/toggle-feature': {
     parameters: {
       query?: never
@@ -35,6 +55,23 @@ export interface paths {
      */
     put: operations['setScheduleStatus']
     post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/schedule/{scheduleId}/part': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Add a part to an existing schedule */
+    post: operations['addSchedulePart']
     delete?: never
     options?: never
     head?: never
@@ -536,60 +573,35 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/schedule/part/{schedulePartId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Delete a schedule part
+     * @description Only permitted when the part has no linked offences
+     */
+    delete: operations['deleteSchedulePart']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
-
 export type webhooks = Record<string, never>
-
 export interface components {
   schemas: {
-    /** @description Feature toggle details */
-    FeatureToggle: {
-      /**
-       * @description Feature to be toggled: FULL_SYNC_NOMIS, DELTA_SYNC_NOMIS, FULL_SYNC_SDRS or DELTA_SYNC_SDRS
-       * @enum {string}
-       */
-      feature:
-        | 'FULL_SYNC_NOMIS'
-        | 'DELTA_SYNC_NOMIS'
-        | 'FULL_SYNC_SDRS'
-        | 'DELTA_SYNC_SDRS'
-        | 'SYNC_HOME_OFFICE_CODES'
-        | 'PUBLISH_EVENTS'
-        | 'T3_OFFENCE_EXCLUSIONS'
-      /** @description true or false - depending on whether the feature should be enabled */
-      enabled: boolean
-    }
-    /** @description Request to change the publication status of a schedule */
-    ScheduleStatusRequest: {
-      /** @enum {string} */
-      status: 'DRAFT' | 'LIVE'
-    }
-    /** @description Schedule part ID and Offence ID - used for unlinking offences from schedules */
-    SchedulePartIdAndOffenceId: {
-      /** Format: int64 */
-      schedulePartId: number
-      /** Format: int64 */
-      offenceId: number
-    }
-    LinkOffence: {
-      /**
-       * Format: int64
-       * @description Unique ID of the offence
-       */
-      offenceId: number
-      /**
-       * Format: int64
-       * @description The offence code
-       */
-      schedulePartId: number
-      /** @description The line reference for the associated schedule's legislation */
-      lineReference?: string | null
-      /** @description The legislation text for the associated schedule */
-      legislationText?: string | null
-      /** @description Schedule paragraph title that this offence is mapped to */
-      paragraphTitle?: string | null
-      /** @description Schedule paragraph number that this offence is mapped to */
-      paragraphNumber?: string | null
+    /** @description Request to update a schedule. The act and code may only be changed while the schedule is a DRAFT, because published schedules are matched by act and code elsewhere in the service. */
+    UpdateSchedule: {
+      act: string
+      code: string
+      url?: string | null
     }
     BasicOffence: {
       /**
@@ -730,6 +742,60 @@ export interface components {
       /** Format: int32 */
       partNumber: number
       offences?: components['schemas']['OffenceToScheduleMapping'][] | null
+    }
+    /** @description Feature toggle details */
+    FeatureToggle: {
+      /**
+       * @description Feature to be toggled: FULL_SYNC_NOMIS, DELTA_SYNC_NOMIS, FULL_SYNC_SDRS or DELTA_SYNC_SDRS
+       * @enum {string}
+       */
+      feature:
+        | 'FULL_SYNC_NOMIS'
+        | 'DELTA_SYNC_NOMIS'
+        | 'FULL_SYNC_SDRS'
+        | 'DELTA_SYNC_SDRS'
+        | 'SYNC_HOME_OFFICE_CODES'
+        | 'PUBLISH_EVENTS'
+        | 'T3_OFFENCE_EXCLUSIONS'
+      /** @description true or false - depending on whether the feature should be enabled */
+      enabled: boolean
+    }
+    /** @description Request to change the publication status of a schedule */
+    ScheduleStatusRequest: {
+      /** @enum {string} */
+      status: 'DRAFT' | 'LIVE'
+    }
+    /** @description Request to add a part to an existing schedule */
+    CreateSchedulePart: {
+      /** Format: int32 */
+      partNumber: number
+    }
+    /** @description Schedule part ID and Offence ID - used for unlinking offences from schedules */
+    SchedulePartIdAndOffenceId: {
+      /** Format: int64 */
+      schedulePartId: number
+      /** Format: int64 */
+      offenceId: number
+    }
+    LinkOffence: {
+      /**
+       * Format: int64
+       * @description Unique ID of the offence
+       */
+      offenceId: number
+      /**
+       * Format: int64
+       * @description The offence code
+       */
+      schedulePartId: number
+      /** @description The line reference for the associated schedule's legislation */
+      lineReference?: string | null
+      /** @description The legislation text for the associated schedule */
+      legislationText?: string | null
+      /** @description Schedule paragraph title that this offence is mapped to */
+      paragraphTitle?: string | null
+      /** @description Schedule paragraph number that this offence is mapped to */
+      paragraphNumber?: string | null
     }
     /** @description Offence details */
     Offence: {
@@ -1012,10 +1078,34 @@ export interface components {
   headers: never
   pathItems: never
 }
-
 export type $defs = Record<string, never>
-
 export interface operations {
+  updateSchedule: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        scheduleId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateSchedule']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Schedule']
+        }
+      }
+    }
+  }
   toggleFeature: {
     parameters: {
       query?: never
@@ -1059,6 +1149,32 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  addSchedulePart: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        scheduleId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateSchedulePart']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SchedulePart']
+        }
       }
     }
   }
@@ -1654,6 +1770,26 @@ export interface operations {
         content: {
           'application/json': components['schemas']['FeatureToggle'][]
         }
+      }
+    }
+  }
+  deleteSchedulePart: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        schedulePartId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
