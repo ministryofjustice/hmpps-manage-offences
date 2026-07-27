@@ -4,7 +4,7 @@ import LinkOffenceRoutes from './handlers/linkOffence'
 import OffenceService from '../../services/offenceService'
 import PartsAndOffencesRoutes from './handlers/partsAndOffences'
 import CreateScheduleRoutes from './handlers/createSchedule'
-import ManageSchedulesRoutes from './handlers/manageSchedules'
+import ScheduleStatusRoutes from './handlers/scheduleStatus'
 import SchedulePartRoutes from './handlers/scheduleParts'
 import EditScheduleRoutes from './handlers/editSchedule'
 import AdminService from '../../services/adminService'
@@ -15,7 +15,6 @@ export const schedulePaths = {
   LINK_OFFENCES: '/schedules/link-offences/:scheduleId/:schedulePartId',
   LINK_OFFENCE_CREATE: '/schedules/link-offence/create',
   CREATE_SCHEDULE: '/schedules/create',
-  MANAGE_SCHEDULES: '/schedules/manage',
   SCHEDULE_STATUS: '/schedules/:scheduleId/status',
   EDIT_SCHEDULE: '/schedules/:scheduleId/edit',
   ADD_SCHEDULE_PART: '/schedules/:scheduleId/parts/add',
@@ -29,7 +28,7 @@ export default function Index(offenceService: OffenceService, adminService: Admi
   const linkOffenceRoutes = new LinkOffenceRoutes(offenceService)
   const partsAndOffencesHandler = new PartsAndOffencesRoutes(offenceService, adminService)
   const createScheduleHandler = new CreateScheduleRoutes(offenceService)
-  const manageSchedulesHandler = new ManageSchedulesRoutes(offenceService, adminService)
+  const scheduleStatusHandler = new ScheduleStatusRoutes(offenceService, adminService)
   const schedulePartHandler = new SchedulePartRoutes(offenceService)
   const editScheduleHandler = new EditScheduleRoutes(offenceService)
 
@@ -37,8 +36,8 @@ export default function Index(offenceService: OffenceService, adminService: Admi
   // registered ahead of any /schedules/:param route so the literal paths win
   router.get(schedulePaths.CREATE_SCHEDULE, createScheduleHandler.GET)
   router.post(schedulePaths.CREATE_SCHEDULE, createScheduleHandler.POST)
-  router.get(schedulePaths.MANAGE_SCHEDULES, manageSchedulesHandler.GET)
-  router.post(schedulePaths.SCHEDULE_STATUS, manageSchedulesHandler.POST_STATUS)
+  router.get(schedulePaths.SCHEDULE_STATUS, scheduleStatusHandler.GET)
+  router.post(schedulePaths.SCHEDULE_STATUS, scheduleStatusHandler.POST)
   router.get(schedulePaths.EDIT_SCHEDULE, editScheduleHandler.GET)
   router.post(schedulePaths.EDIT_SCHEDULE, editScheduleHandler.POST)
   router.get(schedulePaths.ADD_SCHEDULE_PART, schedulePartHandler.GET_ADD)

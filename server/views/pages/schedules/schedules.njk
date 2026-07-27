@@ -24,6 +24,12 @@
 {% block content %}
     <h1 class='govuk-heading-l'>Select a schedule to manage its offences</h1>
 
+    {% if 'UPDATE_OFFENCE_SCHEDULES' in user.userRoles %}
+        <p class="govuk-body">
+            You can also <a href="/schedules/create" class="govuk-link" data-qa="create-schedule">create a new schedule</a>.
+        </p>
+    {% endif %}
+
     <form method="get">
         {{ govukRadios({
             idPrefix: "schedule",
@@ -45,15 +51,5 @@
         </div>
 
     </form>
-
-    {% if 'UPDATE_OFFENCE_SCHEDULES' in user.userRoles %}
-        {{ govukButton({
-            classes: "govuk-button--secondary",
-            text: "Create a schedule",
-            href: "/schedules/create",
-            attributes: { 'data-qa': 'create-schedule' }
-        }) }}
-
-    {% endif %}
 
 {% endblock %}
