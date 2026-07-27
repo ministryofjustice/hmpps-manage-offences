@@ -33,7 +33,6 @@ export default function Index(offenceService: OffenceService, adminService: Admi
   const editScheduleHandler = new EditScheduleRoutes(offenceService)
 
   router.get('/schedules', scheduleHandler.GET)
-  // registered ahead of any /schedules/:param route so the literal paths win
   router.get(schedulePaths.CREATE_SCHEDULE, createScheduleHandler.GET)
   router.post(schedulePaths.CREATE_SCHEDULE, createScheduleHandler.POST)
   router.get(schedulePaths.SCHEDULE_STATUS, scheduleStatusHandler.GET)
