@@ -50,6 +50,12 @@
     {% endif %}
   </div>
 
+  {% if 'UPDATE_OFFENCE_SCHEDULES' in user.userRoles %}
+    <p class="govuk-body">
+      <a href="/schedules/{{ fullSchedule.id }}/edit" class="govuk-link" data-qa="edit-schedule">Change schedule details</a>
+    </p>
+  {% endif %}
+
   {% set tabRows = [] %}
   {% for part in fullSchedule.scheduleParts %}
     {% set labelDesc = "Part " + part.partNumber + partDesc if partDesc else "Part " + part.partNumber %}
@@ -72,6 +78,15 @@
     classes: 'borderless-tabs',
     items: tabRows
   }) }}
+
+  {% if 'UPDATE_OFFENCE_SCHEDULES' in user.userRoles %}
+    {{ govukButton({
+      classes: "govuk-button--secondary",
+      text: "Add a part",
+      href: '/schedules/' + fullSchedule.id + '/parts/add',
+      attributes: { 'data-qa': 'add-part' }
+    }) }}
+  {% endif %}
 
   {{ govukBackLink({
     text: "Back",
@@ -128,4 +143,16 @@
       user: user
     }
   ) }}
+
+  {% if ('UPDATE_OFFENCE_SCHEDULES' in user.userRoles) and (not part.offences or part.offences.length === 0) %}
+    <form method="post" action="/schedules/{{ fullSchedule.id }}/parts/{{ part.id }}/delete">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      {{ govukButton({
+        classes: "govuk-button--warning",
+        text: "Delete part " + part.partNumber,
+        preventDoubleClick: true,
+        attributes: { 'data-qa': 'delete-part-' + part.id }
+      }) }}
+    </form>
+  {% endif %}
 {% endmacro %}

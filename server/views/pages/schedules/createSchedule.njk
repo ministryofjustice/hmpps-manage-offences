@@ -68,16 +68,6 @@
             classes: "govuk-!-width-two-thirds"
         }) }}
 
-        {{ govukInput({
-            label: { text: "Number of parts" },
-            hint: { text: "Parts are numbered from 1. You can link offences to them once the schedule exists." },
-            id: "partCount",
-            name: "partCount",
-            value: form.partCount,
-            inputmode: "numeric",
-            classes: "govuk-input--width-3"
-        }) }}
-
         {{ govukButton({
             text: "Create draft schedule",
             preventDoubleClick: true,

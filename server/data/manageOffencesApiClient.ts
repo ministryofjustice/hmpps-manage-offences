@@ -11,7 +11,9 @@ import {
   OffenceToScheduleMapping,
   PcscLists,
   Schedule,
+  SchedulePart,
   SdsExclusionLists,
+  UpdateScheduleRequest,
 } from '../@types/manageOffences/manageOffencesClientTypes'
 
 type User = Express.User
@@ -103,6 +105,21 @@ export default class ManageOffencesApiClient extends RestClient {
       },
       asUser(user.token),
     )
+  }
+
+  updateSchedule(scheduleId: number, update: UpdateScheduleRequest, user: User): Promise<Schedule> {
+    return this.put({ path: `/schedule/${scheduleId}`, data: update }, asUser(user.token)) as Promise<Schedule>
+  }
+
+  addSchedulePart(scheduleId: number, partNumber: number, user: User): Promise<SchedulePart> {
+    return this.post(
+      { path: `/schedule/${scheduleId}/part`, data: { partNumber } },
+      asUser(user.token),
+    ) as Promise<SchedulePart>
+  }
+
+  deleteSchedulePart(schedulePartId: number, user: User): Promise<unknown> {
+    return this.delete({ path: `/schedule/part/${schedulePartId}` }, asUser(user.token))
   }
 
   getAllSchedules(user: User): Promise<[Schedule]> {

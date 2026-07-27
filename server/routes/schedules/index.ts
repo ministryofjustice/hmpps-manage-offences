@@ -5,6 +5,8 @@ import OffenceService from '../../services/offenceService'
 import PartsAndOffencesRoutes from './handlers/partsAndOffences'
 import CreateScheduleRoutes from './handlers/createSchedule'
 import ManageSchedulesRoutes from './handlers/manageSchedules'
+import SchedulePartRoutes from './handlers/scheduleParts'
+import EditScheduleRoutes from './handlers/editSchedule'
 import AdminService from '../../services/adminService'
 
 export const schedulePaths = {
@@ -15,6 +17,9 @@ export const schedulePaths = {
   CREATE_SCHEDULE: '/schedules/create',
   MANAGE_SCHEDULES: '/schedules/manage',
   SCHEDULE_STATUS: '/schedules/:scheduleId/status',
+  EDIT_SCHEDULE: '/schedules/:scheduleId/edit',
+  ADD_SCHEDULE_PART: '/schedules/:scheduleId/parts/add',
+  DELETE_SCHEDULE_PART: '/schedules/:scheduleId/parts/:schedulePartId/delete',
 }
 
 export default function Index(offenceService: OffenceService, adminService: AdminService): Router {
@@ -25,6 +30,8 @@ export default function Index(offenceService: OffenceService, adminService: Admi
   const partsAndOffencesHandler = new PartsAndOffencesRoutes(offenceService, adminService)
   const createScheduleHandler = new CreateScheduleRoutes(offenceService)
   const manageSchedulesHandler = new ManageSchedulesRoutes(offenceService, adminService)
+  const schedulePartHandler = new SchedulePartRoutes(offenceService)
+  const editScheduleHandler = new EditScheduleRoutes(offenceService)
 
   router.get('/schedules', scheduleHandler.GET)
   // registered ahead of any /schedules/:param route so the literal paths win
@@ -32,6 +39,11 @@ export default function Index(offenceService: OffenceService, adminService: Admi
   router.post(schedulePaths.CREATE_SCHEDULE, createScheduleHandler.POST)
   router.get(schedulePaths.MANAGE_SCHEDULES, manageSchedulesHandler.GET)
   router.post(schedulePaths.SCHEDULE_STATUS, manageSchedulesHandler.POST_STATUS)
+  router.get(schedulePaths.EDIT_SCHEDULE, editScheduleHandler.GET)
+  router.post(schedulePaths.EDIT_SCHEDULE, editScheduleHandler.POST)
+  router.get(schedulePaths.ADD_SCHEDULE_PART, schedulePartHandler.GET_ADD)
+  router.post(schedulePaths.ADD_SCHEDULE_PART, schedulePartHandler.POST_ADD)
+  router.post(schedulePaths.DELETE_SCHEDULE_PART, schedulePartHandler.POST_DELETE)
   router.get('/schedules/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
   router.get('/schedules/pcsc-lists', partsAndOffencesHandler.GET_PCSC_LISTS)
   router.get('/schedules/sds-exclusion-lists', partsAndOffencesHandler.GET_SDS_EXCLUSION_LISTS)

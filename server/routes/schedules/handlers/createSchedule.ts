@@ -1,37 +1,6 @@
 import { Request, Response } from 'express'
 import OffenceService from '../../../services/offenceService'
-
-export type CreateScheduleForm = {
-  act?: string
-  code?: string
-  url?: string
-  partCount?: string
-}
-
-export type FormError = {
-  text: string
-  href: string
-}
-
-const LEGISLATION_URL = /^https:\/\/www\.legislation\.gov\.uk\//
-
-export function validateCreateSchedule(form: CreateScheduleForm): FormError[] {
-  const errors: FormError[] = []
-  if (!form.act?.trim()) {
-    errors.push({ text: 'Enter the act the schedule belongs to', href: '#act' })
-  }
-  if (!form.code?.trim()) {
-    errors.push({ text: 'Enter the schedule code', href: '#code' })
-  }
-  if (form.url?.trim() && !LEGISLATION_URL.test(form.url.trim())) {
-    errors.push({ text: 'Enter a legislation.gov.uk address, or leave the field blank', href: '#url' })
-  }
-  const partCount = Number(form.partCount)
-  if (!Number.isInteger(partCount) || partCount < 1 || partCount > 20) {
-    errors.push({ text: 'Enter the number of parts, between 1 and 20', href: '#partCount' })
-  }
-  return errors
-}
+import { ScheduleDetailsForm, validateScheduleDetails } from '../scheduleValidation'
 
 export default class CreateScheduleRoutes {
   constructor(private readonly offenceService: OffenceService) {}
@@ -41,8 +10,8 @@ export default class CreateScheduleRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const form = req.body as CreateScheduleForm
-    const errors = validateCreateSchedule(form)
+    const form = req.body as ScheduleDetailsForm
+    const errors = validateScheduleDetails(form)
     if (errors.length) {
       return res.render('pages/schedules/createSchedule', { errors, form })
     }
@@ -54,7 +23,8 @@ export default class CreateScheduleRoutes {
           act: form.act.trim(),
           code: form.code.trim(),
           url: form.url?.trim() || null,
-          scheduleParts: Array.from({ length: Number(form.partCount) }, (_, i) => ({ id: 0, partNumber: i + 1 })),
+          scheduleParts: [],
+          status: 'DRAFT',
         },
         res.locals.user,
       )
