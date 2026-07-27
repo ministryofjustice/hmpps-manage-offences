@@ -21,6 +21,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/admin/schedule/{scheduleId}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Set the publication status of a schedule
+     * @description Schedules are created as DRAFT and are withheld from callers without ROLE_MANAGE_OFFENCES_ADMIN until published
+     */
+    put: operations['setScheduleStatus']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/schedule/unlink-offences': {
     parameters: {
       query?: never
@@ -140,6 +160,46 @@ export interface paths {
       cookie?: never
     }
     get: operations['getToreraOffenceCodes']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/schedule/torera-offence-codes-by-schedule-part': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve all schedule 19ZA offence codes by part number
+     * @description Returns list of offence codes broken down by schedule part, commonly used for TORERA offences
+     */
+    get: operations['getToreraScheduleParts']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/schedule/sds-offence-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Determine both if the passed in offence codes are related to the PCSC list and whether they have any exclusions to be considered for SDS40 and Progression Model
+     * @description This endpoint will return a list of offences with PCSC markers and any SDS early release exclusions if applicable.
+     */
+    get: operations['getSdsOffenceDetails']
     put?: never
     post?: never
     delete?: never
@@ -422,6 +482,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/offences/actuarial-mapping': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get offence code to actuarial weighting mapping
+     * @description Queries database to get offence code to actuarial weighting mapping
+     */
+    get: operations['getAllRiskActuarialOffenceCodeMappings']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/change-history/nomis': {
     parameters: {
       query?: never
@@ -457,7 +537,9 @@ export interface paths {
     trace?: never
   }
 }
+
 export type webhooks = Record<string, never>
+
 export interface components {
   schemas: {
     /** @description Feature toggle details */
@@ -476,6 +558,11 @@ export interface components {
         | 'T3_OFFENCE_EXCLUSIONS'
       /** @description true or false - depending on whether the feature should be enabled */
       enabled: boolean
+    }
+    /** @description Request to change the publication status of a schedule */
+    ScheduleStatusRequest: {
+      /** @enum {string} */
+      status: 'DRAFT' | 'LIVE'
     }
     /** @description Schedule part ID and Offence ID - used for unlinking offences from schedules */
     SchedulePartIdAndOffenceId: {
@@ -496,15 +583,14 @@ export interface components {
        */
       schedulePartId: number
       /** @description The line reference for the associated schedule's legislation */
-      lineReference?: string
+      lineReference?: string | null
       /** @description The legislation text for the associated schedule */
-      legislationText?: string
+      legislationText?: string | null
       /** @description Schedule paragraph title that this offence is mapped to */
-      paragraphTitle?: string
+      paragraphTitle?: string | null
       /** @description Schedule paragraph number that this offence is mapped to */
-      paragraphNumber?: string
+      paragraphNumber?: string | null
     }
-    /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
     BasicOffence: {
       /**
        * Format: int64
@@ -514,7 +600,7 @@ export interface components {
       /** @description The offence code */
       code: string
       /** @description The offence description (taken from SDRS CJSTitle field) */
-      description?: string
+      description?: string | null
       /**
        * Format: date
        * @description The offence start date
@@ -524,7 +610,7 @@ export interface components {
        * Format: date
        * @description The offence end date
        */
-      endDate?: string
+      endDate?: string | null
     }
     /** @description Schedule details when associated to an offence */
     LinkedScheduleDetails: {
@@ -532,13 +618,13 @@ export interface components {
       id: number
       act: string
       code: string
-      url?: string
+      url?: string | null
       /** Format: int32 */
       partNumber: number
-      paragraphNumber?: string
-      paragraphTitle?: string
-      lineReference?: string
-      legislationText?: string
+      paragraphNumber?: string | null
+      paragraphTitle?: string | null
+      lineReference?: string | null
+      legislationText?: string | null
     }
     OffenceToScheduleMapping: {
       /**
@@ -549,9 +635,9 @@ export interface components {
       /** @description The offence code */
       code: string
       /** @description The offence description (taken from SDRS CJSTitle field) */
-      description?: string
+      description?: string | null
       /** @description The offence type (e.g CI) */
-      offenceType?: string
+      offenceType?: string | null
       /**
        * Format: int32
        * @description The revision number of the offence
@@ -566,9 +652,9 @@ export interface components {
        * Format: date
        * @description The offence end date
        */
-      endDate?: string
+      endDate?: string | null
       /** @description The offence's home office stats code */
-      homeOfficeStatsCode?: string
+      homeOfficeStatsCode?: string | null
       /**
        * Format: date-time
        * @description The date this offence was last changed in SDRS
@@ -578,50 +664,50 @@ export interface components {
        * Format: date-time
        * @description The date this offence was loaded into manage-offences from SDRS
        */
-      loadDate?: string
+      loadDate?: string | null
       /** @description The schedules linked to this offence */
-      schedules?: components['schemas']['LinkedScheduleDetails'][]
+      schedules?: components['schemas']['LinkedScheduleDetails'][] | null
       /** @description If true then this is a inchoate offence; i.e. a child of another offence */
       isChild: boolean
       /**
        * Format: int64
        * @description The parent offence id of an inchoate offence
        */
-      parentOffenceId?: number
+      parentOffenceId?: number | null
       /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
-      childOffences?: components['schemas']['BasicOffence'][]
+      childOffences?: components['schemas']['BasicOffence'][] | null
       /** @description The legislation associated to this offence (from actsAndSections in the SDRS response) */
-      legislation?: string
+      legislation?: string | null
       /** @description Set to true if max period is life */
-      maxPeriodIsLife?: boolean
+      maxPeriodIsLife?: boolean | null
       /**
        * Format: int32
        * @description Set to the max period of indictment in years
        */
-      maxPeriodOfIndictmentYears?: number
+      maxPeriodOfIndictmentYears?: number | null
       /**
        * Format: int32
        * @description Set to the max period of indictment in months
        */
-      maxPeriodOfIndictmentMonths?: number
+      maxPeriodOfIndictmentMonths?: number | null
       /**
        * Format: int32
        * @description Set to the max period of indictment in weeks
        */
-      maxPeriodOfIndictmentWeeks?: number
+      maxPeriodOfIndictmentWeeks?: number | null
       /**
        * Format: int32
        * @description Set to the max period of indictment in days
        */
-      maxPeriodOfIndictmentDays?: number
+      maxPeriodOfIndictmentDays?: number | null
       /** @description The line reference for the associated schedule's legislation */
-      lineReference?: string
+      lineReference?: string | null
       /** @description The legislation text for the associated schedule */
-      legislationText?: string
+      legislationText?: string | null
       /** @description Schedule paragraph title that this offence is mapped to */
-      paragraphTitle?: string
+      paragraphTitle?: string | null
       /** @description Schedule paragraph number that this offence is mapped to */
-      paragraphNumber?: string
+      paragraphNumber?: string | null
     }
     /** @description Schedule details */
     Schedule: {
@@ -629,8 +715,13 @@ export interface components {
       id: number
       act: string
       code: string
-      url?: string
-      scheduleParts?: components['schemas']['SchedulePart'][]
+      url?: string | null
+      scheduleParts?: components['schemas']['SchedulePart'][] | null
+      /**
+       * @description Publication status. Schedules are always created as DRAFT; the value supplied on create is ignored. DRAFT schedules are only returned to callers holding ROLE_MANAGE_OFFENCES_ADMIN.
+       * @enum {string}
+       */
+      status: 'DRAFT' | 'LIVE'
     }
     /** @description Schedule part details and associated offences */
     SchedulePart: {
@@ -638,7 +729,7 @@ export interface components {
       id: number
       /** Format: int32 */
       partNumber: number
-      offences?: components['schemas']['OffenceToScheduleMapping'][]
+      offences?: components['schemas']['OffenceToScheduleMapping'][] | null
     }
     /** @description Offence details */
     Offence: {
@@ -650,9 +741,9 @@ export interface components {
       /** @description The offence code */
       code: string
       /** @description The offence description (taken from SDRS CJSTitle field) */
-      description?: string
+      description?: string | null
       /** @description The offence type (e.g CI) */
-      offenceType?: string
+      offenceType?: string | null
       /**
        * Format: int32
        * @description The revision number of the offence
@@ -667,11 +758,11 @@ export interface components {
        * Format: date
        * @description The offence end date
        */
-      endDate?: string
+      endDate?: string | null
       /** @description The offence's home office stats code */
-      homeOfficeStatsCode?: string
+      homeOfficeStatsCode?: string | null
       /** @description The offence's home office description */
-      homeOfficeDescription?: string
+      homeOfficeDescription?: string | null
       /**
        * Format: date-time
        * @description The date this offence was last changed in SDRS
@@ -681,65 +772,88 @@ export interface components {
        * Format: date-time
        * @description The date this offence was loaded into manage-offences from SDRS
        */
-      loadDate?: string
+      loadDate?: string | null
       /** @description The schedules linked to this offence */
-      schedules?: components['schemas']['LinkedScheduleDetails'][]
+      schedules?: components['schemas']['LinkedScheduleDetails'][] | null
       /** @description If true then this is a inchoate offence; i.e. a child of another offence */
       isChild: boolean
       /**
        * Format: int64
        * @description The parent offence id of an inchoate offence
        */
-      parentOffenceId?: number
+      parentOffenceId?: number | null
       /** @description A list of child offence ID's; i.e. inchoate offences linked to this offence */
-      childOffenceIds?: number[]
+      childOffenceIds?: number[] | null
       /** @description The legislation associated to this offence (from actsAndSections in the SDRS response) */
-      legislation?: string
+      legislation?: string | null
       /** @description Set to true if max period is life */
-      maxPeriodIsLife?: boolean
+      maxPeriodIsLife?: boolean | null
       /**
        * Format: int32
        * @description Set to the max period of indictment in years
        */
-      maxPeriodOfIndictmentYears?: number
+      maxPeriodOfIndictmentYears?: number | null
       /**
        * Format: int32
        * @description Set to the max period of indictment in months
        */
-      maxPeriodOfIndictmentMonths?: number
+      maxPeriodOfIndictmentMonths?: number | null
       /**
        * Format: int32
        * @description Set to the max period of indictment in weeks
        */
-      maxPeriodOfIndictmentWeeks?: number
+      maxPeriodOfIndictmentWeeks?: number | null
       /**
        * Format: int32
        * @description Set to the max period of indictment in days
        */
-      maxPeriodOfIndictmentDays?: number
+      maxPeriodOfIndictmentDays?: number | null
       /**
        * @description Yes if the offence caries a custodial sentence, Either if it does when tried as an indictment and No otherwise.
-       * @enum {string}
+       * @enum {string|null}
        */
-      custodialIndicator?: 'Y' | 'N' | 'E'
+      custodialIndicator?: 'Y' | 'N' | 'E' | null
+    }
+    ToreraSchedulePartCodes: {
+      parts: {
+        [key: string]: string[]
+      }
+    }
+    /**
+     * @description Categories for the offence
+     * @enum {string}
+     */
+    OffenceSdsExclusionIndicator:
+      | 'SEXUAL'
+      | 'SEXUAL_T3'
+      | 'DOMESTIC_ABUSE'
+      | 'DOMESTIC_ABUSE_T3'
+      | 'VIOLENT'
+      | 'NONE'
+      | 'NATIONAL_SECURITY'
+      | 'TERRORISM'
+      | 'MURDER_T3'
+      | 'SCHEDULE_13_PART_3'
+    PcscMarkers: {
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
+      inListA: boolean
+      /** @description SDS between 4 and 7 years : Schedule 15 Part 2 that attract life + serious violent offences */
+      inListB: boolean
+      /** @description Sec250 >7 years = List C: Schedule 15 Part 2 that attract life + serious violent offences (same as List B) */
+      inListC: boolean
+      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
+      inListD: boolean
+    }
+    /** @description Shows which (if any) PCSC Marker the offence relates to as well as any SDS early release exclusions for the offence */
+    SdsOffenceDetails: {
+      offenceCode: string
+      pcscMarkers: components['schemas']['PcscMarkers']
+      earlyReleaseExclusions: components['schemas']['OffenceSdsExclusionIndicator'][]
     }
     /** @description Categorises the offence based on the exclusion list it appears in */
     OffenceSdsExclusion: {
       offenceCode: string
-      /**
-       * @description Categories for the offence
-       * @enum {string}
-       */
-      schedulePart:
-        | 'SEXUAL'
-        | 'SEXUAL_T3'
-        | 'DOMESTIC_ABUSE'
-        | 'DOMESTIC_ABUSE_T3'
-        | 'VIOLENT'
-        | 'NONE'
-        | 'NATIONAL_SECURITY'
-        | 'TERRORISM'
-        | 'MURDER_T3'
+      schedulePart: components['schemas']['OffenceSdsExclusionIndicator']
     }
     /** @description Contains the list of all the offences that are sexual, domestic abuse, national security, terrorism or violent */
     SdsExclusionLists: {
@@ -774,16 +888,6 @@ export interface components {
     OffencePcscMarkers: {
       offenceCode: string
       pcscMarkers: components['schemas']['PcscMarkers']
-    }
-    PcscMarkers: {
-      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
-      inListA: boolean
-      /** @description SDS between 4 and 7 years : Schedule 15 Part 2 that attract life + serious violent offences */
-      inListB: boolean
-      /** @description Sec250 >7 years = List C: Schedule 15 Part 2 that attract life + serious violent offences (same as List B) */
-      inListC: boolean
-      /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life */
-      inListD: boolean
     }
     /** @description Details of the load by SDRS Cache */
     MostRecentLoadResult: {
@@ -822,24 +926,60 @@ export interface components {
         | 'GET_MOJ_OFFENCE'
       /**
        * @description Load Status: SUCCESS or FAIL
-       * @enum {string}
+       * @enum {string|null}
        */
-      status?: 'SUCCESS' | 'FAIL'
+      status?: 'SUCCESS' | 'FAIL' | null
       /**
        * @description Load Type: FULL_LOAD or UPDATE
-       * @enum {string}
+       * @enum {string|null}
        */
-      type?: 'FULL_LOAD' | 'UPDATE'
+      type?: 'FULL_LOAD' | 'UPDATE' | null
       /**
        * Format: date-time
        * @description The date and time of the load
        */
-      loadDate?: string
+      loadDate?: string | null
       /**
        * Format: date-time
        * @description The date and time of the most recent successful load; if the load was successful this is the same as the loadDate
        */
-      lastSuccessfulLoadDate?: string
+      lastSuccessfulLoadDate?: string | null
+    }
+    RiskActuarialHoCodeDTO: {
+      parentGroupDescription: string
+      categoryDescription: string
+      subCategoryDescription: string
+      /** @enum {string} */
+      actuarialCategory:
+        | 'UNKNOWN'
+        | 'BURGLARY_DOMESTIC'
+        | 'BURGLARY_OTHER'
+        | 'DRUNKENNESS'
+        | 'DRINK_DRIVING'
+        | 'MOTORING_OFFENCES'
+        | 'VEHICLE_RELATED_THEFT'
+        | 'FRAUD_AND_FORGERY'
+        | 'WELFARE_FRAUD'
+        | 'DRUG_IMPORT_EXPORT_OR_PRODUCTION'
+        | 'DRUG_POSSESSION_OR_SUPPLY'
+        | 'VIOLENCE_AGAINST_THE_PERSON_ABH_PLUS'
+        | 'VIOLENCE_AGAINST_THE_PERSON_SUB_ABH'
+        | 'PUBLIC_ORDER_AND_HARRASSMENT'
+        | 'WEAPONS_NON_FIREARM'
+        | 'FIREARMS_MOST_SERIOUS'
+        | 'FIREARMS_OTHER'
+        | 'HANDLING_STOLEN_GOODS'
+        | 'CRIMINAL_DAMAGE'
+        | 'ACQUISITIVE_VIOLENCE'
+        | 'OTHER_OFFENCES'
+        | 'ABSCONDING_OR_BAIL'
+        | 'SEXUAL_AGAINST_CHILD'
+        | 'SEXUAL_NOT_AGAINST_CHILD'
+        | 'THEFT_NON_MOTOR'
+        | 'NEED_DETAILS_OF_EXACT_OFFENCE'
+      flags: {
+        [key: string]: boolean
+      }
     }
     /** @description This shows a change to NOMIS */
     NomisChangeHistory: {
@@ -872,7 +1012,9 @@ export interface components {
   headers: never
   pathItems: never
 }
+
 export type $defs = Record<string, never>
+
 export interface operations {
   toggleFeature: {
     parameters: {
@@ -884,6 +1026,30 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['FeatureToggle'][]
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  setScheduleStatus: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        scheduleId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ScheduleStatusRequest']
       }
     }
     responses: {
@@ -958,7 +1124,9 @@ export interface operations {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          'application/json': components['schemas']['Schedule']
+        }
       }
     }
   }
@@ -1044,6 +1212,48 @@ export interface operations {
         }
         content: {
           'application/json': string[]
+        }
+      }
+    }
+  }
+  getToreraScheduleParts: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ToreraSchedulePartCodes']
+        }
+      }
+    }
+  }
+  getSdsOffenceDetails: {
+    parameters: {
+      query: {
+        offenceCodes: string[]
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SdsOffenceDetails'][]
         }
       }
     }
@@ -1378,6 +1588,28 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['Offence'][]
+        }
+      }
+    }
+  }
+  getAllRiskActuarialOffenceCodeMappings: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: components['schemas']['RiskActuarialHoCodeDTO']
+          }
         }
       }
     }
