@@ -273,10 +273,30 @@ export interface paths {
       cookie?: never
     }
     /**
-     * Retrieves the lists of all the offences that are to be excluded from early release.
+     * Retrieves the lists of all the offences that are to be excluded from SDS40 early release.
      * @description This returns five lists for Sexual, Violent, Domestic Abuse, National Security or Terrorism offences.
      */
     get: operations['getSdsExclusionLists']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/schedule/progression-model-exclusion-lists': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieves the lists of all the offences that are to be excluded from Progression Model.
+     * @description This returns five lists for Sexual, Violent, Domestic Abuse, National Security or Terrorism offences.
+     */
+    get: operations['getProgressionModelExclusionLists']
     put?: never
     post?: never
     delete?: never
@@ -900,6 +920,7 @@ export interface components {
       | 'TERRORISM'
       | 'MURDER_T3'
       | 'SCHEDULE_13_PART_3'
+      | 'SENTENCING_ACT_2026_PROGRESSION_MODEL'
     PcscMarkers: {
       /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
       inListA: boolean
@@ -939,6 +960,11 @@ export interface components {
       terrorism: components['schemas']['OffenceToScheduleMapping'][]
       /** @description Tranche Three Offence falls under the Murder category */
       murderTrancheThree: components['schemas']['OffenceToScheduleMapping'][]
+    }
+    /** @description Contains the list of all the offences that are excluded from progression model */
+    ProgressionModelExclusionLists: {
+      /** @description Offence under the SA2026 Excluded Offences for Progression Model schedule */
+      sentencingAct2026ProgressionModelExclusions: components['schemas']['OffenceToScheduleMapping'][]
     }
     PcscLists: {
       /** @description Schedule 15 Part 1 + Schedule 15 Part 2 that attract life (exclude all offences that start on or after 28 June 2022) */
@@ -1412,6 +1438,26 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['SdsExclusionLists']
+        }
+      }
+    }
+  }
+  getProgressionModelExclusionLists: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProgressionModelExclusionLists']
         }
       }
     }

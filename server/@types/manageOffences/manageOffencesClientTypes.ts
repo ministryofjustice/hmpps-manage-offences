@@ -11,6 +11,7 @@ export type UpdateScheduleRequest = { act: string; code: string; url?: string | 
 export type NomisChangeHistory = components['schemas']['NomisChangeHistory']
 export type PcscLists = components['schemas']['PcscLists']
 export type SdsExclusionLists = components['schemas']['SdsExclusionLists']
+export type ProgressionModelExclusionLists = components['schemas']['ProgressionModelExclusionLists']
 export type DateInput = {
   day: number
   month: number

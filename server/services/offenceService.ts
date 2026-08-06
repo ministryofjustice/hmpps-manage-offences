@@ -5,6 +5,7 @@ import {
   OffenceMarkers,
   OffenceToScheduleMapping,
   PcscLists,
+  ProgressionModelExclusionLists,
   Schedule,
   SchedulePart,
   SdsExclusionLists,
@@ -91,6 +92,10 @@ export default class OffenceService {
 
   async getSdsExclusionLists(user: User): Promise<SdsExclusionLists> {
     return this.manageOffencesApi.getSdsExclusionLists(user)
+  }
+
+  async getProgressionModelExclusionLists(user: User): Promise<ProgressionModelExclusionLists> {
+    return this.manageOffencesApi.getProgressionModelExclusionLists(user)
   }
 
   async getPcscLists(user: User): Promise<PcscLists> {

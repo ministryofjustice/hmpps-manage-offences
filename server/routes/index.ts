@@ -10,7 +10,7 @@ import changeHistory from './changeHistory'
 export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
 
-  router.use(homeRoutes())
+  router.use(homeRoutes(services.offenceService))
   router.use(searchRoutes(services.offenceService, services.adminService))
   router.use(loadResultsRoutes(services.adminService))
   router.use(toggleJobs(services.adminService))

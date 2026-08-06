@@ -13,7 +13,9 @@
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Description</th>
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Start date</th>
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">End date</th>
+                {% if attributes.showLegislationColumn %}
                 <th scope="col" class="govuk-table__header govuk-!-font-size-16">Legislation</th>
+                {% endif %}
                 {% if attributes.showMaxPeriodAndParagraph %}
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">Max Period</th>
                     <th scope="col" class="govuk-table__header govuk-!-font-size-16">Paragraph</th>
@@ -35,9 +37,11 @@
                     <td class="govuk-table__cell">
                         {{ offence.endDate | dateFormat }}
                     </td>
-                    <td class="govuk-table__cell">
-                        {{ offence.legislationText or offence.legislation }}
-                    </td>
+                    {% if attributes.showLegislationColumn %}
+                      <td class="govuk-table__cell">
+                          {{ offence.legislationText or offence.legislation }}
+                      </td>
+                    {% endif %}
                     {% if attributes.showMaxPeriodAndParagraph %}
                         <td class="govuk-table__cell">
                             {% if offence.maxPeriodIsLife %}

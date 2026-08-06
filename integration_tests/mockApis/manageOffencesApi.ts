@@ -14,4 +14,16 @@ export default {
         jsonBody: { status: httpStatus === 200 ? 'UP' : 'DOWN' },
       },
     }),
+  stubEmptyProgressionModelLists: (): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/manage-offences-api/schedule/progression-model-exclusion-lists',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: { sentencingAct2026ProgressionModelExclusions: [] },
+      },
+    }),
 }
