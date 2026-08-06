@@ -10,6 +10,7 @@ import {
   Offence,
   OffenceToScheduleMapping,
   PcscLists,
+  ProgressionModelExclusionLists,
   Schedule,
   SchedulePart,
   SdsExclusionLists,
@@ -208,6 +209,15 @@ export default class ManageOffencesApiClient extends RestClient {
       },
       asUser(user.token),
     ) as Promise<SdsExclusionLists>
+  }
+
+  getProgressionModelExclusionLists(user: User): Promise<ProgressionModelExclusionLists> {
+    return this.get(
+      {
+        path: '/schedule/progression-model-exclusion-lists',
+      },
+      asUser(user.token),
+    ) as Promise<ProgressionModelExclusionLists>
   }
 
   getPcscLists(user: User): Promise<PcscLists> {

@@ -1,0 +1,67 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/nav.njk" import navBar with context %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/scheduleOffenceListTable.njk" import scheduleOffenceListTable %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageTitle = applicationName + " - SA2026 Excluded Offences for Progression Model" %}
+{% set pageId = "schedules" %}
+
+{% block navBar %}
+  {{ navBar("schedules") }}
+{% endblock %}
+
+{% block aside %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: "/"
+      },
+      {
+        text: "SA2026 Excluded Offences for Progression Model"
+      }
+    ]
+  }) }}
+{% endblock %}
+
+      {% block content %}
+        <h1 class="govuk-heading-l">
+          Offences that are excluded from SA2026 Progression Model Release
+        </h1>
+        {{ govukTabs({
+          classes: 'borderless-tabs',
+          items: [
+            {
+              label: "Part 1",
+              id: "part1",
+              panel: {
+                html: exclusionTab(progressionModelExclusionLists.sentencingAct2026ProgressionModelExclusions, 'Specific sexual offences to be excluded from the Sentencing Act 2026 Progression Model')
+              }
+            }
+          ]
+        }) }}
+
+        {{ govukBackLink({
+          text: "Back",
+          href: "/"
+        }) }}
+      {% endblock %}
+
+      {% macro exclusionTab(list, partDesc, partExtraText) %}
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full govuk-!-text-align-left">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              {{ partDesc }}
+            </h2>
+          </div>
+        </div>
+        {{ scheduleOffenceListTable(
+          {
+            offences: list,
+            showMaxPeriodAndParagraph: false
+          }
+        ) }}
+      {% endmacro %}

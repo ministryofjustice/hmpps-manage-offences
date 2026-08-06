@@ -26,7 +26,7 @@ export default function Index(offenceService: OffenceService, adminService: Admi
 
   const scheduleHandler = new ScheduleRoutes(offenceService)
   const linkOffenceRoutes = new LinkOffenceRoutes(offenceService)
-  const partsAndOffencesHandler = new PartsAndOffencesRoutes(offenceService, adminService)
+  const partsAndOffencesHandler = new PartsAndOffencesRoutes(offenceService)
   const createScheduleHandler = new CreateScheduleRoutes(offenceService)
   const scheduleStatusHandler = new ScheduleStatusRoutes(offenceService, adminService)
   const schedulePartHandler = new SchedulePartRoutes(offenceService)
@@ -45,6 +45,10 @@ export default function Index(offenceService: OffenceService, adminService: Admi
   router.get('/schedules/parts-and-offences/:scheduleId', partsAndOffencesHandler.GET)
   router.get('/schedules/pcsc-lists', partsAndOffencesHandler.GET_PCSC_LISTS)
   router.get('/schedules/sds-exclusion-lists', partsAndOffencesHandler.GET_SDS_EXCLUSION_LISTS)
+  router.get(
+    '/schedules/progression-model-exclusion-lists',
+    partsAndOffencesHandler.GET_PROGRESSION_MODEL_EXCLUSION_LISTS,
+  )
   router.get(schedulePaths.LINK_OFFENCES, linkOffenceRoutes.GET)
   router.get(schedulePaths.LINK_OFFENCE_CREATE, linkOffenceRoutes.GET_LINK_SCREEN)
   router.post(schedulePaths.LINK_OFFENCE_CREATE, linkOffenceRoutes.POST_LINK)
