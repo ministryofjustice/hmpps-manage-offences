@@ -1,7 +1,7 @@
 {% macro offenceMarkersSection(offenceMarkers) %}
   <div class="govuk-grid-row govuk-body">
     <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-m">Offence Markers: PCSC or SDS40 Release Exclusion</h2>
+      <h2 class="govuk-heading-m">Offence Markers: PCSC, SDS40 or Progression Model Release Exclusions</h2>
       {% if offenceMarkers.markersExist %}
         <ul class="govuk-list govuk-list--bullet" id="offence-markers">
           {% if offenceMarkers.isSexual %}
@@ -27,6 +27,9 @@
           {% endif %}
           {% if offenceMarkers.isViolent %}
             <li>SDS40 Release Exclusion: Violent (for sentences of four years and over)</li>
+          {% endif %}
+          {% if offenceMarkers.isSA2026ProgressionModelExcludedOffence %}
+            <li>SA2026 Progression Model Exclusion</li>
           {% endif %}
           {% if offenceMarkers.inListA %}
             <li>SDS+: SDS >7 years between 01 April 2020 and 28 June 2022</li>

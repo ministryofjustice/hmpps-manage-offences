@@ -103,7 +103,11 @@ export default class OffenceService {
   }
 
   async getOffenceMarkers(offence: Offence, user: User): Promise<OffenceMarkers> {
-    const [sdsExclusionLists, pcscLists] = await Promise.all([this.getSdsExclusionLists(user), this.getPcscLists(user)])
+    const [sdsExclusionLists, pcscLists, progressionModelLists] = await Promise.all([
+      this.getSdsExclusionLists(user),
+      this.getPcscLists(user),
+      this.getProgressionModelExclusionLists(user),
+    ])
 
     const isCodeInList = (list: { code: string }[], code: string) => list.some(item => item.code === code)
 
@@ -119,6 +123,11 @@ export default class OffenceService {
     const isDomesticAbuseTrancheThree = isCodeInList(sdsExclusionLists.domesticAbuseTrancheThree, code)
     const isMurderTrancheThree = isCodeInList(sdsExclusionLists.murderTrancheThree, code)
 
+    const isSA2026ProgressionModelExcludedOffence = isCodeInList(
+      progressionModelLists.sentencingAct2026ProgressionModelExclusions,
+      code,
+    )
+
     const inListA = isCodeInList(pcscLists.listA, code)
     const inListB = isCodeInList(pcscLists.listB, code)
     const inListC = isCodeInList(pcscLists.listC, code)
@@ -133,6 +142,7 @@ export default class OffenceService {
       isSexualTrancheThree ||
       isDomesticAbuseTrancheThree ||
       isMurderTrancheThree ||
+      isSA2026ProgressionModelExcludedOffence ||
       inListA ||
       inListB ||
       inListC ||
@@ -152,6 +162,7 @@ export default class OffenceService {
       inListC,
       inListD,
       markersExist,
+      isSA2026ProgressionModelExcludedOffence,
     }
   }
 
