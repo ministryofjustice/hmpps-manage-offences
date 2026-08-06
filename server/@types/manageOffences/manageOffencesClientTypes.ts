@@ -33,6 +33,7 @@ export type OffenceMarkers = {
   isViolent: boolean
   isTerrorism: boolean
   isMurderTrancheThree: boolean
+  isSA2026ProgressionModelExcludedOffence: boolean
   inListA: boolean
   inListB: boolean
   inListC: boolean
