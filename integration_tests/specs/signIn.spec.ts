@@ -3,6 +3,7 @@ import hmppsAuth from '../mockApis/hmppsAuth'
 
 import { login, resetStubs } from '../testUtils'
 import HomePage from '../pages/homePage'
+import manageOffencesApi from '../mockApis/manageOffencesApi'
 
 test.describe('SignIn', () => {
   test.afterEach(async () => {
@@ -24,6 +25,7 @@ test.describe('SignIn', () => {
   })
 
   test('User name visible in header', async ({ page }) => {
+    await manageOffencesApi.stubEmptyProgressionModelLists()
     await login(page, { name: 'A TestUser' })
 
     const homePage = await HomePage.verifyOnPage(page)
@@ -32,6 +34,7 @@ test.describe('SignIn', () => {
   })
 
   test('Phase banner visible in header', async ({ page }) => {
+    await manageOffencesApi.stubEmptyProgressionModelLists()
     await login(page)
 
     const homePage = await HomePage.verifyOnPage(page)
@@ -40,6 +43,7 @@ test.describe('SignIn', () => {
   })
 
   test('User can sign out', async ({ page }) => {
+    await manageOffencesApi.stubEmptyProgressionModelLists()
     await login(page)
 
     const homePage = await HomePage.verifyOnPage(page)
@@ -49,6 +53,7 @@ test.describe('SignIn', () => {
   })
 
   test('User can manage their details', async ({ page }) => {
+    await manageOffencesApi.stubEmptyProgressionModelLists()
     await login(page, { name: 'A TestUser' })
 
     await hmppsAuth.stubManageDetailsPage()
@@ -60,12 +65,14 @@ test.describe('SignIn', () => {
   })
 
   test('Token verification failure takes user to sign in page', async ({ page }) => {
+    await manageOffencesApi.stubEmptyProgressionModelLists()
     await login(page, { active: false })
 
     await expect(page.getByRole('heading')).toHaveText('Sign in')
   })
 
   test('Token verification failure clears user session', async ({ page }) => {
+    await manageOffencesApi.stubEmptyProgressionModelLists()
     await login(page, { name: 'A TestUser', active: false })
 
     await expect(page.getByRole('heading')).toHaveText('Sign in')

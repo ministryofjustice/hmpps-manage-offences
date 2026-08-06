@@ -23,7 +23,8 @@
     "int-test-init:ci": "npx playwright install",
     "clean": "rm -rf dist test_results",
     "rebuild": "npm run clean && npm run setup && npm run build",
-    "setup": "npm ci && hmpps-npm-script-run-allowlist"
+    "setup": "npm ci && hmpps-npm-script-run-allowlist",
+    "generate-manage-offences-types": "openapi-typescript https://manage-offences-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/manageOffences/index.d.ts"
   },
   "engines": {
     "node": "^24",
