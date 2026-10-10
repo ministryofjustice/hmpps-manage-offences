@@ -31,7 +31,7 @@
     "npm": "^11"
   },
   "overrides": {
-    "js-yaml": "^5.4.1",
+    "js-yaml": "^5.4.2",
     "moment": "^2.31.0",
     "proxy-addr": "^2.0.8",
     "bunyan": {
@@ -39,14 +39,14 @@
         "rimraf": {
           "glob": {
             "minimatch": "^3.1.5",
-            "brace-expansion": "^1.1.21"
+            "brace-expansion": "^5.0.12"
           }
         }
       }
     }
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1120.0",
+    "@aws-sdk/client-sqs": "^3.1146.0",
     "@ministryofjustice/frontend": "^10.0.1",
     "@ministryofjustice/hmpps-auth-clients": "3.0.0",
     "@ministryofjustice/hmpps-azure-telemetry": "^1.1.0",
@@ -60,7 +60,7 @@
     "csrf-sync": "^4.2.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "govuk-frontend": "^6.5.0",
+    "govuk-frontend": "^6.5.1",
     "helmet": "^8.3.0",
     "http-errors": "^2.0.1",
     "jwt-decode": "^4.0.0",
@@ -69,16 +69,16 @@
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
     "path-to-regexp": "8.4.2",
-    "redis": "6.2.1",
-    "superagent": "^10.3.0"
+    "redis": "6.3.0",
+    "superagent": "^10.4.1"
   },
   "devDependencies": {
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
-    "@ministryofjustice/frontend-types": "2.0.1",
+    "@ministryofjustice/frontend-types": "2.0.3",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
-    "@playwright/test": "^1.62.1",
+    "@playwright/test": "^1.63.0",
     "@tsconfig/node24": "^24.0.5",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
@@ -89,7 +89,7 @@
     "@types/jest": "^30.0.0",
     "@types/jest-when": "^3.5.5",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.13.3",
+    "@types/node": "^24.19.1",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
@@ -103,16 +103,16 @@
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
     "esbuild-sass-plugin": "^3.7.0",
-    "jest": "^30.4.2",
-    "jest-html-reporter": "^4.4.0",
+    "jest": "^30.5.2",
+    "jest-html-reporter": "^4.4.2",
     "jest-junit": "^17.0.0",
     "jest-when": "^4.0.3",
     "jsonwebtoken": "^9.0.3",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.6.0",
     "nock": "^14.0.17",
     "openapi-typescript": "^7.13.0",
-    "supertest": "^7.2.2",
-    "ts-jest": "^29.4.12",
+    "supertest": "^7.3.1",
+    "ts-jest": "^29.4.14",
     "typescript": "^5.9.3"
   }
 }
