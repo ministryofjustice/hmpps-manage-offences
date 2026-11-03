@@ -30,21 +30,6 @@
     "node": "^24",
     "npm": "^11"
   },
-  "overrides": {
-    "js-yaml": "^5.5.0",
-    "moment": "^2.31.0",
-    "proxy-addr": "^2.0.8",
-    "bunyan": {
-      "mv": {
-        "rimraf": {
-          "glob": {
-            "minimatch": "^10.2.6",
-            "brace-expansion": "^5.0.12"
-          }
-        }
-      }
-    }
-  },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.1157.0",
     "@ministryofjustice/frontend": "^11.1.0",
