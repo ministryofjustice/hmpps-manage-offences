@@ -1,4 +1,4 @@
-import { components } from './index'
+import { components } from './index.d'
 
 export type Offence = components['schemas']['Offence']
 export type OffenceToScheduleMapping = components['schemas']['OffenceToScheduleMapping']
