@@ -27,29 +27,19 @@
     "generate-manage-offences-types": "openapi-typescript https://manage-offences-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/manageOffences/index.d.ts"
   },
   "engines": {
-    "node": "^24",
+    "node": "^26",
     "npm": "^11"
   },
   "overrides": {
-    "js-yaml": "^5.5.0",
-    "moment": "^2.31.0",
-    "proxy-addr": "^2.0.8",
-    "bunyan": {
-      "mv": {
-        "rimraf": {
-          "glob": {
-            "minimatch": "^10.2.6",
-            "brace-expansion": "^5.0.12"
-          }
-        }
-      }
+    "openapi-typescript": {
+      "typescript": "$typescript"
     }
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1154.0",
-    "@ministryofjustice/frontend": "^11.1.0",
+    "@aws-sdk/client-sqs": "^3.1158.0",
+    "@ministryofjustice/frontend": "^12.0.0",
     "@ministryofjustice/hmpps-auth-clients": "3.0.0",
-    "@ministryofjustice/hmpps-azure-telemetry": "^1.1.0",
+    "@ministryofjustice/hmpps-azure-telemetry": "^1.2.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-rest-client": "^2.2.0",
     "bunyan": "^1.8.15",
@@ -74,7 +64,7 @@
   },
   "devDependencies": {
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
-    "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
+    "@ministryofjustice/eslint-config-hmpps": "2.0.0-alpha.3",
     "@ministryofjustice/frontend-types": "2.0.3",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
@@ -113,6 +103,6 @@
     "openapi-typescript": "^7.13.0",
     "supertest": "^7.3.1",
     "ts-jest": "^29.4.15",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
