@@ -15,8 +15,8 @@
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests && tsc -p assets/js",
-    "test": "jest",
-    "test:ci": "jest --runInBand",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:ci": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "npx playwright test",
     "int-test-ui": "npx playwright test --ui",
@@ -27,22 +27,12 @@
     "generate-manage-offences-types": "openapi-typescript https://manage-offences-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/manageOffences/index.d.ts"
   },
   "engines": {
-    "node": "^24",
+    "node": "^26",
     "npm": "^11"
   },
   "overrides": {
-    "js-yaml": "^5.5.0",
-    "moment": "^2.31.0",
-    "proxy-addr": "^2.0.8",
-    "bunyan": {
-      "mv": {
-        "rimraf": {
-          "glob": {
-            "minimatch": "^10.2.6",
-            "brace-expansion": "^5.0.12"
-          }
-        }
-      }
+    "openapi-typescript": {
+      "typescript": "$typescript"
     }
   },
   "dependencies": {
@@ -68,13 +58,13 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
-    "path-to-regexp": "8.4.2",
+    "path-to-regexp": "9.0.0",
     "redis": "6.3.0",
     "superagent": "^10.4.1"
   },
   "devDependencies": {
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
-    "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
+    "@ministryofjustice/eslint-config-hmpps": "2.0.0-alpha.3",
     "@ministryofjustice/frontend-types": "2.0.3",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
@@ -113,6 +103,6 @@
     "openapi-typescript": "^7.13.0",
     "supertest": "^7.3.1",
     "ts-jest": "^29.4.15",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
