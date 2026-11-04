@@ -7,7 +7,7 @@ const offenceService = new OffenceService(null) as jest.Mocked<OffenceService>
 
 describe('Route Handlers - Home', () => {
   const handler = new HomeRoutes(offenceService)
-  let req: Request
+  const req = {} as Request
   let res: Response
 
   beforeEach(() => {
