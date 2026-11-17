@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import ChangeHistoryRoutes from './changeHistory'
 import AdminService from '../../../services/adminService'
-import { NomisHistoryRecords } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import { NomisHistoryRecords } from '../../../@types/ManageOffenceTypes'
 
 const adminService = new AdminService(null, null) as jest.Mocked<AdminService>
 

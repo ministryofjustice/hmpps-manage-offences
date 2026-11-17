@@ -2,7 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../../testutils/appSetup'
 import OffenceService from '../../../services/offenceService'
-import { OffenceToScheduleMapping, SdsExclusionLists } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import { OffenceToScheduleMapping, SdsExclusionLists } from '../../../@types/manageOffencesApi'
 import AdminService from '../../../services/adminService'
 
 jest.mock('../../../services/offenceService')

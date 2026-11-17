@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import LoadResultsRoutes from './loadResults'
-import { MostRecentLoadResult } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import { MostRecentLoadResult } from '../../../@types/manageOffencesApi'
 import AdminService from '../../../services/adminService'
 
 const adminService = new AdminService(null, null) as jest.Mocked<AdminService>

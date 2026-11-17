@@ -14,8 +14,8 @@ import {
   Schedule,
   SchedulePart,
   SdsExclusionLists,
-  UpdateScheduleRequest,
-} from '../@types/manageOffences/manageOffencesClientTypes'
+  UpdateSchedule,
+} from '../@types/manageOffencesApi'
 
 type User = Express.User
 
@@ -108,7 +108,7 @@ export default class ManageOffencesApiClient extends RestClient {
     )
   }
 
-  updateSchedule(scheduleId: number, update: UpdateScheduleRequest, user: User): Promise<Schedule> {
+  updateSchedule(scheduleId: number, update: UpdateSchedule, user: User): Promise<Schedule> {
     return this.put({ path: `/schedule/${scheduleId}`, data: update }, asUser(user.token)) as Promise<Schedule>
   }
 

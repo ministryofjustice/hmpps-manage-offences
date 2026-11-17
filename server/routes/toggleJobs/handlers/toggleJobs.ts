@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import FeatureToggleEnum from '../../../enums/FeatureToggleEnum'
-import { FeatureToggle } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import { FeatureToggle } from '../../../@types/manageOffencesApi'
 import AdminService from '../../../services/adminService'
 
 export default class ToggleJobsRoutes {
