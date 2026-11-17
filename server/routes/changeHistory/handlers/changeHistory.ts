@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import AdminService from '../../../services/adminService'
-import { DateInput } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import { DateInput } from '../../../@types/ManageOffenceTypes'
 
 export default class ChangeHistoryRoutes {
   constructor(private readonly adminService: AdminService) {}

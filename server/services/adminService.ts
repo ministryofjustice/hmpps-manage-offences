@@ -1,14 +1,10 @@
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
-import {
-  FeatureToggle,
-  MostRecentLoadResult,
-  NomisHistoryRecords,
-  Offence,
-} from '../@types/manageOffences/manageOffencesClientTypes'
+import { FeatureToggle, MostRecentLoadResult, Offence } from '../@types/manageOffencesApi'
 import FeatureToggleDisplay from '../types/featureToggleDisplay'
 import FeatureToggleType from '../types/featureToggleType'
 import PrisonApiClient from '../data/prisonApiClient'
 import AuthorisedRoles from '../enums/authorisedRoles'
+import { NomisHistoryRecords } from '../@types/ManageOffenceTypes'
 
 type User = Express.User
 

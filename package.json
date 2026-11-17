@@ -24,16 +24,12 @@
     "clean": "rm -rf dist test_results",
     "rebuild": "npm run clean && npm run setup && npm run build",
     "setup": "npm ci && hmpps-npm-script-run-allowlist",
-    "generate-manage-offences-types": "openapi-typescript https://manage-offences-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/manageOffences/index.d.ts"
+    "generate-manage-offences-types": "openapi-ts -i https://manage-offences-api-dev.hmpps.service.justice.gov.uk/v3/api-docs -o ./server/@types/manageOffencesApi -p @hey-api/typescript && eslint . --cache --max-warnings 0 --fix \"./server/@types/manageOffencesApi/types.gen.ts\"",
+    "generate-prison-api-types": "openapi-ts -i https://prison-api-dev.prison.service.justice.gov.uk/v3/api-docs -o ./server/@types/prisonApi -p @hey-api/typescript && eslint . --cache --max-warnings 0 --fix \"./server/@types/prisonApi/types.gen.ts\""
   },
   "engines": {
     "node": "^26",
     "npm": "^11"
-  },
-  "overrides": {
-    "openapi-typescript": {
-      "typescript": "$typescript"
-    }
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.1163.0",
@@ -63,6 +59,7 @@
     "superagent": "^10.4.1"
   },
   "devDependencies": {
+    "@hey-api/openapi-ts": "0.99.0",
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "2.0.0-alpha.3",
     "@ministryofjustice/frontend-types": "2.0.3",
@@ -100,7 +97,6 @@
     "jsonwebtoken": "^9.0.3",
     "lint-staged": "^17.6.0",
     "nock": "^15.0.6",
-    "openapi-typescript": "^7.13.0",
     "supertest": "^7.3.1",
     "ts-jest": "^29.4.15",
     "typescript": "^6.0.3"

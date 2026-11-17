@@ -1,9 +1,9 @@
 import { when } from 'jest-when'
 import AdminService from './adminService'
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
-import { Offence } from '../@types/manageOffences/manageOffencesClientTypes'
+import { Offence } from '../@types/manageOffencesApi'
 import PrisonApiClient from '../data/prisonApiClient'
-import { PageOffenceDto } from '../@types/prisonApi/prisonApiTypes'
+import { PageOffenceDto } from '../@types/prisonApi'
 
 jest.mock('../data/manageOffencesApiClient')
 jest.mock('../data/prisonApiClient')

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import OffenceService from '../../../services/offenceService'
-import { LinkOffence } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import { LinkOffence } from '../../../@types/manageOffencesApi'
 
 export default class LinkOffenceRoutes {
   constructor(private readonly offenceService: OffenceService) {}

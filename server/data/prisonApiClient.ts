@@ -2,7 +2,7 @@ import { RestClient, asUser } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import config from '../config'
 import logger from '../../logger'
-import { PageOffenceDto } from '../@types/prisonApi/prisonApiTypes'
+import { PageOffenceDto } from '../@types/prisonApi'
 
 type User = Express.User
 

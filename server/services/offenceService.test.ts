@@ -1,6 +1,6 @@
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import OffenceService from './offenceService'
-import { Offence } from '../@types/manageOffences/manageOffencesClientTypes'
+import { Offence } from '../@types/manageOffencesApi'
 import AuthorisedRoles from '../enums/authorisedRoles'
 
 jest.mock('../data/manageOffencesApiClient')

@@ -1,4 +1,4 @@
-import { FeatureToggle } from '../@types/manageOffences/manageOffencesClientTypes'
+import { FeatureToggle } from '../@types/manageOffencesApi'
 
 class FeatureToggleDisplay implements FeatureToggle {
   displayName: string

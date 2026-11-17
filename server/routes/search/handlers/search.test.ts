@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import SearchRoutes from './search'
 import OffenceService from '../../../services/offenceService'
-import { Offence } from '../../../@types/manageOffences/manageOffencesClientTypes'
+import { Offence } from '../../../@types/manageOffencesApi'
 import AdminService from '../../../services/adminService'
 
 const offenceService = new OffenceService(null) as jest.Mocked<OffenceService>

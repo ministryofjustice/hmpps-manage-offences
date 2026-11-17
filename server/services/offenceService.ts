@@ -2,15 +2,15 @@ import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import {
   LinkOffence,
   Offence,
-  OffenceMarkers,
   OffenceToScheduleMapping,
   PcscLists,
   ProgressionModelExclusionLists,
   Schedule,
   SchedulePart,
   SdsExclusionLists,
-  UpdateScheduleRequest,
-} from '../@types/manageOffences/manageOffencesClientTypes'
+  UpdateSchedule,
+} from '../@types/manageOffencesApi'
+import { OffenceMarkers } from '../@types/ManageOffenceTypes'
 import AuthorisedRoles from '../enums/authorisedRoles'
 
 type User = Express.User
@@ -44,7 +44,7 @@ export default class OffenceService {
     return this.manageOffencesApi.createSchedule(schedule, user)
   }
 
-  async updateSchedule(scheduleId: number, update: UpdateScheduleRequest, user: User): Promise<Schedule> {
+  async updateSchedule(scheduleId: number, update: UpdateSchedule, user: User): Promise<Schedule> {
     return this.manageOffencesApi.updateSchedule(scheduleId, update, user)
   }
 
